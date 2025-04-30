@@ -1,0 +1,15 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.vsidx
+
+# Kompilacja
+bin/
+obj/
+
+# Inne
+*.log
+*.tmp
+*.cache
+*.Backup.tmp
