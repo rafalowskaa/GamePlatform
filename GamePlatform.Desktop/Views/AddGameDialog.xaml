@@ -1,0 +1,31 @@
+﻿<Window x:Class="GamePlatform.Desktop.Views.AddGameDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:GamePlatform.Shared.Enums"
+        Title="Dodaj grę" SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        Style="{StaticResource MaterialDesignWindow}">
+    <StackPanel Margin="24" Width="340" md:DialogHost.Dialog="True">
+        <TextBox Text="{Binding Title}" md:HintAssist.Hint="Tytuł"/>
+        <TextBox Margin="0 8 0 0" Text="{Binding Version}" md:HintAssist.Hint="Wersja"/>
+
+        <ComboBox ItemsSource="{x:Static local:GameCategory.GetValues}" SelectedItem="{Binding SelectedCategory}" Margin="0 8"/>
+        <ComboBox ItemsSource="{x:Static local:GameMode.GetValues}"     SelectedItem="{Binding SelectedMode}"/>
+        <TextBox Margin="0 8" Text="{Binding MaxPlayers}" md:HintAssist.Hint="Max graczy (opc)"/>
+        <CheckBox Content="Rozgrywka na żywo" IsChecked="{Binding IsLive}"/>
+        <TextBox Margin="0 8" Text="{Binding Description}" AcceptsReturn="True" Height="60" md:HintAssist.Hint="Opis"/>
+
+        <StackPanel Orientation="Horizontal" Margin="0 8">
+            <TextBox Width="220" Text="{Binding ZipPath}" md:HintAssist.Hint="Plik ZIP"/>
+            <Button Content="..." Width="34" Command="{Binding PickZipCommand}"/>
+        </StackPanel>
+
+        <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 12 0 0">
+            <Button Content="Anuluj" IsCancel="True" />
+            <Button Content="Zapisz" Margin="8 0 0 0" IsDefault="True" Click="OnSubmit" />
+        </StackPanel>
+    </StackPanel>
+</Window>
