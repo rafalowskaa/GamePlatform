@@ -5,6 +5,6 @@ namespace GamePlatform.Shared.Enums;
 
 public static class EnumExtensions
 {
-    public static IEnumerable<GameCategory> GetValues => Enum.GetValues<GameCategory>();
-    public static IEnumerable<GameMode> GetValues => Enum.GetValues<GameMode>();
+    public static IEnumerable<GameCategory> CategoryValues => Enum.GetValues<GameCategory>();
+    public static IEnumerable<GameMode> ModeValues => Enum.GetValues<GameMode>();
 }

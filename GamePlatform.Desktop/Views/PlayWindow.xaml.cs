@@ -1,14 +1,21 @@
 ﻿using System.Windows;
-using GamePlatform.Desktop.ViewModels;
 
-namespace GamePlatform.Desktop.Views;
-
-public partial class PlayWindow : Window
+namespace GamePlatform.Desktop.Views
 {
-    public PlayWindow()
+    public partial class PlayWindow : Window
     {
-        InitializeComponent();
-        if (DataContext is PlayWindowViewModel vm)
-            Title = vm.Title;
+        public PlayWindow()
+        {
+            InitializeComponent();
+            Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.PlayWindowViewModel vm)
+            {
+                Title = vm.Title;
+            }
+        }
     }
 }
