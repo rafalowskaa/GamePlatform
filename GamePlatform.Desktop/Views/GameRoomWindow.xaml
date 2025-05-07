@@ -1,0 +1,28 @@
+﻿<Window x:Class="GamePlatform.Desktop.Views.GameRoomWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Pokój gry" Width="400" Height="300"
+        WindowStartupLocation="CenterOwner"
+        Style="{StaticResource MaterialDesignWindow}">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"   />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- czat -->
+        <ListBox ItemsSource="{Binding Chat}" />
+
+        <!-- input -->
+        <DockPanel Grid.Row="1" Margin="0,8,0,0">
+            <TextBox x:Name="Input"
+                 Width="280"
+                 Margin="0 0 8 0"
+                 Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Wyślij"
+                Command="{Binding SendCommand}" />
+        </DockPanel>
+    </Grid>
+
+</Window>

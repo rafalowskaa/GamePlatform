@@ -7,4 +7,5 @@ public static class EnumExtensions
 {
     public static IEnumerable<GameCategory> CategoryValues => Enum.GetValues<GameCategory>();
     public static IEnumerable<GameMode> ModeValues => Enum.GetValues<GameMode>();
+    public static IEnumerable<UserRole> RoleValues => Enum.GetValues<UserRole>();  // ★ NOWE
 }

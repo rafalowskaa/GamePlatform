@@ -11,8 +11,12 @@
 
     <StackPanel Margin="24" Width="340">
 
-        <TextBox Text="{Binding Title}" md:HintAssist.Hint="Tytuł"/>
-        <TextBox Margin="0 8 0 0" Text="{Binding Version}" md:HintAssist.Hint="Wersja"/>
+        <TextBox Text="{Binding Title}"
+                 md:HintAssist.Hint="Tytuł"/>
+
+        <TextBox Margin="0 8 0 0"
+                 Text="{Binding Version}"
+                 md:HintAssist.Hint="Wersja"/>
 
         <ComboBox Margin="0 8 0 0"
                   ItemsSource="{x:Static enums:EnumExtensions.CategoryValues}"
@@ -23,7 +27,7 @@
                   SelectedItem="{Binding SelectedMode}"
                   md:HintAssist.Hint="Tryb gry"/>
 
-        <!-- MaxPlayers tylko dla MultiPlayer -->
+        <!--  MaxPlayers tylko dla MultiPlayer  -->
         <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
             <TextBox Width="120"
                      Text="{Binding MaxPlayers}"
@@ -38,24 +42,35 @@
 
         <TextBox Margin="0 8 0 0"
                  Text="{Binding Description}"
-                 Height="64" AcceptsReturn="True"
+                 Height="64"
+                 AcceptsReturn="True"
                  md:HintAssist.Hint="Opis"/>
 
         <DockPanel Margin="0 8 0 0">
-            <TextBox Width="220" DockPanel.Dock="Left"
-                     Text="{Binding ZipPath}" IsReadOnly="True"
+            <TextBox Width="220"
+                     DockPanel.Dock="Left"
+                     Text="{Binding ZipPath}"
+                     IsReadOnly="True"
                      md:HintAssist.Hint="Plik ZIP"/>
-            <Button Content="…" Width="34" Margin="8 0 0 0"
+            <Button Content="…"
+                    Width="34"
+                    Margin="8 0 0 0"
                     Command="{Binding PickZipCommand}"/>
         </DockPanel>
 
-        <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding Error}"
+                   Foreground="Red"
+                   TextWrapping="Wrap"/>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 12 0 0">
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0 12 0 0">
             <Button Content="Anuluj" IsCancel="True"/>
-            <Button Content="Zapisz" Margin="12 0 0 0"
+            <Button Content="Zapisz"
+                    Margin="12 0 0 0"
                     Style="{StaticResource MaterialDesignRaisedButton}"
-                    Click="OnSubmit" IsDefault="True"/>
+                    Click="OnSubmit"
+                    IsDefault="True"/>
         </StackPanel>
     </StackPanel>
 </Window>

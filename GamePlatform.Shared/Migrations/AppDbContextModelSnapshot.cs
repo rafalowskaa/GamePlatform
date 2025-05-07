@@ -17,6 +17,45 @@ namespace GamePlatform.Shared.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
 
+            modelBuilder.Entity("GamePlatform.Shared.Models.Friend", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MateId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "MateId");
+
+                    b.HasIndex("MateId");
+
+                    b.ToTable("Friends");
+                });
+
+            modelBuilder.Entity("GamePlatform.Shared.Models.FriendRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("FromUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SentUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ToUserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToUserId");
+
+                    b.ToTable("FriendRequests");
+                });
+
             modelBuilder.Entity("GamePlatform.Shared.Models.Game", b =>
                 {
                     b.Property<Guid>("Id")
@@ -82,6 +121,10 @@ namespace GamePlatform.Shared.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AvatarPath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -91,6 +134,10 @@ namespace GamePlatform.Shared.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RecoveryMail")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -126,6 +173,44 @@ namespace GamePlatform.Shared.Migrations
                     b.ToTable("GameVersions");
                 });
 
+            modelBuilder.Entity("GamePlatform.Shared.Models.Friend", b =>
+                {
+                    b.HasOne("GamePlatform.Shared.Models.User", "Mate")
+                        .WithMany("FriendsAccepted")
+                        .HasForeignKey("MateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GamePlatform.Shared.Models.User", "User")
+                        .WithMany("FriendsInitiated")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Mate");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GamePlatform.Shared.Models.FriendRequest", b =>
+                {
+                    b.HasOne("GamePlatform.Shared.Models.User", "FromUser")
+                        .WithMany()
+                        .HasForeignKey("FromUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GamePlatform.Shared.Models.User", "ToUser")
+                        .WithMany()
+                        .HasForeignKey("ToUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
+                });
+
             modelBuilder.Entity("GamePlatform.Shared.Models.Score", b =>
                 {
                     b.HasOne("GamePlatform.Shared.Models.Game", "Game")
@@ -153,6 +238,13 @@ namespace GamePlatform.Shared.Migrations
                     b.Navigation("Scores");
 
                     b.Navigation("Versions");
+                });
+
+            modelBuilder.Entity("GamePlatform.Shared.Models.User", b =>
+                {
+                    b.Navigation("FriendsAccepted");
+
+                    b.Navigation("FriendsInitiated");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,21 +5,29 @@
              xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
              ShutdownMode="OnMainWindowClose">
 
-	<Application.Resources>
-		<ResourceDictionary>
-			<!--  motyw  -->
-			<ResourceDictionary.MergedDictionaries>
-				<md:BundledTheme BaseTheme="Dark"
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- Twoje zasoby -->
+                <ResourceDictionary Source="pack://application:,,,/Resources/MaterialColors.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resources/IconPack.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resources/Converters.xaml"/>
+
+                <!-- Motyw -->
+                <md:BundledTheme BaseTheme="Dark"
                                  PrimaryColor="Indigo"
-                                 SecondaryColor="Lime" />
+                                 SecondaryColor="Lime"/>
 
-				<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
-			</ResourceDictionary.MergedDictionaries>
+                <!-- Style bazowe (Material Design 2) -->
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml"/>
 
-			<!--  konwertery globalne  -->
-			<conv:ModeToVisConverter x:Key="ModeToVis" />
-			<conv:BoolToVisConverter x:Key="BoolToVis" />
-		</ResourceDictionary>
-	</Application.Resources>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Konwertery -->
+            <conv:BoolToVisConverter x:Key="BoolToVis"/>
+            <conv:ModeToVisConverter x:Key="ModeToVis"/>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

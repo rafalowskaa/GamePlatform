@@ -1,6 +1,4 @@
-﻿// App.xaml.cs  (wymień cały plik)
-
-// ▸ using-i bez zmian
+﻿//  App.xaml.cs
 using GamePlatform.Desktop.Services;
 using GamePlatform.Desktop.ViewModels;
 using GamePlatform.Desktop.Views;
@@ -18,36 +16,45 @@ using System.Windows;
 
 namespace GamePlatform.Desktop;
 
+/// <summary>
+///  Start-up aplikacji: DI → migracja EF → okno logowania → shell.
+/// </summary>
 public partial class App : Application
 {
     public IServiceProvider Services { get; private set; } = null!;
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        // 0️⃣  Wyłączamy automatyczne zamykanie – przywrócimy je później
-        ShutdownMode = ShutdownMode.OnExplicitShutdown;
-
-        base.OnStartup(e);
-
-        // 1️⃣  DI
+        /* ========== 1.  DI / EF / Walidatory / VM-y ========== */
         var sc = new ServiceCollection();
 
-        sc.AddDbContext<AppDbContext>(o => o.UseSqlite("Data Source=games.db"));
+        // 1️⃣ baza
+        sc.AddDbContext<AppDbContext>(
+            o => o.UseSqlite("Data Source=games.db"));
 
+        // 2️⃣ usługi domenowe
         sc.AddScoped<IAuthService, AuthService>();
         sc.AddScoped<IGameRepository, GameRepositorySqlite>();
+        sc.AddScoped<IProfileService, ProfileService>();
+        sc.AddScoped<IFriendService, FriendService>();
+
+        // 3️⃣ walidatory
         sc.AddScoped<GameUploadValidator>();
         sc.AddScoped<RegisterValidator>();
         sc.AddScoped<UserValidator>();
 
+        // 4️⃣ view-modele  (Transient → każdy widok dostaje „świeży” VM)
         sc.AddTransient<LoginViewModel>();
         sc.AddTransient<MainViewModel>();
-        sc.AddTransient<AdminViewModel>();
+        sc.AddTransient<UsersViewModel>();
+        sc.AddTransient<ProfileViewModel>();
+        sc.AddTransient<FriendListViewModel>();
         sc.AddTransient<AddGameDialogViewModel>();
+        sc.AddTransient<ShellViewModel>();
 
         Services = sc.BuildServiceProvider();
 
-        // 2️⃣  Migracje + seed admina
+        /* ========== 2.  Migracja + seed admina ========== */
         using (var scope = Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -67,31 +74,31 @@ public partial class App : Application
             }
         }
 
-        // 3️⃣  Okno logowania
-        var loginVm = Services.GetRequiredService<LoginViewModel>();
-        var loginWin = new LoginWindow { DataContext = loginVm };
-        loginWin.ShowDialog();                 // czekamy na zamknięcie
+        /* ========== 3.  Okno logowania (modalne) ========== */
+        var loginWin = new LoginWindow
+        {
+            DataContext = Services.GetRequiredService<LoginViewModel>()
+        };
+        loginWin.ShowDialog();      //  czeka, aż użytkownik się uwierzytelni
 
         var auth = Services.GetRequiredService<IAuthService>();
         if (auth.CurrentRole == UserRole.Guest)
         {
-            // ręczne zamknięcie aplikacji
+            //  anulowano / zamknięto okno logowania
             Shutdown();
             return;
         }
 
-        // 4️⃣  Shell zależny od roli
-        Window shell = auth.CurrentRole switch
+        /* ========== 4.  Shell z nawigacją ========== */
+        var shell = new ShellWindow(
+                        Services.GetRequiredService<ShellViewModel>())
         {
-            UserRole.Admin => new AdminWindow { DataContext = Services.GetRequiredService<AdminViewModel>() },
-            _ => new MainWindow { DataContext = Services.GetRequiredService<MainViewModel>() }
+            Title = auth.CurrentRole == UserRole.Admin
+                    ? "GamePlatform – Administrator"
+                    : "GamePlatform"
         };
 
         MainWindow = shell;
-
-        // PRZYWRACAMY normalny tryb zamykania
-        ShutdownMode = ShutdownMode.OnMainWindowClose;
-
         shell.Show();
     }
 }

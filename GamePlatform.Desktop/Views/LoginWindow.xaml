@@ -14,7 +14,7 @@
 
     <Grid Margin="24" Width="300">
 
-        <!-- ***********************  LOGOWANIE  *********************** -->
+        <!-- ===== LOGOWANIE ===== -->
         <StackPanel Visibility="{Binding IsRegistering,
                                          Converter={StaticResource BoolToVis},
                                          ConverterParameter=Invert}">
@@ -30,17 +30,12 @@
                       Margin="0 8 0 0"
                       IsChecked="{Binding RememberMe}"/>
 
-            <TextBlock Text="{Binding Error}"
-                       Foreground="Red"
-                       TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap"/>
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="0 12 0 0">
-
-                <Button Content="Rejestracja"
-                        Click="ShowRegisterClick"/>
-
+                <Button Content="Rejestracja" Click="ShowRegisterClick"/>
                 <Button Content="Zaloguj"
                         Margin="12 0 0 0"
                         IsDefault="True"
@@ -48,42 +43,25 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             </StackPanel>
 
-            <TextBlock Margin="0 8 0 0"
-                       HorizontalAlignment="Right">
+            <TextBlock Margin="0 8 0 0" HorizontalAlignment="Right">
                 <Hyperlink Click="ForgotPwdClick">Nie pamiętasz hasła?</Hyperlink>
             </TextBlock>
         </StackPanel>
 
-        <!-- **********************  REJESTRACJA  ********************** -->
+        <!-- ===== REJESTRACJA ===== -->
         <StackPanel Visibility="{Binding IsRegistering,
                                          Converter={StaticResource BoolToVis}}">
+            <TextBox     Text="{Binding NewLogin}" md:HintAssist.Hint="Login"/>
+            <TextBox     Text="{Binding Email}"    md:HintAssist.Hint="E-mail" Margin="0 8 0 0"/>
+            <PasswordBox md:HintAssist.Hint="Hasło"           Margin="0 8 0 0" PasswordChanged="PwdChangedRegister"/>
+            <PasswordBox md:HintAssist.Hint="Powtórz hasło"   Margin="0 8 0 0" PasswordChanged="PwdChangedRepeat"/>
 
-            <TextBox Text="{Binding NewLogin}"
-                     md:HintAssist.Hint="Login"/>
-
-            <TextBox Text="{Binding Email}"
-                     md:HintAssist.Hint="E-mail"
-                     Margin="0 8 0 0"/>
-
-            <PasswordBox md:HintAssist.Hint="Hasło"
-                         Margin="0 8 0 0"
-                         PasswordChanged="PwdChangedRegister"/>
-
-            <PasswordBox md:HintAssist.Hint="Powtórz hasło"
-                         Margin="0 8 0 0"
-                         PasswordChanged="PwdChangedRepeat"/>
-
-            <TextBlock Text="{Binding Error}"
-                       Foreground="Red"
-                       TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap"/>
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="0 12 0 0">
-
-                <Button Content="Wstecz"
-                        Click="ShowLoginClick"/>
-
+                <Button Content="Wstecz"     Click="ShowLoginClick"/>
                 <Button Content="Zarejestruj"
                         Margin="12 0 0 0"
                         IsDefault="True"

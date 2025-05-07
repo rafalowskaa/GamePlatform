@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color            x:Key="PrimaryColorValue"   >#FF3F51B5</Color>
+    <!-- Indigo 500 -->
+    <Color            x:Key="SecondaryColorValue" >#FFCDDC39</Color>
+    <!-- Lime  500 -->
+    <SolidColorBrush  x:Key="PrimaryBrush"   Color="{StaticResource PrimaryColorValue}"/>
+    <SolidColorBrush  x:Key="SecondaryBrush" Color="{StaticResource SecondaryColorValue}"/>
+
+</ResourceDictionary>

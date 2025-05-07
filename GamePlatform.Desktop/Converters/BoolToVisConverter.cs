@@ -6,13 +6,15 @@ using System.Windows.Data;
 namespace GamePlatform.Desktop.Converters;
 
 /// <summary>
-///  bool → Visibility  (p=Invert odwraca wynik)
+/// bool → Visibility  (parametr "Invert" neguje wynik)
 /// </summary>
 public sealed class BoolToVisConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object value, Type targetType,
+                          object parameter, CultureInfo culture)
     {
-        var visible = value is true;
+        bool visible = value is true;
+
         if (parameter is string s &&
             s.Equals("Invert", StringComparison.OrdinalIgnoreCase))
             visible = !visible;
@@ -20,6 +22,6 @@ public sealed class BoolToVisConverter : IValueConverter
         return visible ? Visibility.Visible : Visibility.Collapsed;
     }
 
-    public object ConvertBack(object v, Type t, object p, CultureInfo c) =>
-        throw new NotSupportedException();
+    public object ConvertBack(object v, Type t, object p, CultureInfo c)
+        => throw new NotSupportedException();
 }

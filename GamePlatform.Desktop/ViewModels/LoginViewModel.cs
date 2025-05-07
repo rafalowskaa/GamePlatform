@@ -1,5 +1,4 @@
-﻿// ViewModels/LoginViewModel.cs
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
 using GamePlatform.Shared.Validation;
@@ -9,82 +8,79 @@ using System.Windows;
 
 namespace GamePlatform.Desktop.ViewModels;
 
+/// <summary>
+/// Jeden VM obsługujący zarówno logowanie, jak i rejestrację.
+/// </summary>
 public partial class LoginViewModel : ObservableObject
 {
     private readonly IAuthService _auth;
-    private readonly RegisterValidator _validator;
+    private readonly RegisterValidator _regValidator;
 
-    public LoginViewModel(IAuthService auth, RegisterValidator validator)
+    public LoginViewModel(IAuthService auth, RegisterValidator regValidator)
     {
         _auth = auth;
-        _validator = validator;
+        _regValidator = regValidator;
     }
 
-    /* --------  tryb  (false = login, true = register) -------- */
+    /* ===== tryb: false – login / true – register ===== */
     [ObservableProperty] private bool _isRegistering;
 
-    /* --------  LOGOWANIE  -------- */
+    /* ------------------ LOGOWANIE ------------------ */
     [ObservableProperty] private string _login = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
+    [ObservableProperty] private bool _rememberMe;
 
-    /* --------  REJESTRACJA  -------- */
+    /* ---------------- REJESTRACJA ------------------ */
     [ObservableProperty] private string _newLogin = string.Empty;
     [ObservableProperty] private string _email = string.Empty;
     public string RegPassword { private get; set; } = string.Empty;
     public string RegPasswordRepeat { private get; set; } = string.Empty;
 
-    /* --------  wspólne  -------- */
+    /* ---------------- WSPÓLNE ---------------------- */
     [ObservableProperty] private string? _error;
 
-    /* ======  Zdarzenie, które przechwytuje LoginWindow  ====== */
-    public event Action? Authenticated;
+    public event Action? Authenticated;              // sygnał dla widoku
 
-    /* ==========================================================
-     *  COMMANDY
-     * =========================================================*/
+    /* ================= COMMANDY ================= */
+
     [RelayCommand]
-    private async Task SubmitLogin(Window? _)
+    private async Task SubmitLogin(Window? win)
     {
         Error = null;
 
         if (await _auth.LoginAsync(Login, Password))
         {
             ClearFields();
-            Authenticated?.Invoke();            // powiadamiamy View
+            Authenticated?.Invoke();
         }
         else
             Error = "Błędny login lub hasło.";
     }
 
     [RelayCommand]
-    private async Task SubmitRegister(Window? _)
+    private async Task SubmitRegister(Window? win)
     {
         Error = null;
 
         var dto = new RegisterDto(NewLogin, Email, RegPassword, RegPasswordRepeat);
-        var res = _validator.Validate(dto);
-        if (!res.IsValid)
-        {
-            Error = res.ToString("• ");
-            return;
-        }
+        var res = _regValidator.Validate(dto);
+        if (!res.IsValid) { Error = res.ToString("• "); return; }
 
         if (await _auth.RegisterAsync(NewLogin, Email, RegPassword))
         {
-            await _auth.LoginAsync(NewLogin, RegPassword);  // auto-login
+            await _auth.LoginAsync(NewLogin, RegPassword); // auto-login
             ClearFields();
             Authenticated?.Invoke();
         }
         else
-            Error = "Login lub e-mail już istnieje.";
+            Error = "Login lub e-mail jest już zajęty.";
     }
 
-    /* pomocnicze */
+    /* ---------------- pomocnicze ------------------ */
     private void ClearFields()
     {
         Password = string.Empty;
-        RegPassword = string.Empty;
-        RegPasswordRepeat = string.Empty;
+        RegPassword = RegPasswordRepeat = string.Empty;
         Error = null;
     }
 }

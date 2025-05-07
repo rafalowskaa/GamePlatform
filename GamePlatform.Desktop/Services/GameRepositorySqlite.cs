@@ -1,60 +1,59 @@
-﻿using GamePlatform.Shared.Data;
-using GamePlatform.Shared.Models;
-using GamePlatform.Shared.Services;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GamePlatform.Shared.Data;
+using GamePlatform.Shared.Models;
+using GamePlatform.Shared.Services;
+using Microsoft.EntityFrameworkCore;
 
-namespace GamePlatform.Desktop.Services
+namespace GamePlatform.Desktop.Services;
+
+/// <summary>
+/// Implementacja repozytorium gier oparta na SQLite + EF Core.
+/// </summary>
+public sealed class GameRepositorySqlite : IGameRepository
 {
-    public class GameRepositorySqlite : IGameRepository
+    private readonly AppDbContext _db;
+    public GameRepositorySqlite(AppDbContext db) => _db = db;
+
+    public async Task<IReadOnlyList<Game>> GetAllAsync(string? filter = null)
     {
-        private readonly AppDbContext _db;
+        IQueryable<Game> q = _db.Games
+                                .Include(g => g.Versions)
+                                .AsNoTracking();
 
-        public GameRepositorySqlite(AppDbContext db) => _db = db;
+        if (!string.IsNullOrWhiteSpace(filter))
+            q = q.Where(g => g.Title.Contains(filter));
 
-        public async Task<IReadOnlyList<Game>> GetAllAsync(string? filter = null)
-        {
-            IQueryable<Game> q = _db.Games
-                                    .Include(g => g.Versions)
-                                    .AsNoTracking();
+        return await q.ToListAsync();
+    }
 
-            if (!string.IsNullOrWhiteSpace(filter))
-                q = q.Where(g => g.Title.Contains(filter));
+    public async Task<Game?> GetAsync(Guid id) =>
+        await _db.Games
+                 .Include(g => g.Versions)
+                 .Include(g => g.Scores)
+                 .FirstOrDefaultAsync(g => g.Id == id);
 
-            return await q.ToListAsync();
-        }
+    public async Task AddAsync(Game game, GameVersion firstVersion)
+    {
+        game.Versions.Add(firstVersion);
+        _db.Games.Add(game);
+        await _db.SaveChangesAsync();
+    }
 
-        public async Task<Game?> GetAsync(Guid id) =>
-            await _db.Games
-                     .Include(g => g.Versions)
-                     .Include(g => g.Scores)
-                     .FirstOrDefaultAsync(g => g.Id == id);
+    public async Task DeleteAsync(Guid id)
+    {
+        _db.Games.Remove(new Game { Id = id });
+        await _db.SaveChangesAsync();
+    }
 
-        public async Task AddAsync(Game game, GameVersion firstVersion)
-        {
-            game.Versions.Add(firstVersion);
-            _db.Games.Add(game);
-            await _db.SaveChangesAsync();
-        }
+    public async Task AddScoreAsync(Guid gameId, Score score)
+    {
+        var game = await _db.Games.FindAsync(gameId);
+        if (game is null) return;
 
-        public async Task DeleteAsync(Guid id)
-        {
-            var stub = new Game { Id = id };
-            _db.Attach(stub);
-            _db.Remove(stub);
-            await _db.SaveChangesAsync();
-        }
-
-        public async Task AddScoreAsync(Guid gameId, Score score)
-        {
-            var game = await _db.Games.FindAsync(gameId);
-            if (game is null) return;
-
-            game.Scores.Add(score);
-            await _db.SaveChangesAsync();
-        }
+        game.Scores.Add(score);
+        await _db.SaveChangesAsync();
     }
 }
