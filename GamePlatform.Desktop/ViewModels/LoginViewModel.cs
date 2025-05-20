@@ -2,85 +2,78 @@
 using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
 using GamePlatform.Shared.Validation;
-using System;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace GamePlatform.Desktop.ViewModels;
 
-/// <summary>
-/// Jeden VM obsługujący zarówno logowanie, jak i rejestrację.
-/// </summary>
 public partial class LoginViewModel : ObservableObject
 {
     private readonly IAuthService _auth;
-    private readonly RegisterValidator _regValidator;
+    private readonly RegisterValidator _validator;
 
-    public LoginViewModel(IAuthService auth, RegisterValidator regValidator)
+    public LoginViewModel(IAuthService auth, RegisterValidator val)
     {
         _auth = auth;
-        _regValidator = regValidator;
+        _validator = val;
     }
 
-    /* ===== tryb: false – login / true – register ===== */
+    /* ─────────  pola  ───────── */
     [ObservableProperty] private bool _isRegistering;
+    [ObservableProperty] private string _login = "";
+    [ObservableProperty] private string _password = "";
+    [ObservableProperty] private bool _showPassword;
 
-    /* ------------------ LOGOWANIE ------------------ */
-    [ObservableProperty] private string _login = string.Empty;
-    [ObservableProperty] private string _password = string.Empty;
+    [ObservableProperty] private string _newLogin = "";
+    [ObservableProperty] private string _email = "";
+    public string RegPassword { get; set; } = "";
+    public string RegPasswordRepeat { get; set; } = "";
+    [ObservableProperty] private bool _showRegPassword;
+
+    // -> NOWA właściwość do checkboxa „Zapamiętaj mnie”
     [ObservableProperty] private bool _rememberMe;
 
-    /* ---------------- REJESTRACJA ------------------ */
-    [ObservableProperty] private string _newLogin = string.Empty;
-    [ObservableProperty] private string _email = string.Empty;
-    public string RegPassword { private get; set; } = string.Empty;
-    public string RegPasswordRepeat { private get; set; } = string.Empty;
-
-    /* ---------------- WSPÓLNE ---------------------- */
     [ObservableProperty] private string? _error;
 
-    public event Action? Authenticated;              // sygnał dla widoku
-
-    /* ================= COMMANDY ================= */
-
-    [RelayCommand]
-    private async Task SubmitLogin(Window? win)
+    /* ─────────  helpers  ───────── */
+    private void FlashError(string msg)
     {
-        Error = null;
-
-        if (await _auth.LoginAsync(Login, Password))
-        {
-            ClearFields();
-            Authenticated?.Invoke();
-        }
-        else
-            Error = "Błędny login lub hasło.";
+        Error = msg;
+        _ = Task.Delay(3000).ContinueWith(_ => Error = null);
     }
 
-    [RelayCommand]
-    private async Task SubmitRegister(Window? win)
+    private void ClearFields()
     {
-        Error = null;
+        Password = "";
+        RegPassword = RegPasswordRepeat = "";
+    }
 
+    /* ─────────  LOGOWANIE  ───────── */
+    [RelayCommand]
+    private async Task SubmitLogin(System.Windows.Window win)
+    {
+        if (await _auth.LoginAsync(Login, Password))
+        {
+            // TODO: RememberMe -> zapisz token/cookie etc.
+            ClearFields();
+            win.DialogResult = true;   // ZAMYKA okno modalne
+        }
+        else FlashError("Błędny login lub hasło.");
+    }
+
+    /* ─────────  REJESTRACJA  ───────── */
+    [RelayCommand]
+    private async Task SubmitRegister()
+    {
         var dto = new RegisterDto(NewLogin, Email, RegPassword, RegPasswordRepeat);
-        var res = _regValidator.Validate(dto);
-        if (!res.IsValid) { Error = res.ToString("• "); return; }
+        var res = _validator.Validate(dto);
+        if (!res.IsValid) { FlashError(res.ToString("• ")); return; }
 
         if (await _auth.RegisterAsync(NewLogin, Email, RegPassword))
         {
-            await _auth.LoginAsync(NewLogin, RegPassword); // auto-login
             ClearFields();
-            Authenticated?.Invoke();
+            IsRegistering = false;
+            FlashError("Konto utworzone – zaloguj się.");
         }
-        else
-            Error = "Login lub e-mail jest już zajęty.";
-    }
-
-    /* ---------------- pomocnicze ------------------ */
-    private void ClearFields()
-    {
-        Password = string.Empty;
-        RegPassword = RegPasswordRepeat = string.Empty;
-        Error = null;
+        else FlashError("Login lub e-mail jest już zajęty.");
     }
 }

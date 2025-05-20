@@ -1,5 +1,4 @@
-﻿//  App.xaml.cs
-using GamePlatform.Desktop.Services;
+﻿using GamePlatform.Desktop.Services;
 using GamePlatform.Desktop.ViewModels;
 using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Data;
@@ -11,13 +10,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace GamePlatform.Desktop;
 
 /// <summary>
-///  Start-up aplikacji: DI → migracja EF → okno logowania → shell.
+/// Główna klasa aplikacji.
 /// </summary>
 public partial class App : Application
 {
@@ -25,36 +26,43 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        /* ========== 1.  DI / EF / Walidatory / VM-y ========== */
+        /* ------- globalny catcher -------- */
+        AppDomain.CurrentDomain.UnhandledException += (_, a)
+            => ShowFatal((Exception)a.ExceptionObject);
+
+        DispatcherUnhandledException += (_, a) =>
+        {
+            ShowFatal(a.Exception);
+            a.Handled = true;                 // nie zamykaj procesu
+        };
+
+        /* ---------- DI / EF ---------- */
         var sc = new ServiceCollection();
 
-        // 1️⃣ baza
-        sc.AddDbContext<AppDbContext>(
-            o => o.UseSqlite("Data Source=games.db"));
+        sc.AddDbContext<AppDbContext>(o => o.UseSqlite("Data Source=games.db"));
 
-        // 2️⃣ usługi domenowe
         sc.AddScoped<IAuthService, AuthService>();
         sc.AddScoped<IGameRepository, GameRepositorySqlite>();
         sc.AddScoped<IProfileService, ProfileService>();
         sc.AddScoped<IFriendService, FriendService>();
+        sc.AddSingleton<INotificationService, NotificationService>();
 
-        // 3️⃣ walidatory
         sc.AddScoped<GameUploadValidator>();
         sc.AddScoped<RegisterValidator>();
         sc.AddScoped<UserValidator>();
 
-        // 4️⃣ view-modele  (Transient → każdy widok dostaje „świeży” VM)
         sc.AddTransient<LoginViewModel>();
         sc.AddTransient<MainViewModel>();
         sc.AddTransient<UsersViewModel>();
         sc.AddTransient<ProfileViewModel>();
         sc.AddTransient<FriendListViewModel>();
+        sc.AddTransient<StatsViewModel>();
         sc.AddTransient<AddGameDialogViewModel>();
         sc.AddTransient<ShellViewModel>();
 
         Services = sc.BuildServiceProvider();
 
-        /* ========== 2.  Migracja + seed admina ========== */
+        /* ---------- migracja + admin ---------- */
         using (var scope = Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -62,43 +70,77 @@ public partial class App : Application
 
             if (!db.Users.Any())
             {
-                var hasher = new PasswordHasher<User>();
                 db.Users.Add(new User
                 {
                     Login = "admin",
-                    Email = "admin@example.com",
+                    Email = "admin@demo.dev",
                     Role = UserRole.Admin,
-                    PasswordHash = hasher.HashPassword(null!, "admin")
+                    PasswordHash = new PasswordHasher<User>()
+                                   .HashPassword(null!, "admin")
                 });
                 db.SaveChanges();
             }
         }
 
-        /* ========== 3.  Okno logowania (modalne) ========== */
-        var loginWin = new LoginWindow
+        /* ---------- okno-keeper ---------- */
+        var keeper = MakeKeeper();
+        MainWindow = keeper;
+        keeper.Show();
+
+        /* ---------- pętla ---------- */
+        while (true)
+        {
+            if (!ShowLogin()) { Shutdown(); return; }
+
+            // --- UWAGA: najpierw tworzymy i ustawiamy nowe MainWindow,
+            //     a dopiero potem zamykamy stare, żeby WPF nie wywołał Shutdown().
+
+            var shell = new ShellWindow(
+                            Services.GetRequiredService<ShellViewModel>());
+
+            MainWindow = shell;       // <- teraz Shell jest głównym oknem
+            if (keeper.IsVisible)     //    więc zamknięcie keepera nic nie wywoła
+                keeper.Close();
+
+            shell.ShowDialog();       // ← blokuje aż do zamknięcia powłoki
+
+            /* jeżeli Shell zamknął się „Wyloguj” → CurrentRole = Guest
+             * jeżeli [X] przy zalogowanym userze → inna rola => Exit   */
+            if (Services.GetRequiredService<IAuthService>().CurrentRole
+                != UserRole.Guest)
+            {
+                Shutdown();                                // [X]
+                return;
+            }
+
+            // Logout → start od nowa
+            keeper = MakeKeeper();
+            MainWindow = keeper;
+            keeper.Show();
+        }
+    }
+
+    /* ---------- helpers ---------- */
+
+    private static Window MakeKeeper() => new()
+    {
+        Width = 0,
+        Height = 0,
+        Opacity = 0,
+        ShowInTaskbar = false,
+        WindowStyle = WindowStyle.None
+    };
+
+    private bool ShowLogin()
+    {
+        var win = new LoginWindow
         {
             DataContext = Services.GetRequiredService<LoginViewModel>()
         };
-        loginWin.ShowDialog();      //  czeka, aż użytkownik się uwierzytelni
-
-        var auth = Services.GetRequiredService<IAuthService>();
-        if (auth.CurrentRole == UserRole.Guest)
-        {
-            //  anulowano / zamknięto okno logowania
-            Shutdown();
-            return;
-        }
-
-        /* ========== 4.  Shell z nawigacją ========== */
-        var shell = new ShellWindow(
-                        Services.GetRequiredService<ShellViewModel>())
-        {
-            Title = auth.CurrentRole == UserRole.Admin
-                    ? "GamePlatform – Administrator"
-                    : "GamePlatform"
-        };
-
-        MainWindow = shell;
-        shell.Show();
+        return win.ShowDialog() == true;
     }
+
+    private static void ShowFatal(Exception ex)
+        => MessageBox.Show(ex.ToString(), "Błąd krytyczny",
+                           MessageBoxButton.OK, MessageBoxImage.Error);
 }

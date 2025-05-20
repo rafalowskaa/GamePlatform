@@ -8,11 +8,12 @@ namespace GamePlatform.Desktop.Services;
 
 public interface IFriendService
 {
-    /* ------- zapytania ------- */
+    /* zapytania */
     Task<IReadOnlyList<User>> GetFriendsAsync(Guid userId);
     Task<IReadOnlyList<FriendRequestDto>> GetPendingAsync(Guid userId);
+    Task<IReadOnlyList<User>> FindUsersAsync(string term, Guid currentId);   // ★ NOWE
 
-    /* ------- polecenia  ------- */
+    /* polecenia */
     Task SendRequestAsync(Guid fromUserId, Guid toUserId);
     Task AcceptRequestAsync(Guid requestId);
     Task DeclineRequestAsync(Guid requestId);

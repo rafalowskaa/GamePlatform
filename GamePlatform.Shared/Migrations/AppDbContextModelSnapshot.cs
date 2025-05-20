@@ -125,8 +125,17 @@ namespace GamePlatform.Shared.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("BlockReason")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("BlockedUntilUtc")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastLoginUtc")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Login")

@@ -1,37 +1,50 @@
 ﻿<Page x:Class="GamePlatform.Desktop.Views.FriendsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-      Title="Znajomi">
+      xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <Grid Margin="24">
+    <DockPanel Margin="24">
+
+        <!-- ====== pasek wyszukiwania / autosugestia ====== -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <ComboBox Width="260"
+                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding Suggestions}"
+                      IsEditable="True"
+                      IsDropDownOpen="{Binding IsSuggestOpen}"
+                      KeyUp="OnKey"
+                      md:HintAssist.Hint="Dodaj znajomego…"/>
+
+            <Button Content="➕"
+                    Margin="8 0 0 0"
+                    Command="{Binding InviteCommand}"
+                    CommandParameter="{Binding SearchText}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"/>
+        </StackPanel>
+
+        <!-- ====== lista znajomych ====== -->
         <DataGrid ItemsSource="{Binding Friends}"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  Margin="0 12 0 0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="*"/>
+                <DataGridTextColumn Header="Login"  Binding="{Binding Login}" Width="*"/>
                 <DataGridTextColumn Header="E-mail" Binding="{Binding Email}" Width="2*"/>
-                <DataGridTemplateColumn Header="">
+                <DataGridTemplateColumn Header="" Width="70">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Usuń"
                                     Command="{Binding DataContext.RemoveCommand,
                                                       RelativeSource={RelativeSource AncestorType=Page}}"
-                                    CommandParameter="{Binding}"
-                                    Style="{StaticResource MaterialDesignFlatButton}"/>
+                                    CommandParameter="{Binding}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
-        <Border Background="#80000000"
-                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}">
-            <TextBlock Text="Ładowanie..."
-                       Foreground="White"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="18"/>
-        </Border>
-    </Grid>
+        <!-- ====== Snackbar ====== -->
+        <md:Snackbar Margin="0 12 0 0"
+                     MessageQueue="{Binding MsgQueue}"/>
+    </DockPanel>
 </Page>

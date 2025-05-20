@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GamePlatform.Shared.Enums
+﻿namespace GamePlatform.Shared.Enums
 {
-    public enum UserRole { Guest, User, Admin}
+    /// <summary>
+    /// Poziomy uprawnień w aplikacji.
+    /// </summary>
+    public enum UserRole
+    {
+        Guest,        // konto niezalogowane
+        User,         // zwykły użytkownik
+        Moderator,    // zarządza treścią / użytkownikami (bez uprawnień admina)
+        Admin         // pełne uprawnienia
+    }
 }

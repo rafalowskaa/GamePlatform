@@ -10,14 +10,20 @@ using System.Threading.Tasks;
 namespace GamePlatform.Desktop.Services;
 
 /// <summary>
-/// Obsługa zaproszeń i listy znajomych.
+/// Logika zaproszeń i listy znajomych.
 /// </summary>
 public sealed class FriendService : IFriendService
 {
     private readonly AppDbContext _db;
-    public FriendService(AppDbContext db) => _db = db;
+    private readonly INotificationService? _notif;  // może być null w testach
 
-    /* ========= ZAPYTANIA ========= */
+    public FriendService(AppDbContext db, INotificationService? notif = null)
+    {
+        _db = db;
+        _notif = notif;
+    }
+
+    /* ======== zapytania ======== */
 
     public async Task<IReadOnlyList<User>> GetFriendsAsync(Guid userId) =>
         await _db.Friends
@@ -33,17 +39,30 @@ public sealed class FriendService : IFriendService
                  .AsNoTracking()
                  .ToListAsync();
 
-    /* ========== KOMENDY ========== */
+    /// <summary>Wyszukuje użytkowników pasujących do <paramref name="term"/> (login / e-mail).</summary>
+    public async Task<IReadOnlyList<User>> FindUsersAsync(string term, Guid currentId) =>
+        await _db.Users
+                 .Where(u => (u.Login.Contains(term) || u.Email.Contains(term)) &&
+                             u.Id != currentId)
+                 .OrderBy(u => u.Login)
+                 .Take(20)
+                 .AsNoTracking()
+                 .ToListAsync();
+
+    /* ======== komendy ======== */
 
     public async Task SendRequestAsync(Guid fromUserId, Guid toUserId)
     {
-        if (fromUserId == toUserId) return;                         // do siebie
+        if (fromUserId == toUserId) return;  // do siebie
 
-        bool exists = await _db.Friends.AnyAsync(f =>
-                        (f.UserId == fromUserId && f.MateId == toUserId) ||
-                        (f.UserId == toUserId && f.MateId == fromUserId));
+        bool alreadyFriends = await _db.Friends.AnyAsync(f =>
+                                (f.UserId == fromUserId && f.MateId == toUserId) ||
+                                (f.UserId == toUserId && f.MateId == fromUserId));
+        if (alreadyFriends) return;
 
-        if (exists) return;                                         // już znajomi
+        bool pending = await _db.FriendRequests.AnyAsync(r =>
+                        r.FromUserId == fromUserId && r.ToUserId == toUserId);
+        if (pending) return;
 
         _db.FriendRequests.Add(new FriendRequest
         {
@@ -51,6 +70,8 @@ public sealed class FriendService : IFriendService
             ToUserId = toUserId
         });
         await _db.SaveChangesAsync();
+
+        _notif?.Raise("Wysłano zaproszenie do znajomych");
     }
 
     public async Task AcceptRequestAsync(Guid requestId)
@@ -61,6 +82,8 @@ public sealed class FriendService : IFriendService
         _db.Friends.Add(new Friend { UserId = req.FromUserId, MateId = req.ToUserId });
         _db.FriendRequests.Remove(req);
         await _db.SaveChangesAsync();
+
+        _notif?.Raise("Zaproszenie zaakceptowane");
     }
 
     public async Task DeclineRequestAsync(Guid requestId)
@@ -70,6 +93,8 @@ public sealed class FriendService : IFriendService
 
         _db.FriendRequests.Remove(req);
         await _db.SaveChangesAsync();
+
+        _notif?.Raise("Zaproszenie odrzucone");
     }
 
     public async Task RemoveFriendAsync(Guid userId, Guid mateId)
@@ -77,10 +102,11 @@ public sealed class FriendService : IFriendService
         var rel = await _db.Friends.FirstOrDefaultAsync(f =>
                      (f.UserId == userId && f.MateId == mateId) ||
                      (f.UserId == mateId && f.MateId == userId));
-
         if (rel is null) return;
 
         _db.Friends.Remove(rel);
         await _db.SaveChangesAsync();
+
+        _notif?.Raise("Usunięto z listy znajomych");
     }
 }

@@ -3,57 +3,62 @@ using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
 using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Enums;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace GamePlatform.Desktop.ViewModels;
 
-/// <summary>
-/// Główna „skorupa” – przełącza strony i obsługuje wylogowanie.
-/// </summary>
 public partial class ShellViewModel : ObservableObject
 {
     private readonly MainViewModel _main;
     private readonly ProfileViewModel _profile;
     private readonly UsersViewModel _users;
     private readonly FriendListViewModel _friends;
+    private readonly StatsViewModel _stats;
     private readonly IAuthService _auth;
 
-    public ShellViewModel(MainViewModel main,
-                          ProfileViewModel profile,
-                          UsersViewModel users,
-                          FriendListViewModel friends,
-                          IAuthService auth)
+    public ShellViewModel(IServiceProvider sp, IAuthService auth)
     {
-        _main = main;
-        _profile = profile;
-        _users = users;
-        _friends = friends;
+        _main = sp.GetRequiredService<MainViewModel>();
+        _profile = sp.GetRequiredService<ProfileViewModel>();
+        _users = sp.GetRequiredService<UsersViewModel>();
+        _friends = sp.GetRequiredService<FriendListViewModel>();
+        _stats = sp.GetRequiredService<StatsViewModel>();
         _auth = auth;
 
-        CurrentPage = new GamesPage { DataContext = _main };
+        SetPage(new GamesPage { DataContext = _main }, "Games");
     }
 
+    /* ---------------- bindings ---------------- */
     [ObservableProperty] private Page _currentPage = null!;
+    [ObservableProperty] private string _currentPageTag = "Games";
 
     public bool IsAdmin => _auth.CurrentRole == UserRole.Admin;
 
-    /* ---------- NAWIGACJA ---------- */
-    [RelayCommand] private void ShowGames() => CurrentPage = new GamesPage { DataContext = _main };
-    [RelayCommand] private void ShowProfile() => CurrentPage = new ProfilePage { DataContext = _profile };
-    [RelayCommand] private void ShowFriends() => CurrentPage = new FriendsPage { DataContext = _friends };
-
-    [RelayCommand]
-    private void ShowUsers()
+    private void SetPage(Page page, string tag)
     {
-        if (IsAdmin)
-            CurrentPage = new UsersPage { DataContext = _users };
+        CurrentPage = page;
+        CurrentPageTag = tag;
     }
 
-    /* ---------- WYLOGOWANIE ---------- */
+    /* --------------- commands ----------------- */
+    [RelayCommand] private void ShowGames() => SetPage(new GamesPage { DataContext = _main }, "Games");
+    [RelayCommand] private void ShowProfile() => SetPage(new ProfilePage { DataContext = _profile }, "Profile");
+    [RelayCommand] private void ShowFriends() => SetPage(new FriendsPage { DataContext = _friends }, "Friends");
+    [RelayCommand] private void ShowStats() => SetPage(new StatsPage { DataContext = _stats }, "Stats");
+    [RelayCommand]
+    private void ShowUsers()
+    { if (IsAdmin) SetPage(new UsersPage { DataContext = _users }, "Users"); }
+
+    /* --------------- logout ------------------- */
     [RelayCommand]
     private async void Logout()
     {
         await _auth.LogoutAsync();
-        System.Windows.Application.Current.Shutdown();   // restart aplikacji = ponowne logowanie
+        OnPropertyChanged(nameof(IsAdmin));        // odśwież przycisk „Użytkownicy”
+        // zamykamy główne okno powłoki -> wracamy do pętli w App.xaml.cs
+        Application.Current.MainWindow?.Close();
     }
 }
