@@ -11,54 +11,36 @@ namespace GamePlatform.Desktop.ViewModels;
 
 /// <summary>
 /// VM okna „Edytuj użytkownika”.
-/// Wszystkie właściwości są zdefiniowane ręcznie; nie używamy atrybutów
-/// Source-Generatora, więc nie powstaną żadne duplikaty.
 /// </summary>
 public partial class EditUserViewModel : ObservableObject
 {
     private readonly AppDbContext _db;
     private Guid _userId;
 
-    public EditUserViewModel(AppDbContext db) => _db = db;
-
-    /* ────────── Właściwości ────────── */
-
-    private string _login = "";
-    public string Login
+    public EditUserViewModel(AppDbContext db)
     {
-        get => _login;
-        private set => SetProperty(ref _login, value);
+        _db = db;
+
+        /*  pełna lista ról – Admin | Moderator | User  */
+        Roles = new[]
+        {
+            UserRole.Admin,
+            UserRole.Moderator,
+            UserRole.User
+        };
     }
 
-    private string _email = "";
-    public string Email
-    {
-        get => _email;
-        set => SetProperty(ref _email, value);
-    }
+    /* ----------  PUBLICZNE KOLEKCJE  ---------- */
+    public UserRole[] Roles { get; }
 
-    private UserRole _role;
-    public UserRole Role
-    {
-        get => _role;
-        set => SetProperty(ref _role, value);
-    }
+    /* ----------  WŁAŚCIWOŚCI  ---------- */
+    [ObservableProperty] private string _login = "";
+    [ObservableProperty] private string _email = "";
+    [ObservableProperty] private UserRole _role;
+    [ObservableProperty] private DateTime? _blockedUntilUtc;
+    [ObservableProperty] private string? _blockReason;
 
-    private DateTime? _blockedUntilUtc;
-    public DateTime? BlockedUntilUtc
-    {
-        get => _blockedUntilUtc;
-        set => SetProperty(ref _blockedUntilUtc, value);
-    }
-
-    private string? _blockReason;
-    public string? BlockReason
-    {
-        get => _blockReason;
-        set => SetProperty(ref _blockReason, value);
-    }
-
-    /// <summary>Przenosi dane wybranego wiersza do pól dialogu.</summary>
+    /* ----------  INICJALIZACJA  ---------- */
     public void Init(User src)
     {
         _userId = src.Id;
@@ -69,8 +51,13 @@ public partial class EditUserViewModel : ObservableObject
         BlockReason = src.BlockReason;
     }
 
-    /* ────────── Zapis ────────── */
+    /* ----------  KOMENDY  ---------- */
 
+    /// <summary>Zdjęcie blokady (przycisk ✕ obok DatePickera).</summary>
+    [RelayCommand]
+    private void ClearBlock() => BlockedUntilUtc = null;
+
+    /// <summary>Zapisz zmiany i zamknij okno (DialogResult = true).</summary>
     [RelayCommand]
     private async Task Save(System.Windows.Window win)
     {
@@ -87,6 +74,6 @@ public partial class EditUserViewModel : ObservableObject
         u.BlockReason = BlockReason;
 
         await _db.SaveChangesAsync();
-        win.DialogResult = true;     // zamyka okno z rezultatem OK
+        win.DialogResult = true;    // zamyka okno z rezultatem OK
     }
 }

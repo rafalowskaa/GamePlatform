@@ -9,9 +9,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;     // MessageBox, Application
+using System.Windows;
+using System.Windows.Data;              // ICollectionView
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -26,28 +30,99 @@ public partial class UsersViewModel : ObservableObject
         _db = db;
         _auth = auth;
         _sp = sp;
+
+        /* -------  lista opcji do ComboBoxa  ------- */
+        Roles = new List<string>
+        {
+            "Wszyscy",
+            nameof(UserRole.Admin),
+            nameof(UserRole.Moderator),
+            nameof(UserRole.User)
+        };
+
+        /* -------  CollectionView do filtrowania / sortowania  ------- */
+        UsersView = CollectionViewSource.GetDefaultView(Users);
+        UsersView.Filter = FilterPredicate;
+
         _ = LoadAsync();
     }
 
+    /* --------------------  DANE  -------------------- */
     public ObservableCollection<User> Users { get; } = new();
 
-    /* ──────────  STAN  ────────── */
-    [ObservableProperty] private bool _isBusy;
+    /// <summary>Widok z sortowaniem i filtrem.</summary>
+    public ICollectionView UsersView { get; }
 
-    /* ──────────  ŁADOWANIE  ────────── */
+    /// <summary>Źródło ItemsSource dla ComboBoxa „Rola”.</summary>
+    public IReadOnlyList<string> Roles { get; }
+
+    /* --------------------  STAN UI  -------------------- */
+    [ObservableProperty] private bool _isBusy;
+    [ObservableProperty] private string? _selectedRoleFilter = "Wszyscy";
+    [ObservableProperty] private string? _loginFilter;
+    [ObservableProperty] private bool _onlyBlocked;
+
+    /* --------------------  ŁADOWANIE  -------------------- */
     [RelayCommand]
     private async Task LoadAsync()
     {
         IsBusy = true;
-        Users.Clear();
 
+        Users.Clear();
         foreach (var u in await _db.Users.AsNoTracking().ToListAsync())
             Users.Add(u);
 
         IsBusy = false;
+        UsersView.Refresh();
     }
 
-    /* ──────────  USUŃ (z potwierdzeniem + hasło)  ────────── */
+    /* --------------------  FILTRACJA  -------------------- */
+    private bool FilterPredicate(object obj)
+    {
+        if (obj is not User u) return false;
+
+        /*  Rola  */
+        if (!string.IsNullOrWhiteSpace(SelectedRoleFilter) &&
+            SelectedRoleFilter != "Wszyscy" &&
+            !u.Role.ToString().Equals(SelectedRoleFilter, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        /*  Login  */
+        if (!string.IsNullOrWhiteSpace(LoginFilter) &&
+            !u.Login.Contains(LoginFilter, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        /*  Tylko z blokadą  */
+        if (OnlyBlocked && string.IsNullOrWhiteSpace(u.BlockReason))
+            return false;
+
+        return true;
+    }
+
+    /*  automatyczne odświeżanie filtrów  */
+    partial void OnSelectedRoleFilterChanged(string? _, string? __) => ApplyFilter();
+    partial void OnLoginFilterChanged(string? _, string? __) => ApplyFilter();
+    partial void OnOnlyBlockedChanged(bool _, bool __) => ApplyFilter();
+
+    private void ApplyFilter()
+    {
+        UsersView.SortDescriptions.Clear();   // czyści ewentualne stare sortowanie
+        UsersView.Refresh();
+    }
+
+    /*  wyczyść filtry  */
+    [RelayCommand]
+    private void ClearFilters()
+    {
+        SelectedRoleFilter = "Wszyscy";
+        LoginFilter = null;
+        OnlyBlocked = false;
+
+        UsersView.SortDescriptions.Clear();
+        UsersView.Refresh();
+    }
+
+    /* --------------------  USUŃ  -------------------- */
     [RelayCommand]
     private async Task DeleteAsync(object? parameter)
     {
@@ -57,51 +132,39 @@ public partial class UsersViewModel : ObservableObject
         if (isModerator && victim.Role is UserRole.Admin or UserRole.Moderator) return;
         if (_auth.CurrentUser?.Id == victim.Id) return;
 
-        // pierwszy dialog „Czy na pewno…”
-        var res = MessageBox.Show(
-            $"Czy na pewno chcesz usunąć użytkownika \"{victim.Login}\"?",
-            "Potwierdź",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+        if (MessageBox.Show(
+                $"Czy na pewno chcesz usunąć użytkownika „{victim.Login}”?",
+                "Potwierdź", MessageBoxButton.YesNo, MessageBoxImage.Warning)
+            != MessageBoxResult.Yes)
+            return;
 
-        if (res != MessageBoxResult.Yes) return;
-
-        // dialog hasła
-        var pwdDlg = new PasswordPromptWindow
-        {
-            Owner = Application.Current.MainWindow
-        };
+        /*  dialog z hasłem  */
+        var pwdDlg = new PasswordPromptWindow { Owner = Application.Current.MainWindow };
         if (pwdDlg.ShowDialog() != true) return;
 
-        // weryfikacja hasła
         var me = _auth.CurrentUser;
         if (me is null)
         {
             MessageBox.Show("Brak kontekstu zalogowanego użytkownika.",
-                            "Błąd",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
+                            "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 
         var hasher = new PasswordHasher<User>();
-        var vrfy = hasher.VerifyHashedPassword(me, me.PasswordHash, pwdDlg.Password);
-        if (vrfy == PasswordVerificationResult.Failed)
+        if (hasher.VerifyHashedPassword(me, me.PasswordHash, pwdDlg.Password)
+            == PasswordVerificationResult.Failed)
         {
             MessageBox.Show("Nieprawidłowe hasło.",
-                            "Błąd",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
+                            "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 
-        // usunięcie z bazy i z kolekcji
         _db.Users.Remove(victim);
         await _db.SaveChangesAsync();
         Users.Remove(victim);
     }
 
-    /* ──────────  EDYTUJ  ────────── */
+    /* --------------------  EDYCJA  -------------------- */
     [RelayCommand]
     private async Task EditAsync(object? parameter)
     {
@@ -116,8 +179,7 @@ public partial class UsersViewModel : ObservableObject
             Owner = Application.Current.MainWindow
         };
 
-        bool? ok = dlg.ShowDialog();
-        if (ok == true)
+        if (dlg.ShowDialog() == true)
             await LoadAsync();
     }
 }
