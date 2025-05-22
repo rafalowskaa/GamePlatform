@@ -21,18 +21,22 @@ public sealed class AuthService : IAuthService
     public UserRole CurrentRole => _current?.Role ?? UserRole.Guest;
     public string? CurrentLogin => _current?.Login;
 
-    public async Task<bool> LoginAsync(string loginOrEmail, string password)
+    public async Task<LoginResult> LoginAsync(string loginOrEmail, string password)
     {
         _current = await _db.Users.FirstOrDefaultAsync(u =>
                        u.Login == loginOrEmail || u.Email == loginOrEmail);
 
-        if (_current is null) return false;
+        if (_current is null)
+            return LoginResult.Fail("Błędny login lub hasło.");
 
-        /* blokada */
+        /* sprawdź blokadę */
         if (_current.BlockedUntilUtc is not null && _current.BlockedUntilUtc > DateTime.UtcNow)
         {
-            Debug.WriteLine($"[Auth] Konto zablokowane do {_current.BlockedUntilUtc}");
-            return false;
+            string msg = $"Konto zostało zablokowane do {_current.BlockedUntilUtc:yyyy-MM-dd HH:mm} (UTC)"
+                       + (!string.IsNullOrWhiteSpace(_current.BlockReason)
+                          ? $"\nPowód: {_current.BlockReason}"
+                          : "");
+            return LoginResult.Fail(msg);
         }
 
         bool ok = _hasher.VerifyHashedPassword(_current, _current.PasswordHash, password)
@@ -42,10 +46,11 @@ public sealed class AuthService : IAuthService
         {
             _current.LastLoginUtc = DateTime.UtcNow;
             await _db.SaveChangesAsync();
+            return LoginResult.Success();
         }
-        else _current = null;
 
-        return ok;
+        _current = null;
+        return LoginResult.Fail("Błędny login lub hasło.");
     }
 
     public async Task<bool> RegisterAsync(string login, string email, string password)
@@ -66,4 +71,11 @@ public sealed class AuthService : IAuthService
     }
 
     public Task LogoutAsync() { _current = null; return Task.CompletedTask; }
+}
+
+/* ——— pomocniczy DTO wyniku logowania ——— */
+public record LoginResult(bool IsSuccess, string? Error)
+{
+    public static LoginResult Success() => new(true, null);
+    public static LoginResult Fail(string reason) => new(false, reason);
 }

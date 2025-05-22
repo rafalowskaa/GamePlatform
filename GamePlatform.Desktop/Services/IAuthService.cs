@@ -15,7 +15,9 @@ public interface IAuthService
     string? CurrentLogin { get; }
 
     /* OPERACJE ----------------------------------------------------------- */
-    Task<bool> LoginAsync(string loginOrEmail, string password);
+    //Task<bool> LoginAsync(string loginOrEmail, string password);
     Task<bool> RegisterAsync(string login, string email, string password);
+    Task<LoginResult> LoginAsync(string loginOrEmail, string password);
+
     Task LogoutAsync();
 }

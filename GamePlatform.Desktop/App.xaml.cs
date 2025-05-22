@@ -59,6 +59,7 @@ public partial class App : Application
         sc.AddTransient<StatsViewModel>();
         sc.AddTransient<AddGameDialogViewModel>();
         sc.AddTransient<ShellViewModel>();
+        sc.AddTransient<EditUserViewModel>();
 
         Services = sc.BuildServiceProvider();
 

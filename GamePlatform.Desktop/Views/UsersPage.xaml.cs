@@ -1,6 +1,11 @@
-﻿using System.Windows.Controls;
-namespace GamePlatform.Desktop.Views;
-public partial class UsersPage : Page
+﻿using System.Windows;
+using System.Windows.Controls;
+
+namespace GamePlatform.Desktop.Views
 {
-    public UsersPage() => InitializeComponent();
+    public partial class UsersPage : Page
+    {
+        public UsersPage() => InitializeComponent();
+
+    }
 }

@@ -51,14 +51,22 @@ public partial class LoginViewModel : ObservableObject
     [RelayCommand]
     private async Task SubmitLogin(System.Windows.Window win)
     {
-        if (await _auth.LoginAsync(Login, Password))
+        /*  nowy wynik = obiekt  */
+        var result = await _auth.LoginAsync(Login, Password);
+
+        if (result.IsSuccess)
         {
             // TODO: RememberMe -> zapisz token/cookie etc.
             ClearFields();
-            win.DialogResult = true;   // ZAMYKA okno modalne
+            win.DialogResult = true;   // zamyka okno modalne
         }
-        else FlashError("Błędny login lub hasło.");
+        else
+        {
+            FlashError(result.Error ?? "Logowanie nieudane");
+        }
     }
+
+
 
     /* ─────────  REJESTRACJA  ───────── */
     [RelayCommand]

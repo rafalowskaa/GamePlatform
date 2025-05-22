@@ -1,12 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
+using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Data;
 using GamePlatform.Shared.Enums;
 using GamePlatform.Shared.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;     // MessageBox, Application
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -14,54 +19,105 @@ public partial class UsersViewModel : ObservableObject
 {
     private readonly AppDbContext _db;
     private readonly IAuthService _auth;
+    private readonly IServiceProvider _sp;
 
-    public UsersViewModel(AppDbContext db, IAuthService auth)
-    { _db = db; _auth = auth; _ = LoadAsync(); }
+    public UsersViewModel(AppDbContext db, IAuthService auth, IServiceProvider sp)
+    {
+        _db = db;
+        _auth = auth;
+        _sp = sp;
+        _ = LoadAsync();
+    }
 
     public ObservableCollection<User> Users { get; } = new();
 
+    /* ──────────  STAN  ────────── */
     [ObservableProperty] private bool _isBusy;
 
+    /* ──────────  ŁADOWANIE  ────────── */
     [RelayCommand]
     private async Task LoadAsync()
     {
         IsBusy = true;
         Users.Clear();
+
         foreach (var u in await _db.Users.AsNoTracking().ToListAsync())
             Users.Add(u);
+
         IsBusy = false;
     }
 
-    /* --------------- SAVE ---------------- */
+    /* ──────────  USUŃ (z potwierdzeniem + hasło)  ────────── */
     [RelayCommand]
-    private async Task SaveAsync(object? p)
+    private async Task DeleteAsync(object? parameter)
     {
-        if (p is not User u) return;
-        if (_auth.CurrentRole == UserRole.Moderator && u.Role == UserRole.Admin) return;
+        if (parameter is not User victim) return;
 
-        var tracked = await _db.Users.FindAsync(u.Id);
-        if (tracked is null) return;
+        bool isModerator = _auth.CurrentRole == UserRole.Moderator;
+        if (isModerator && victim.Role is UserRole.Admin or UserRole.Moderator) return;
+        if (_auth.CurrentUser?.Id == victim.Id) return;
 
-        tracked.Login = u.Login;
-        tracked.Email = u.Email;
-        tracked.Role = u.Role;
-        tracked.BlockedUntilUtc = u.BlockedUntilUtc;
-        tracked.BlockReason = u.BlockReason;
+        // pierwszy dialog „Czy na pewno…”
+        var res = MessageBox.Show(
+            $"Czy na pewno chcesz usunąć użytkownika \"{victim.Login}\"?",
+            "Potwierdź",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
 
+        if (res != MessageBoxResult.Yes) return;
+
+        // dialog hasła
+        var pwdDlg = new PasswordPromptWindow
+        {
+            Owner = Application.Current.MainWindow
+        };
+        if (pwdDlg.ShowDialog() != true) return;
+
+        // weryfikacja hasła
+        var me = _auth.CurrentUser;
+        if (me is null)
+        {
+            MessageBox.Show("Brak kontekstu zalogowanego użytkownika.",
+                            "Błąd",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+            return;
+        }
+
+        var hasher = new PasswordHasher<User>();
+        var vrfy = hasher.VerifyHashedPassword(me, me.PasswordHash, pwdDlg.Password);
+        if (vrfy == PasswordVerificationResult.Failed)
+        {
+            MessageBox.Show("Nieprawidłowe hasło.",
+                            "Błąd",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+            return;
+        }
+
+        // usunięcie z bazy i z kolekcji
+        _db.Users.Remove(victim);
         await _db.SaveChangesAsync();
+        Users.Remove(victim);
     }
 
-    /* --------------- DELETE -------------- */
+    /* ──────────  EDYTUJ  ────────── */
     [RelayCommand]
-    private async Task DeleteAsync(object? p)
+    private async Task EditAsync(object? parameter)
     {
-        if (p is not User u) return;
+        if (parameter is not User victim) return;
 
-        if (_auth.CurrentRole == UserRole.Moderator && u.Role is UserRole.Admin or UserRole.Moderator) return;
-        if (_auth.CurrentUser?.Id == u.Id) return;
+        var dlgVm = _sp.GetRequiredService<EditUserViewModel>();
+        dlgVm.Init(victim);
 
-        _db.Users.Remove(u);
-        await _db.SaveChangesAsync();
-        Users.Remove(u);
+        var dlg = new EditUserDialog
+        {
+            DataContext = dlgVm,
+            Owner = Application.Current.MainWindow
+        };
+
+        bool? ok = dlg.ShowDialog();
+        if (ok == true)
+            await LoadAsync();
     }
 }

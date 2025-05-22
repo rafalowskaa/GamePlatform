@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <None Remove="Resources\login_banner.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GamePlatform.Shared\GamePlatform.Shared.csproj" />
   </ItemGroup>
 
@@ -28,6 +32,12 @@
   <ItemGroup>
     <Folder Include="Assets\" />
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\login_banner.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 

@@ -1,58 +1,157 @@
 ﻿<Page x:Class="GamePlatform.Desktop.Views.UsersPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:enums="clr-namespace:GamePlatform.Shared.Enums;assembly=GamePlatform.Shared"
-      xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Grid Margin="24">
-        <DataGrid ItemsSource="{Binding Users}"
-                  AutoGenerateColumns="False"
-                  md:DataGridAssist.CellPadding="4"
-                  RowHeaderWidth="0">
+    <!-- ==========  ZASOBY  ========== -->
+    <Page.Resources>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Login" Binding="{Binding Login, Mode=TwoWay}"/>
-                <DataGridTextColumn Header="Email" Binding="{Binding Email, Mode=TwoWay}" Width="2*"/>
+        <!-- nagłówek -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground"   Value="White"/>
+            <Setter Property="Background"   Value="#222"/>
+            <Setter Property="BorderBrush"  Value="#444"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        </Style>
 
-                <DataGridTemplateColumn Header="Rola" Width="100">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ComboBox ItemsSource="{x:Static enums:EnumExtensions.RoleValues}"
-                                      SelectedItem="{Binding Role, Mode=TwoWay}"
-                                      Width="90"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+        <!-- wiersz: zaznaczenie, brak hover -->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#444"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-                <DataGridTextColumn Header="Blokada do"
-                                    Binding="{Binding BlockedUntilUtc, Mode=TwoWay}"
-                                    Width="120"/>
-                <DataGridTextColumn Header="Powód"
-                                    Binding="{Binding BlockReason, Mode=TwoWay}"
-                                    Width="160"/>
-                <DataGridTextColumn Header="Ostatnie log."
-                                    Binding="{Binding LastLoginUtc}"
-                                    Width="130"/>
+        <!-- tekst wyśrodkowany -->
+        <Style x:Key="CenterTxt" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment"   Value="Center"/>
+            <Setter Property="TextAlignment"       Value="Center"/>
+            <Setter Property="TextTrimming"        Value="CharacterEllipsis"/>
+        </Style>
 
-                <DataGridTemplateColumn Header="Akcje" Width="140">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Zapisz"
-                                        Command="{Binding DataContext.SaveCommand,
-                                                  RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}"
-                                        Style="{StaticResource MaterialDesignFlatButton}"/>
-                                <Button Content="Usuń" Margin="8 0 0 0"
-                                        Command="{Binding DataContext.DeleteCommand,
-                                                  RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}"
-                                        Style="{StaticResource MaterialDesignFlatButton}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+        <!-- czarny przycisk -->
+        <Style x:Key="BlackBtn" TargetType="Button"
+               BasedOn="{StaticResource MaterialDesignRaisedButton}">
+            <Setter Property="Width"       Value="140"/>
+            <Setter Property="Padding"     Value="4 2"/>
+            <Setter Property="Background"  Value="#111"/>
+            <Setter Property="Foreground"  Value="White"/>
+            <Setter Property="BorderBrush" Value="#111"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="DarkToolTip" TargetType="ToolTip">
+            <Setter Property="Background" Value="#111"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding"    Value="6"/>
+            <Setter Property="BorderBrush" Value="#111"/>
+        </Style>
+
+    </Page.Resources>
+
+    <!-- ==========  DATA-GRID  ========== -->
+    <DataGrid ItemsSource="{Binding Users}"
+              AutoGenerateColumns="False"
+              IsReadOnly="True"
+              HeadersVisibility="Column"
+              GridLinesVisibility="None"
+              RowHeaderWidth="0"
+              CanUserResizeColumns="False"
+              CanUserResizeRows="False"
+              CanUserSortColumns="False"
+              Background="Transparent"
+              BorderThickness="0"
+              Margin="12">
+
+        <DataGrid.Columns>
+
+            <!-- LOGIN -->
+            <DataGridTextColumn Header="LOGIN" Width="*"
+                                Binding="{Binding Login}"
+                                ElementStyle="{StaticResource CenterTxt}"/>
+
+            <!-- ROLA -->
+            <DataGridTextColumn Header="ROLA" Width="110"
+                                Binding="{Binding Role}"
+                                ElementStyle="{StaticResource CenterTxt}"/>
+
+           
+
+            <!-- BLOKADA z chmurką (pokazuje się tylko gdy BlockReason != null/empty) -->
+            <DataGridTemplateColumn Header="BLOKADA" Width="220">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+
+                            <!-- data blokady -->
+                            <TextBlock Style="{StaticResource CenterTxt}"
+                           Width="160"
+                           Text="{Binding BlockedUntilUtc}"/>
+
+                            <!-- ikona ☁ + tooltip -->
+                            <TextBlock Text="☁"
+                           FontSize="14"
+                           Margin="4 0 0 0">
+                                <TextBlock.ToolTip>
+                                    <ToolTip Style="{StaticResource DarkToolTip}"
+                                 Content="{Binding BlockReason}" />
+                                </TextBlock.ToolTip>
+
+                    <!-- ukrywamy ikonę, gdy BlockReason pusty/null -->
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding BlockReason}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding BlockReason}" Value="">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+
+
+            <!-- OSTATNIE LOG. -->
+            <DataGridTextColumn Header="OSTATNIE LOGOWANIE" Width="180"
+                                Binding="{Binding LastLoginUtc}"
+                                ElementStyle="{StaticResource CenterTxt}"/>
+
+            <!-- AKCJE -->
+            <DataGridTemplateColumn Header="AKCJE" Width="320">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <Button Style="{StaticResource BlackBtn}"
+                                    Content="Edytuj"
+                                    Command="{Binding DataContext.EditCommand,
+                                              RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}"/>
+
+                            <Button Style="{StaticResource BlackBtn}"
+                                    Margin="8 0 0 0"
+                                    Content="Usuń użytkownika"
+                                    Command="{Binding DataContext.DeleteCommand,
+                                              RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+
+        </DataGrid.Columns>
+    </DataGrid>
 </Page>
