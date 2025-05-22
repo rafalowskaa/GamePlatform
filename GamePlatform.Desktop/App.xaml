@@ -7,28 +7,25 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <!-- konwerter widoczności -->
+            <!-- jedyny ręczny konwerter – wbudowany -->
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
+            <!-- globalna kolejka komunikatów -->
+            <md:SnackbarMessageQueue x:Key="GlobalMsgQueue"
+                                     DiscardDuplicates="True"/>
+
             <ResourceDictionary.MergedDictionaries>
-
-                <!-- kolory własne -->
                 <ResourceDictionary Source="pack://application:,,,/Resources/MaterialColors.xaml"/>
-
-                <!-- ikony -->
                 <ResourceDictionary Source="pack://application:,,,/Resources/IconPack.xaml"/>
-
-                <!--  ⇓  NOWY SŁOWNIK ZE STYLAMI TEKSTU  ⇓  -->
                 <ResourceDictionary Source="pack://application:,,,/Resources/TextStyles.xaml"/>
 
-                <!-- motyw Material Design -->
+                <!-- motyw MD -->
                 <md:BundledTheme BaseTheme="Dark"
                                  PrimaryColor="Indigo"
                                  SecondaryColor="Lime"/>
 
-                <!-- domyślne style Material Design 2 -->
+                <!-- domyślne style MD2 -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml"/>
-
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

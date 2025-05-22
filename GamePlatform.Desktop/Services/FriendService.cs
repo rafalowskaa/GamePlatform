@@ -9,21 +9,18 @@ using System.Threading.Tasks;
 
 namespace GamePlatform.Desktop.Services;
 
-/// <summary>
-/// Logika zaproszeń i listy znajomych.
-/// </summary>
 public sealed class FriendService : IFriendService
 {
     private readonly AppDbContext _db;
-    private readonly INotificationService? _notif;  // może być null w testach
+    private readonly INotificationService? _notify;
 
     public FriendService(AppDbContext db, INotificationService? notif = null)
     {
         _db = db;
-        _notif = notif;
+        _notify = notif;
     }
 
-    /* ======== zapytania ======== */
+    /* ─────────────  zapytania  ───────────── */
 
     public async Task<IReadOnlyList<User>> GetFriendsAsync(Guid userId) =>
         await _db.Friends
@@ -35,11 +32,10 @@ public sealed class FriendService : IFriendService
     public async Task<IReadOnlyList<FriendRequestDto>> GetPendingAsync(Guid userId) =>
         await _db.FriendRequests
                  .Where(r => r.ToUserId == userId)
-                 .Select(r => new FriendRequestDto(r.FromUserId, r.ToUserId, r.SentUtc))
+                 .Select(r => new FriendRequestDto(r.Id, r.FromUserId, r.ToUserId, r.SentUtc))
                  .AsNoTracking()
                  .ToListAsync();
 
-    /// <summary>Wyszukuje użytkowników pasujących do <paramref name="term"/> (login / e-mail).</summary>
     public async Task<IReadOnlyList<User>> FindUsersAsync(string term, Guid currentId) =>
         await _db.Users
                  .Where(u => (u.Login.Contains(term) || u.Email.Contains(term)) &&
@@ -49,20 +45,25 @@ public sealed class FriendService : IFriendService
                  .AsNoTracking()
                  .ToListAsync();
 
-    /* ======== komendy ======== */
+    public async Task<bool> AreFriendsAsync(Guid a, Guid b) =>
+        await _db.Friends.AnyAsync(f =>
+               (f.UserId == a && f.MateId == b) ||
+               (f.UserId == b && f.MateId == a));
+
+    public async Task<bool> IsBlockedAsync(Guid blocker, Guid other) =>
+        await _db.BlockedUsers.AnyAsync(bu => bu.BlockerId == blocker && bu.BlockedId == other);
+
+    /* ─────────────  polecenia  ───────────── */
 
     public async Task SendRequestAsync(Guid fromUserId, Guid toUserId)
     {
-        if (fromUserId == toUserId) return;  // do siebie
+        if (fromUserId == toUserId) return;
+        if (await AreFriendsAsync(fromUserId, toUserId)) return;
+        if (await IsBlockedAsync(toUserId, fromUserId)) return;   // zablokowany nie zaprosi
 
-        bool alreadyFriends = await _db.Friends.AnyAsync(f =>
-                                (f.UserId == fromUserId && f.MateId == toUserId) ||
-                                (f.UserId == toUserId && f.MateId == fromUserId));
-        if (alreadyFriends) return;
-
-        bool pending = await _db.FriendRequests.AnyAsync(r =>
-                        r.FromUserId == fromUserId && r.ToUserId == toUserId);
-        if (pending) return;
+        bool dup = await _db.FriendRequests.AnyAsync(r =>
+                    r.FromUserId == fromUserId && r.ToUserId == toUserId);
+        if (dup) return;
 
         _db.FriendRequests.Add(new FriendRequest
         {
@@ -70,31 +71,28 @@ public sealed class FriendService : IFriendService
             ToUserId = toUserId
         });
         await _db.SaveChangesAsync();
-
-        _notif?.Raise("Wysłano zaproszenie do znajomych");
+        _notify?.Info("Wysłano zaproszenie");
     }
 
     public async Task AcceptRequestAsync(Guid requestId)
     {
-        var req = await _db.FriendRequests.FindAsync(requestId);
-        if (req is null) return;
+        var r = await _db.FriendRequests.FindAsync(requestId);
+        if (r is null) return;
 
-        _db.Friends.Add(new Friend { UserId = req.FromUserId, MateId = req.ToUserId });
-        _db.FriendRequests.Remove(req);
+        _db.Friends.Add(new Friend { UserId = r.FromUserId, MateId = r.ToUserId });
+        _db.FriendRequests.Remove(r);
         await _db.SaveChangesAsync();
-
-        _notif?.Raise("Zaproszenie zaakceptowane");
+        _notify?.Info("Zaproszenie zaakceptowane");
     }
 
     public async Task DeclineRequestAsync(Guid requestId)
     {
-        var req = await _db.FriendRequests.FindAsync(requestId);
-        if (req is null) return;
+        var r = await _db.FriendRequests.FindAsync(requestId);
+        if (r is null) return;
 
-        _db.FriendRequests.Remove(req);
+        _db.FriendRequests.Remove(r);
         await _db.SaveChangesAsync();
-
-        _notif?.Raise("Zaproszenie odrzucone");
+        _notify?.Info("Zaproszenie odrzucone");
     }
 
     public async Task RemoveFriendAsync(Guid userId, Guid mateId)
@@ -106,7 +104,27 @@ public sealed class FriendService : IFriendService
 
         _db.Friends.Remove(rel);
         await _db.SaveChangesAsync();
+        _notify?.Info("Usunięto znajomego");
+    }
 
-        _notif?.Raise("Usunięto z listy znajomych");
+    public async Task BlockAsync(Guid blockerId, Guid blockedId)
+    {
+        if (blockerId == blockedId) return;
+        if (await IsBlockedAsync(blockerId, blockedId)) return;
+
+        _db.BlockedUsers.Add(new BlockedUser { BlockerId = blockerId, BlockedId = blockedId });
+        await RemoveFriendAsync(blockerId, blockedId);   // blokada rozłącza znajomych
+        await _db.SaveChangesAsync();
+        _notify?.Info("Użytkownik zablokowany");
+    }
+
+    public async Task UnblockAsync(Guid blockerId, Guid blockedId)
+    {
+        var block = await _db.BlockedUsers.FindAsync(blockerId, blockedId);
+        if (block is null) return;
+
+        _db.BlockedUsers.Remove(block);
+        await _db.SaveChangesAsync();
+        _notify?.Info("Blokada usunięta");
     }
 }

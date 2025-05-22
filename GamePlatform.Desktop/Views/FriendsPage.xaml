@@ -5,46 +5,72 @@
 
     <DockPanel Margin="24">
 
-        <!-- ====== pasek wyszukiwania / autosugestia ====== -->
+        <!-- ░░ WYSZUKIWANIE ░░ -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <ComboBox Width="260"
-                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                      Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged}"
                       ItemsSource="{Binding Suggestions}"
+                      DisplayMemberPath="Login"
                       IsEditable="True"
                       IsDropDownOpen="{Binding IsSuggestOpen}"
-                      KeyUp="OnKey"
-                      md:HintAssist.Hint="Dodaj znajomego…"/>
+                      KeyDown="OnKey">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <EventSetter Event="PreviewMouseLeftButtonUp"
+                                     Handler="OnSuggestPicked"/>
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
 
             <Button Content="➕"
                     Margin="8 0 0 0"
-                    Command="{Binding InviteCommand}"
-                    CommandParameter="{Binding SearchText}"
-                    Style="{StaticResource MaterialDesignRaisedButton}"/>
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding InviteCommand}"/>
         </StackPanel>
 
-        <!-- ====== lista znajomych ====== -->
-        <DataGrid ItemsSource="{Binding Friends}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  Margin="0 12 0 0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Login"  Binding="{Binding Login}" Width="*"/>
-                <DataGridTextColumn Header="E-mail" Binding="{Binding Email}" Width="2*"/>
-                <DataGridTemplateColumn Header="" Width="70">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="Usuń"
-                                    Command="{Binding DataContext.RemoveCommand,
-                                                      RelativeSource={RelativeSource AncestorType=Page}}"
-                                    CommandParameter="{Binding}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <!-- ░░ LISTA ZNAJOMYCH ░░ -->
+        <ListView ItemsSource="{Binding Friends}" Margin="0 12 0 0">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Login}" Width="140"/>
+                        <TextBlock Text="{Binding Email}" Width="220"/>
 
-        <!-- ====== Snackbar ====== -->
-        <md:Snackbar Margin="0 12 0 0"
-                     MessageQueue="{Binding MsgQueue}"/>
+                        <Button Content="⋯" Width="32" Padding="0">
+                            <Button.ContextMenu>
+                                <ContextMenu>
+
+                                    <MenuItem Header="Wyświetl profil"
+                                              Command="{Binding DataContext.ViewProfileCommand,
+                                                                RelativeSource={RelativeSource AncestorType=Page}}"
+                                              CommandParameter="{Binding}"/>
+
+                                    <MenuItem Header="Usuń ze znajomych"
+                                              Command="{Binding DataContext.RemoveCommand,
+                                                                RelativeSource={RelativeSource AncestorType=Page}}"
+                                              CommandParameter="{Binding}"/>
+
+                                    <Separator/>
+
+                                    <MenuItem Header="Zablokuj"
+                                              Command="{Binding DataContext.BlockCommand,
+                                                                RelativeSource={RelativeSource AncestorType=Page}}"
+                                              CommandParameter="{Binding}"/>
+
+                                    <MenuItem Header="Odblokuj"
+                                              Command="{Binding DataContext.UnblockCommand,
+                                                                RelativeSource={RelativeSource AncestorType=Page}}"
+                                              CommandParameter="{Binding}"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- globalny Snackbar -->
+        <md:Snackbar DockPanel.Dock="Bottom"
+                     MessageQueue="{DynamicResource GlobalMsgQueue}"/>
     </DockPanel>
 </Page>

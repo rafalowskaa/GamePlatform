@@ -14,12 +14,15 @@ public class User
     public string PasswordHash { get; set; } = "";
     public UserRole Role { get; set; } = UserRole.User;
 
-    /* ——— nowe pola ——— */
     public DateTime? BlockedUntilUtc { get; set; }
     public string? BlockReason { get; set; }
     public DateTime? LastLoginUtc { get; set; }
 
-    /* — relacje — */
+    /* —— przyjaźnie —— */
     public ICollection<Friend> FriendsInitiated { get; set; } = [];
     public ICollection<Friend> FriendsAccepted { get; set; } = [];
+
+    /* —— blokady —— */
+    public ICollection<BlockedUser> BlockedUsers { get; set; } = []; // ja blokuję
+    public ICollection<BlockedUser> BlockedBy { get; set; } = []; // ktoś blokuje mnie
 }

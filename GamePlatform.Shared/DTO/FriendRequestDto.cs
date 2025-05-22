@@ -1,8 +1,10 @@
 ﻿using System;
 
-namespace GamePlatform.Shared.DTO;
-
 /// <summary>
-///  Dane pojedynczego zaproszenia do znajomych (bez logiki EF).
+/// Dane jednego zaproszenia do znajomych (warstwa DTO – bez EF).
 /// </summary>
-public record FriendRequestDto(Guid FromUserId, Guid ToUserId, DateTime SentUtc);
+public record FriendRequestDto(
+    Guid Id,            //  ★ identyfikator zaproszenia  (NOWE)
+    Guid FromUserId,
+    Guid ToUserId,
+    DateTime SentUtc);

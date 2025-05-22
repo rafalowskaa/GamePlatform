@@ -17,6 +17,24 @@ namespace GamePlatform.Shared.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
 
+            modelBuilder.Entity("GamePlatform.Shared.Models.BlockedUser", b =>
+                {
+                    b.Property<Guid>("BlockerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BlockedId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("BlockedUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("BlockerId", "BlockedId");
+
+                    b.HasIndex("BlockedId");
+
+                    b.ToTable("BlockedUsers");
+                });
+
             modelBuilder.Entity("GamePlatform.Shared.Models.Friend", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -182,6 +200,25 @@ namespace GamePlatform.Shared.Migrations
                     b.ToTable("GameVersions");
                 });
 
+            modelBuilder.Entity("GamePlatform.Shared.Models.BlockedUser", b =>
+                {
+                    b.HasOne("GamePlatform.Shared.Models.User", "Blocked")
+                        .WithMany("BlockedBy")
+                        .HasForeignKey("BlockedId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GamePlatform.Shared.Models.User", "Blocker")
+                        .WithMany("BlockedUsers")
+                        .HasForeignKey("BlockerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Blocked");
+
+                    b.Navigation("Blocker");
+                });
+
             modelBuilder.Entity("GamePlatform.Shared.Models.Friend", b =>
                 {
                     b.HasOne("GamePlatform.Shared.Models.User", "Mate")
@@ -251,6 +288,10 @@ namespace GamePlatform.Shared.Migrations
 
             modelBuilder.Entity("GamePlatform.Shared.Models.User", b =>
                 {
+                    b.Navigation("BlockedBy");
+
+                    b.Navigation("BlockedUsers");
+
                     b.Navigation("FriendsAccepted");
 
                     b.Navigation("FriendsInitiated");

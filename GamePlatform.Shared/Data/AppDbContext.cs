@@ -16,15 +16,16 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> o) : base(o) { }
     public AppDbContext() { }
 
-    /* ---------- DbSet-y ---------- */
+    /* ───── DbSet-y ───── */
     public DbSet<Game> Games => Set<Game>();
     public DbSet<GameVersion> GameVersions => Set<GameVersion>();
     public DbSet<Score> Scores => Set<Score>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Friend> Friends => Set<Friend>();
     public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
+    public DbSet<BlockedUser> BlockedUsers => Set<BlockedUser>();
 
-    /* ---------- konfiguracja ---------- */
+    /* ───── Config ───── */
     protected override void OnConfiguring(DbContextOptionsBuilder b)
     {
         if (!b.IsConfigured)
@@ -35,35 +36,50 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(b);
 
-        /* ===== tabela Friend – relacja N:N z dodatkowymi kolumnami ===== */
+        /* —— Friend (symetryczna) —— */
         b.Entity<Friend>(cfg =>
         {
-            /* klucz złożony zapobiega duplikatom (User ↔ Mate) */
             cfg.HasKey(f => new { f.UserId, f.MateId });
 
-            cfg.HasOne(f => f.User)          // zapraszający
+            cfg.HasOne(f => f.User)
                .WithMany(u => u.FriendsInitiated)
                .HasForeignKey(f => f.UserId)
                .OnDelete(DeleteBehavior.Restrict);
 
-            cfg.HasOne(f => f.Mate)          // przyjęty
+            cfg.HasOne(f => f.Mate)
                .WithMany(u => u.FriendsAccepted)
                .HasForeignKey(f => f.MateId)
                .OnDelete(DeleteBehavior.Restrict);
         });
+
+        /* —— BlockedUser (symetryczna) —— */
+        b.Entity<BlockedUser>(cfg =>
+        {
+            cfg.HasKey(bu => new { bu.BlockerId, bu.BlockedId });
+
+            cfg.HasOne(bu => bu.Blocker)
+               .WithMany(u => u.BlockedUsers)
+               .HasForeignKey(bu => bu.BlockerId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            cfg.HasOne(bu => bu.Blocked)
+               .WithMany(u => u.BlockedBy)
+               .HasForeignKey(bu => bu.BlockedId)
+               .OnDelete(DeleteBehavior.Restrict);
+        });
     }
 
-    /* ---------- walidacja (FluentValidation) ---------- */
+    /* ───── walidacja FluentValidation ───── */
     public override int SaveChanges()
     {
         ValidateEntities();
         return base.SaveChanges();
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken ct = default)
+    public override Task<int> SaveChangesAsync(CancellationToken ct = default)
     {
         ValidateEntities();
-        return await base.SaveChangesAsync(ct);
+        return base.SaveChangesAsync(ct);
     }
 
     private void ValidateEntities()
@@ -76,11 +92,8 @@ public class AppDbContext : DbContext
             var validatorType = typeof(IValidator<>).MakeGenericType(e.Entity.GetType());
             if (sp?.GetService(validatorType) is not IValidator validator) continue;
 
-            var ctx = new ValidationContext<object>(e.Entity);
-            ValidationResult res = validator.Validate(ctx);
-
-            if (!res.IsValid)
-                throw new ValidationException(res.Errors);
+            var res = validator.Validate(new ValidationContext<object>(e.Entity));
+            if (!res.IsValid) throw new ValidationException(res.Errors);
         }
     }
 }

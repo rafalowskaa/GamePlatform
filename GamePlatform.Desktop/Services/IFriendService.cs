@@ -11,11 +11,17 @@ public interface IFriendService
     /* zapytania */
     Task<IReadOnlyList<User>> GetFriendsAsync(Guid userId);
     Task<IReadOnlyList<FriendRequestDto>> GetPendingAsync(Guid userId);
-    Task<IReadOnlyList<User>> FindUsersAsync(string term, Guid currentId);   // ★ NOWE
+    Task<IReadOnlyList<User>> FindUsersAsync(string term, Guid currentId);
 
-    /* polecenia */
+    Task<bool> AreFriendsAsync(Guid userA, Guid userB);
+    Task<bool> IsBlockedAsync(Guid blocker, Guid other);
+
+    /* komendy */
     Task SendRequestAsync(Guid fromUserId, Guid toUserId);
     Task AcceptRequestAsync(Guid requestId);
     Task DeclineRequestAsync(Guid requestId);
-    Task RemoveFriendAsync(Guid userId, Guid friendId);
+    Task RemoveFriendAsync(Guid userId, Guid mateId);
+
+    Task BlockAsync(Guid blockerId, Guid blockedId);
+    Task UnblockAsync(Guid blockerId, Guid blockedId);
 }

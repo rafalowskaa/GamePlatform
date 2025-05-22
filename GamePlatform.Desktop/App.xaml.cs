@@ -6,6 +6,7 @@ using GamePlatform.Shared.Enums;
 using GamePlatform.Shared.Models;
 using GamePlatform.Shared.Services;
 using GamePlatform.Shared.Validation;
+using MaterialDesignThemes.Wpf;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,26 +18,23 @@ using System.Windows;
 
 namespace GamePlatform.Desktop;
 
-/// <summary>
-/// Główna klasa aplikacji.
-/// </summary>
+/// <summary>Punkt startowy aplikacji.</summary>
 public partial class App : Application
 {
     public IServiceProvider Services { get; private set; } = null!;
+    public SnackbarMessageQueue MsgQueue { get; private set; } = null!;
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        /* ------- globalny catcher -------- */
-        AppDomain.CurrentDomain.UnhandledException += (_, a)
-            => ShowFatal((Exception)a.ExceptionObject);
-
+        /* globalny catcher */
         DispatcherUnhandledException += (_, a) =>
         {
-            ShowFatal(a.Exception);
-            a.Handled = true;                 // nie zamykaj procesu
+            MessageBox.Show(a.Exception.ToString(), "Błąd krytyczny",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+            a.Handled = true;
         };
 
-        /* ---------- DI / EF ---------- */
+        /* DI + EF */
         var sc = new ServiceCollection();
 
         sc.AddDbContext<AppDbContext>(o => o.UseSqlite("Data Source=games.db"));
@@ -45,25 +43,32 @@ public partial class App : Application
         sc.AddScoped<IGameRepository, GameRepositorySqlite>();
         sc.AddScoped<IProfileService, ProfileService>();
         sc.AddScoped<IFriendService, FriendService>();
+
         sc.AddSingleton<INotificationService, NotificationService>();
 
+        /* walidatory */
         sc.AddScoped<GameUploadValidator>();
         sc.AddScoped<RegisterValidator>();
         sc.AddScoped<UserValidator>();
 
+        /* view-modele */
         sc.AddTransient<LoginViewModel>();
+        sc.AddTransient<ShellViewModel>();
         sc.AddTransient<MainViewModel>();
         sc.AddTransient<UsersViewModel>();
-        sc.AddTransient<ProfileViewModel>();
         sc.AddTransient<FriendListViewModel>();
+        sc.AddTransient<ProfileViewModel>();
         sc.AddTransient<StatsViewModel>();
         sc.AddTransient<AddGameDialogViewModel>();
-        sc.AddTransient<ShellViewModel>();
         sc.AddTransient<EditUserViewModel>();
 
         Services = sc.BuildServiceProvider();
 
-        /* ---------- migracja + admin ---------- */
+        /* powiązanie powiadomień ↔ Snackbar */
+        if (Services.GetRequiredService<INotificationService>() is NotificationService ns)
+            ns.Raised += m => Dispatcher.Invoke(() => MsgQueue.Enqueue(m));
+
+        /* migracja + auto-admin */
         using (var scope = Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -76,61 +81,34 @@ public partial class App : Application
                     Login = "admin",
                     Email = "admin@demo.dev",
                     Role = UserRole.Admin,
-                    PasswordHash = new PasswordHasher<User>()
-                                   .HashPassword(null!, "admin")
+                    PasswordHash = new PasswordHasher<User>().HashPassword(null!, "admin")
                 });
                 db.SaveChanges();
             }
         }
 
-        /* ---------- okno-keeper ---------- */
-        var keeper = MakeKeeper();
-        MainWindow = keeper;
-        keeper.Show();
+        MsgQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(3));
 
-        /* ---------- pętla ---------- */
-        while (true)
+        Resources["GlobalMsgQueue"] = MsgQueue;
+
+        /* pętla logowania */
+        for (; ; )
         {
             if (!ShowLogin()) { Shutdown(); return; }
 
-            // --- UWAGA: najpierw tworzymy i ustawiamy nowe MainWindow,
-            //     a dopiero potem zamykamy stare, żeby WPF nie wywołał Shutdown().
+            var shell = new ShellWindow(Services.GetRequiredService<ShellViewModel>());
+            MainWindow = shell;
+            shell.ShowDialog();
 
-            var shell = new ShellWindow(
-                            Services.GetRequiredService<ShellViewModel>());
-
-            MainWindow = shell;       // <- teraz Shell jest głównym oknem
-            if (keeper.IsVisible)     //    więc zamknięcie keepera nic nie wywoła
-                keeper.Close();
-
-            shell.ShowDialog();       // ← blokuje aż do zamknięcia powłoki
-
-            /* jeżeli Shell zamknął się „Wyloguj” → CurrentRole = Guest
-             * jeżeli [X] przy zalogowanym userze → inna rola => Exit   */
-            if (Services.GetRequiredService<IAuthService>().CurrentRole
-                != UserRole.Guest)
+            if (Services.GetRequiredService<IAuthService>().CurrentRole != UserRole.Guest)
             {
-                Shutdown();                                // [X]
+                Shutdown();
                 return;
             }
-
-            // Logout → start od nowa
-            keeper = MakeKeeper();
-            MainWindow = keeper;
-            keeper.Show();
         }
     }
 
-    /* ---------- helpers ---------- */
-
-    private static Window MakeKeeper() => new()
-    {
-        Width = 0,
-        Height = 0,
-        Opacity = 0,
-        ShowInTaskbar = false,
-        WindowStyle = WindowStyle.None
-    };
+    /* —— helpers —— */
 
     private bool ShowLogin()
     {
@@ -140,8 +118,4 @@ public partial class App : Application
         };
         return win.ShowDialog() == true;
     }
-
-    private static void ShowFatal(Exception ex)
-        => MessageBox.Show(ex.ToString(), "Błąd krytyczny",
-                           MessageBoxButton.OK, MessageBoxImage.Error);
 }

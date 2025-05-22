@@ -15,18 +15,18 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- ──────────── LEWA KOLUMNA: formularze ──────────── -->
-        <Border Background="{DynamicResource MaterialDesignPaper}"
-                Padding="32">
+        <!-- ═════════════  LEWA KOLUMNA  ═════════════ -->
+        <Border Background="{DynamicResource MaterialDesignPaper}" Padding="32">
             <Grid>
-                <!-- ============ PANEL LOGOWANIA ============ -->
+
+                <!-- ■■■■■■■■■■■■■■■  PANEL LOGOWANIA  ■■■■■■■■■■■■■■■ -->
                 <StackPanel x:Name="LoginPanel">
+                    <!-- widoczność / ukrycie -->
                     <StackPanel.Style>
                         <Style TargetType="StackPanel">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsRegistering}"
-                                             Value="True">
+                                <DataTrigger Binding="{Binding IsRegistering}" Value="True">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -34,26 +34,32 @@
                     </StackPanel.Style>
 
                     <TextBlock Text="Game Platform"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               Margin="0 0 0 24"/>
+                           FontSize="24" FontWeight="Bold" Margin="0 0 0 24"/>
 
-                    <TextBox Text="{Binding Login}"
-                             md:HintAssist.Hint="Login lub e-mail"/>
+                    <!-- LOGIN -->
+                    <TextBox TabIndex="0"
+                         Text="{Binding Login}"
+                         md:HintAssist.Hint="Login lub e-mail"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
-                    <!-- hasło ukryte / jawne -->
-                    <DockPanel Margin="0 8 0 0" LastChildFill="False">
-                        <!-- ukryte -->
+                    <!-- HASŁO (ukryte / jawne) -->
+                    <Grid Margin="0 8 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- PasswordBox (ukryty) -->
                         <PasswordBox x:Name="PwdHidden"
-                                     Width="220"
-                                     PasswordChanged="PwdChanged"
-                                     md:HintAssist.Hint="Hasło">
+                                 Grid.Column="0" TabIndex="1"
+                                 PasswordChanged="PwdChanged"
+                                 md:HintAssist.Hint="Hasło">
                             <PasswordBox.Style>
-                                <Style TargetType="PasswordBox">
+                                <Style TargetType="PasswordBox"
+                                   BasedOn="{StaticResource MaterialDesignFloatingHintPasswordBox}">
                                     <Setter Property="Visibility" Value="Visible"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ShowPassword}"
-                                                     Value="True">
+                                        <DataTrigger Binding="{Binding ShowPassword}" Value="True">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -61,18 +67,18 @@
                             </PasswordBox.Style>
                         </PasswordBox>
 
-                        <!-- jawne -->
+                        <!-- TextBox (jawny) -->
                         <TextBox x:Name="PwdVisible"
-                                 Width="220"
-                                 Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                                 TextChanged="PwdVisibleChanged"
-                                 md:HintAssist.Hint="Hasło">
+                             Grid.Column="0" TabIndex="1"
+                             Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                             TextChanged="PwdVisibleChanged"
+                             md:HintAssist.Hint="Hasło">
                             <TextBox.Style>
-                                <Style TargetType="TextBox">
+                                <Style TargetType="TextBox"
+                                   BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ShowPassword}"
-                                                     Value="True">
+                                        <DataTrigger Binding="{Binding ShowPassword}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -80,42 +86,45 @@
                             </TextBox.Style>
                         </TextBox>
 
-                        <CheckBox Content="👁"
-                                  Margin="8 0 0 0"
-                                  VerticalAlignment="Center"
-                                  IsChecked="{Binding ShowPassword}"/>
-                    </DockPanel>
+                        <!-- „oko” -->
+                        <CheckBox Grid.Column="1"
+                              Content="👁"
+                              IsTabStop="False"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              IsChecked="{Binding ShowPassword}"/>
+                    </Grid>
 
-                    <CheckBox Content="Zapamiętaj mnie"
-                              IsChecked="{Binding RememberMe}"
-                              Margin="0 4 0 0"/>
+                    <CheckBox TabIndex="2"
+                          Content="Zapamiętaj mnie"
+                          IsChecked="{Binding RememberMe}"
+                          Margin="0 4 0 0"/>
 
                     <TextBlock Text="{Binding Error}"
-                               Foreground="Red"
-                               TextWrapping="Wrap"/>
+                           Foreground="Red"
+                           TextWrapping="Wrap"/>
 
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right"
-                                Margin="0 16 0 0">
+                    <!-- PRZYCISKI -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                            Margin="0 16 0 0">
                         <Button Content="Rejestracja"
-                                Click="ShowRegisterClick"/>
-                        <Button Content="Zaloguj"
-                                Margin="12 0 0 0"
-                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                Command="{Binding SubmitLoginCommand}"
-                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                                IsDefault="True"/>
+                            Click="ShowRegisterClick" TabIndex="3"/>
+                        <Button Content="Zaloguj" Margin="12 0 0 0" TabIndex="4"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding SubmitLoginCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            IsDefault="True"/>
                     </StackPanel>
                 </StackPanel>
 
-                <!-- ============ PANEL REJESTRACJI ============ -->
+                <!-- ■■■■■■■■■■■■■■■  PANEL REJESTRACJI  ■■■■■■■■■■■■■■■ -->
                 <StackPanel x:Name="RegisterPanel">
+                    <!-- widoczność / ukrycie -->
                     <StackPanel.Style>
                         <Style TargetType="StackPanel">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsRegistering}"
-                                             Value="True">
+                                <DataTrigger Binding="{Binding IsRegistering}" Value="True">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -123,54 +132,100 @@
                     </StackPanel.Style>
 
                     <TextBlock Text="Nowe konto"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               Margin="0 0 0 24"/>
+                           FontSize="24" FontWeight="Bold" Margin="0 0 0 24"/>
 
-                    <TextBox Text="{Binding NewLogin}"
-                             md:HintAssist.Hint="Login"/>
+                    <!-- LOGIN -->
+                    <TextBox TabIndex="0"
+                         Text="{Binding NewLogin}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         md:HintAssist.Hint="Login"/>
 
-                    <TextBox Text="{Binding Email}"
-                             Margin="0 8 0 0"
-                             md:HintAssist.Hint="E-mail"/>
+                    <!-- E-MAIL -->
+                    <TextBox TabIndex="1" Margin="0 8 0 0"
+                         Text="{Binding Email}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         md:HintAssist.Hint="E-mail"/>
 
-                    <!-- hasło (rejestracja) -->
-                    <DockPanel Margin="0 8 0 0" LastChildFill="False">
-                        <PasswordBox Width="220"
-                                     PasswordChanged="PwdChangedRegister"
-                                     md:HintAssist.Hint="Hasło"/>
-                        <CheckBox Content="👁"
-                                  Margin="8 0 0 0"
-                                  VerticalAlignment="Center"
-                                  IsChecked="{Binding ShowRegPassword}"/>
-                    </DockPanel>
+                    <!-- HASŁO 1 -->
+                    <Grid Margin="0 8 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
 
-                    <DockPanel Margin="0 8 0 0" LastChildFill="False">
-                        <PasswordBox Width="220"
-                                     PasswordChanged="PwdChangedRepeat"
-                                     md:HintAssist.Hint="Powtórz hasło"/>
-                    </DockPanel>
+                        <!-- ukryty -->
+                        <PasswordBox x:Name="RegPwdHidden"
+                                 Grid.Column="0" TabIndex="2"
+                                 PasswordChanged="PwdChangedRegister"
+                                 md:HintAssist.Hint="Hasło">
+                            <PasswordBox.Style>
+                                <Style TargetType="PasswordBox"
+                                   BasedOn="{StaticResource MaterialDesignFloatingHintPasswordBox}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowRegPassword}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </PasswordBox.Style>
+                        </PasswordBox>
+
+                        <!-- jawny -->
+                        <TextBox x:Name="RegPwdVisible"
+                             Grid.Column="0" TabIndex="2"
+                             Text="{Binding RegPassword, UpdateSourceTrigger=PropertyChanged}"
+                             TextChanged="RegPwdVisibleChanged"
+                             md:HintAssist.Hint="Hasło">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox"
+                                   BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowRegPassword}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+
+                        <CheckBox Grid.Column="1"
+                              Content="👁"
+                              IsTabStop="False"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              IsChecked="{Binding ShowRegPassword}"/>
+                    </Grid>
+
+                    <!-- HASŁO 2 -->
+                    <PasswordBox Margin="0 8 0 0" TabIndex="3"
+                            Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                            md:HintAssist.Hint="Powtórz hasło"
+                            PasswordChanged="PwdChangedRepeat"
+                            HorizontalAlignment="Stretch"/>
 
                     <TextBlock Text="{Binding Error}"
-                               Foreground="Red"
-                               TextWrapping="Wrap"/>
+                           Foreground="Red"
+                           TextWrapping="Wrap"/>
 
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right"
-                                Margin="0 16 0 0">
-                        <Button Content="↩︎ Logowanie"
-                                Click="ShowLoginClick"/>
-                        <Button Content="Utwórz konto"
-                                Margin="12 0 0 0"
-                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                Command="{Binding SubmitRegisterCommand}"
-                                IsDefault="True"/>
+                    <!-- PRZYCISKI -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                            Margin="0 16 0 0">
+                        <Button Content="↩︎ Logowanie" Click="ShowLoginClick"
+                            TabIndex="4"/>
+                        <Button Content="Utwórz konto" Margin="12 0 0 0"
+                            TabIndex="5"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding SubmitRegisterCommand}"
+                            IsDefault="True"/>
                     </StackPanel>
                 </StackPanel>
+
             </Grid>
         </Border>
 
-        <!-- ──────────── PRAWA KOLUMNA: grafika ──────────── -->
+        <!-- ═════════════  PRAWA KOLUMNA  ═════════════ -->
         <Image Grid.Column="1"
                Source="pack://application:,,,/Resources/login_banner.png"
                Stretch="UniformToFill"/>

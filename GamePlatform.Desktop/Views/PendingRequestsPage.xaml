@@ -1,0 +1,34 @@
+﻿<Page x:Class="GamePlatform.Desktop.Views.PendingRequestsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Oczekujące zaproszenia">
+    <DockPanel Margin="24">
+
+        <Button DockPanel.Dock="Top" Content="Odśwież"
+                Command="{Binding RefreshCommand}" Width="90"/>
+
+        <DataGrid ItemsSource="{Binding Requests}" AutoGenerateColumns="False"
+                  IsReadOnly="True" Margin="0 12 0 0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Od" Binding="{Binding FromUserId}" Width="*"/>
+                <DataGridTextColumn Header="Kiedy" Binding="{Binding SentUtc}" Width="120"/>
+                <DataGridTemplateColumn Header="" Width="160">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Akceptuj" Width="70"
+                                        Command="{Binding DataContext.AcceptCommand,
+                                                  RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"/>
+                                <Button Content="Odrzuć" Width="70" Margin="8 0 0 0"
+                                        Command="{Binding DataContextDeclineCommand,
+                                                  RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Page>
