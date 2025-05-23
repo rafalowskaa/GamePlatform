@@ -20,7 +20,7 @@
                  Width="280"
                  Margin="0 0 8 0"
                  Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Content="Wyślij"
+            <Button Content="Wyślij" Background="Black" Foreground="White" BorderBrush="Black"
                 Command="{Binding SendCommand}" />
         </DockPanel>
     </Grid>

@@ -10,7 +10,7 @@
             <Image Source="{Binding Avatar}" Stretch="UniformToFill" ClipToBounds="True"/>
         </Border>
 
-        <Button Content="Zmień zdjęcie"
+        <Button Content="Zmień zdjęcie" Background="Black" Foreground="White" BorderBrush="Black"
                 HorizontalAlignment="Center"
                 Margin="0 8 0 12"
                 Command="{Binding PickAvatarCommand}"/>
@@ -25,7 +25,7 @@
 
         <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap"/>
 
-        <Button Content="Zapisz"
+        <Button Content="Zapisz" Background="Black" Foreground="White" BorderBrush="Black"
                 Style="{StaticResource MaterialDesignRaisedButton}"
                 Command="{Binding SaveCommand}"
                 Margin="0 12 0 0"

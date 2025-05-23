@@ -22,7 +22,7 @@
                 </ComboBox.ItemContainerStyle>
             </ComboBox>
 
-            <Button Content="➕"
+            <Button Content="Szukaj" Background="Black" Foreground="White" BorderBrush="Black"
                     Margin="8 0 0 0"
                     Style="{StaticResource MaterialDesignRaisedButton}"
                     Command="{Binding InviteCommand}"/>

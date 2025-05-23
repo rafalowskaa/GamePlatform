@@ -15,7 +15,7 @@
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
         </Style>
 
-        <!-- wiersz: zaznaczenie, brak hover -->
+        <!-- wiersz -->
         <Style TargetType="DataGridRow">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -46,12 +46,27 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
 
-        <!-- tooltip – czarne tło -->
+        <!-- tooltip – ciemny -->
         <Style x:Key="DarkToolTip" TargetType="ToolTip">
             <Setter Property="Background"  Value="#111"/>
             <Setter Property="Foreground"  Value="White"/>
             <Setter Property="Padding"     Value="6"/>
             <Setter Property="BorderBrush" Value="#111"/>
+        </Style>
+
+        <!-- ☁ widoczna tylko gdy BlockReason nie jest pusty -->
+        <Style x:Key="CloudVisibilityStyle" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <!-- null -->
+                <DataTrigger Binding="{Binding BlockReason}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+                <!-- pusty string -->
+                <DataTrigger Binding="{Binding BlockReason.Length}" Value="0">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
     </Page.Resources>
@@ -113,7 +128,7 @@
                                     Binding="{Binding Role}"
                                     ElementStyle="{StaticResource CenterTxt}"/>
 
-                <!-- BLOKADA z chmurką -->
+                <!-- BLOKADA + ☁ -->
                 <DataGridTemplateColumn Header="BLOKADA" Width="220"
                                         SortMemberPath="BlockedUntilUtc">
                     <DataGridTemplateColumn.CellTemplate>
@@ -121,37 +136,18 @@
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Center">
 
-                                <!-- data blokady -->
                                 <TextBlock Style="{StaticResource CenterTxt}"
                                            Width="160"
                                            Text="{Binding BlockedUntilUtc}"/>
 
-                                <!-- ikona ☁  -->
                                 <TextBlock Text="☁"
                                            FontSize="14"
-                                           Margin="4 0 0 0">
+                                           Margin="4 0 0 0"
+                                           Style="{StaticResource CloudVisibilityStyle}">
                                     <TextBlock.ToolTip>
                                         <ToolTip Style="{StaticResource DarkToolTip}"
-                                                 Content="{Binding BlockReason}"/>
+                                                 Content="{Binding BlockReason}" />
                                     </TextBlock.ToolTip>
-
-                                    <!-- widoczność tylko gdy BlockReason niepusty -->
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding BlockReason}" Value="{x:Null}">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding BlockReason}" Value="">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding BlockReason}">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
                                 </TextBlock>
                             </StackPanel>
                         </DataTemplate>

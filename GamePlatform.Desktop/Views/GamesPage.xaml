@@ -10,7 +10,7 @@
             <TextBox Width="260"
                      Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
                      md:HintAssist.Hint="Szukaj…"/>
-            <Button Content="Dodaj"
+            <Button Content="Dodaj" Background="Black" Foreground="White" BorderBrush="Black"
                     Command="{Binding AddGameAsyncCommand}"
                     Style="{StaticResource MaterialDesignRaisedButton}"
                     Margin="12 0"/>

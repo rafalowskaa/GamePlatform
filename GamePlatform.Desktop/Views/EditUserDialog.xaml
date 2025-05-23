@@ -4,8 +4,9 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Edytuj użytkownika"
-        MinWidth="300"
-        SizeToContent="WidthAndHeight"
+        Width="340"
+        Height="340"
+        SizeToContent="Manual"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResize"
         Style="{StaticResource MaterialDesignWindow}">
@@ -72,10 +73,10 @@
 
         <!-- POWÓD -->
         <TextBlock Grid.Row="4" Text="Powód:" FontWeight="SemiBold"
-                   VerticalAlignment="Top"/>
-        <TextBox  Grid.Row="4" Grid.Column="1" Margin="8 0 0 0" Height="70"
+                   VerticalAlignment="Top" TextWrapping="Wrap"/>
+        <TextBox  Grid.Row="4" Grid.Column="1" Margin="8 0 0 0" MinHeight="70" 
                   AcceptsReturn="True"
-                  TextWrapping="Wrap"                    
+                  TextWrapping="WrapWithOverflow"                   
             VerticalScrollBarVisibility="Auto"
                   Text="{Binding BlockReason}"
                   md:HintAssist.Hint="Powód blokady" />

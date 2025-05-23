@@ -25,7 +25,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Login}" Width="120"/>
                         <TextBlock Text="{Binding Email}" Width="200"/>
-                        <Button Content="Zaproś"
+                        <Button Content="Zaproś" Background="Black" Foreground="White" BorderBrush="Black"
                                 Command="{Binding DataContext.InviteCommand,
                                                   RelativeSource={RelativeSource AncestorType=ListBox}}"
                                 CommandParameter="{Binding}"/>

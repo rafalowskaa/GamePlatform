@@ -14,6 +14,8 @@
             <ColumnDefinition Width="340"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        
+        
 
         <!-- ═════════════  LEWA KOLUMNA  ═════════════ -->
         <Border Background="{DynamicResource MaterialDesignPaper}" Padding="32">
@@ -107,10 +109,11 @@
                     <!-- PRZYCISKI -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                             Margin="0 16 0 0">
-                        <Button Content="Rejestracja"
+                        <Button Content="Rejestracja" Background="Black" Foreground="White" BorderBrush="Black"
                             Click="ShowRegisterClick" TabIndex="3"/>
-                        <Button Content="Zaloguj" Margin="12 0 0 0" TabIndex="4"
+                        <Button Content="Zaloguj" Margin="12 0 0 0" TabIndex="4" Background="Black" Foreground="White" BorderBrush="Black"
                             Style="{StaticResource MaterialDesignRaisedButton}"
+                            
                             Command="{Binding SubmitLoginCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                             IsDefault="True"/>
@@ -212,9 +215,9 @@
                     <!-- PRZYCISKI -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                             Margin="0 16 0 0">
-                        <Button Content="↩︎ Logowanie" Click="ShowLoginClick"
+                        <Button Content="↩︎ Logowanie" Click="ShowLoginClick" Background="Black" Foreground="White" BorderBrush="Black"
                             TabIndex="4"/>
-                        <Button Content="Utwórz konto" Margin="12 0 0 0"
+                        <Button Content="Utwórz konto" Margin="12 0 0 0" Background="Black" Foreground="White" BorderBrush="Black"
                             TabIndex="5"
                             Style="{StaticResource MaterialDesignRaisedButton}"
                             Command="{Binding SubmitRegisterCommand}"

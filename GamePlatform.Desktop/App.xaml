@@ -6,7 +6,8 @@
 
     <Application.Resources>
         <ResourceDictionary>
-
+            
+            
             <!-- jedyny ręczny konwerter – wbudowany -->
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
