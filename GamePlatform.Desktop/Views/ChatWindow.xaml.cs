@@ -15,8 +15,8 @@ public partial class ChatWindow : Window
     {
         if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt)
         {
-            if (DataContext is ChatWindowViewModel vm && vm.SendAsyncCommand.CanExecute(null))
-                vm.SendAsyncCommand.Execute(null);
+            if(DataContext is ChatWindowViewModel vm && vm.SendCommand.CanExecute(null))
+                vm.SendCommand.Execute(null);
             e.Handled = true;
         }
     }

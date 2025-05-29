@@ -43,6 +43,18 @@ namespace GamePlatform.Shared.Migrations
                     b.Property<Guid>("MateId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsOnline")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("UserId", "MateId");
 
                     b.HasIndex("MateId");

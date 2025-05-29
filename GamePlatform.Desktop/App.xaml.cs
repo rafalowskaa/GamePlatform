@@ -20,6 +20,8 @@ namespace GamePlatform.Desktop;
 /// <summary>Punkt startowy aplikacji.</summary>
 public partial class App : Application
 {
+    /// <summary>Ułatwia dostęp do silnie typowanej instancji aplikacji.</summary>
+    public static new App Current => (App)Application.Current;
     public IServiceProvider Services { get; private set; } = null!;
     public SnackbarMessageQueue MsgQueue { get; private set; } = null!;
 
