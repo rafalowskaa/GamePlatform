@@ -18,8 +18,12 @@ public partial class FriendsPage : Page
     private void OnSuggestionClick(object? sender, MouseButtonEventArgs _)
     {
         if (sender is not ListBox lb || lb.SelectedItem is not User u) return;
-        if (DataContext is not FriendListViewModel vm) return;
 
-        vm.StartChatCommand.Execute(u);
+
+        if (lb.ItemContainerGenerator.ContainerFromItem(u) is ListBoxItem item)
+        {
+            item.ContextMenu?.DataContext = lb.DataContext;
+            item.ContextMenu?.IsOpen = true;
+        }
     }
 }

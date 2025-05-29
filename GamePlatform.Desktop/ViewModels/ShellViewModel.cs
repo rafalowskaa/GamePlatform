@@ -14,6 +14,7 @@ public partial class ShellViewModel : ObservableObject
     private readonly IServiceProvider _sp;
     private readonly IAuthService _auth;
     private readonly FriendListViewModel _friendsVm;
+    public FriendListViewModel FriendsVm => _friendsVm;
 
     public ShellViewModel(IServiceProvider sp, IAuthService auth)
     {
@@ -45,6 +46,7 @@ public partial class ShellViewModel : ObservableObject
     [RelayCommand] private void ShowGames() => Navigate(new GamesPage { DataContext = _sp.GetRequiredService<MainViewModel>() }, "Games");
     [RelayCommand] private void ShowProfile() => Navigate(new ProfilePage { DataContext = _sp.GetRequiredService<ProfileViewModel>() }, "Profile");
     [RelayCommand] private void ShowFriends() => Navigate(new FriendsPage { DataContext = _friendsVm }, "Friends");
+    [RelayCommand] private void ToggleDrawer() => IsDrawerOpen = !IsDrawerOpen;
     [RelayCommand] private void ShowStats() => Navigate(new StatsPage { DataContext = _sp.GetRequiredService<StatsViewModel>() }, "Stats");
     [RelayCommand]
     private void ShowUsers()
