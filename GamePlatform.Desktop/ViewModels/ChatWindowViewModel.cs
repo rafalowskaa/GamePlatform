@@ -26,11 +26,17 @@ public partial class ChatWindowViewModel : ObservableObject
         Me = me;
         Mate = mate;
 
-        foreach (var m in _chat.GetHistory(me.Id, mate.Id))
-            Messages.Add(m);
+        _ = LoadHistoryAsync();
 
         _chat.MessageReceived += OnIncoming;
-        _chat.SetOnline(Me.Id);
+        _ = _chat.SetOnlineAsync(Me.Id);
+    }
+
+    private async Task LoadHistoryAsync()
+    {
+        var history = await _chat.GetHistoryAsync(Me.Id, Mate.Id);
+        foreach (var m in history)
+            Messages.Add(m);
     }
 
     /* ---- incoming ---- */
@@ -43,14 +49,14 @@ public partial class ChatWindowViewModel : ObservableObject
 
     /* ---- outgoing ---- */
     [RelayCommand]
-    private Task SendAsync()
+    private async Task SendAsync()
     {
         var txt = Text?.Trim();
-        if (string.IsNullOrEmpty(txt)) return Task.CompletedTask;
+        if (string.IsNullOrEmpty(txt)) return;
 
         var msg = new ChatMessage(Me.Id, Mate.Id, txt);
-        _chat.Send(msg);
+        await _chat.SendAsync(msg);
         Text = "";
-        return Task.CompletedTask;
+        
     }
 }
