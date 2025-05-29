@@ -57,7 +57,11 @@
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:User}">
                     <Border Margin="0 1" Padding="4" Background="#444" CornerRadius="4">
-                        <TextBlock Text="{Binding Login}" Foreground="White"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="10" Height="10" Margin="0 0 6 0"
+                                     Fill="{Binding IsOnline, Converter={StaticResource OnlineBrush}}"/>
+                            <TextBlock Text="{Binding Login}" Foreground="White"/>
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -72,7 +76,11 @@
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:User}">
                     <Border Margin="0 2" Padding="6" Background="#333" CornerRadius="4">
-                        <TextBlock Text="{Binding Login}" FontSize="16" Foreground="White"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="10" Height="10" Margin="0 0 6 0"
+                                     Fill="{Binding IsOnline, Converter={StaticResource OnlineBrush}}"/>
+                            <TextBlock Text="{Binding Login}" FontSize="16" Foreground="White"/>
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -32,7 +32,14 @@ public partial class FriendListViewModel : ObservableObject
         _chat = chat;
         _notify = notify;
 
+        _chat.PresenceChanged += OnPresenceChanged;
+
         _ = RefreshFriendsAsync();   // fire-and-forget przy starcie
+    }
+
+    ~FriendListViewModel()
+    {
+        _chat.PresenceChanged -= OnPresenceChanged;
     }
 
     /* =====  MODEL  ===== */
@@ -154,8 +161,9 @@ public partial class FriendListViewModel : ObservableObject
 
         foreach (var u in await _friends.GetFriendsAsync(_auth.CurrentUser.Id))
         {
+            u.IsOnline = _chat.IsOnline(u.Id);
             Friends.Add(u);
-            if (await _friends.IsUserOnlineAsync(u.Id))
+            if (u.IsOnline)
                 Online.Add(u);
         }
     }
@@ -178,5 +186,22 @@ public partial class FriendListViewModel : ObservableObject
         IsSuggestOpen = Suggestions.Count > 0;
     }
 
+    private void OnPresenceChanged(Guid userId, bool isOnline)
+    {
+        foreach (var u in Friends)
+            if (u.Id == userId)
+            {
+                u.IsOnline = isOnline;
+                if (isOnline)
+                {
+                    if (!Online.Contains(u)) Online.Add(u);
+                }
+                else
+                {
+                    Online.Remove(u);
+                }
+                break;
+            }
+    }
     public ObservableCollection<User> Suggestions { get; } = new();
 }
