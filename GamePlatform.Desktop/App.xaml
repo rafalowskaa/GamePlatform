@@ -6,26 +6,21 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            
-            
-            <!-- jedyny ręczny konwerter – wbudowany -->
+
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
-            <!-- globalna kolejka komunikatów -->
-            <md:SnackbarMessageQueue x:Key="GlobalMsgQueue"
-                                     DiscardDuplicates="True"/>
+            <!-- globalny Snackbar -->
+            <md:SnackbarMessageQueue x:Key="GlobalMsgQueue" DiscardDuplicates="True"/>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Resources/MaterialColors.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Resources/IconPack.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Resources/TextStyles.xaml"/>
 
-                <!-- motyw MD -->
                 <md:BundledTheme BaseTheme="Dark"
                                  PrimaryColor="Indigo"
                                  SecondaryColor="Lime"/>
 
-                <!-- domyślne style MD2 -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

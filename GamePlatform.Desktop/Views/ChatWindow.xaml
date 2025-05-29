@@ -1,0 +1,47 @@
+﻿<Window x:Class="GamePlatform.Desktop.Views.ChatWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:models="clr-namespace:GamePlatform.Shared.Models"
+        Title="{Binding Mate.Login, StringFormat=Czat – {0}}"
+        Width="420" Height="560"
+        Style="{StaticResource MaterialDesignWindow}">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ===== HISTORIA ===== -->
+        <ListBox ItemsSource="{Binding Messages}"
+                 Background="Transparent" BorderThickness="0"
+                 HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:ChatMessage}">
+                    <Border Margin="0 4" Padding="8"
+                            Background="#424242" CornerRadius="6">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap"
+                                       Foreground="White" />
+                            <TextBlock Text="{Binding WhenUtc,
+                                       StringFormat={}{0:dd.MM HH\\:mm}}"
+                                       FontSize="11" Foreground="#aaa"
+                                       HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- ===== INPUT ===== -->
+        <DockPanel Grid.Row="1" Margin="0 8 0 0">
+            <TextBox DockPanel.Dock="Left"
+                     Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                     Width="300" Height="32"
+                     KeyDown="TextBox_KeyDown"/>
+            <Button Content="Wyślij" Width="80" Margin="8 0 0 0"
+                    Command="{Binding SendAsyncCommand}"/>
+        </DockPanel>
+    </Grid>
+</Window>

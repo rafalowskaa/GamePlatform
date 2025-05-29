@@ -24,4 +24,7 @@ public interface IFriendService
 
     Task BlockAsync(Guid blockerId, Guid blockedId);
     Task UnblockAsync(Guid blockerId, Guid blockedId);
+
+    /// <summary>Czy dany użytkownik jest on-line.  ⌚ Stub – w DB brak statusów.</summary>
+    Task<bool> IsUserOnlineAsync(Guid userId);
 }

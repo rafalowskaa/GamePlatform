@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using GamePlatform.Shared.Enums;
 using GamePlatform.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -16,7 +17,7 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> o) : base(o) { }
     public AppDbContext() { }
 
-    /* ───── DbSet-y ───── */
+    /* ─────────── DbSet‑y ─────────── */
     public DbSet<Game> Games => Set<Game>();
     public DbSet<GameVersion> GameVersions => Set<GameVersion>();
     public DbSet<Score> Scores => Set<Score>();
@@ -24,8 +25,9 @@ public class AppDbContext : DbContext
     public DbSet<Friend> Friends => Set<Friend>();
     public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
     public DbSet<BlockedUser> BlockedUsers => Set<BlockedUser>();
+    public DbSet<UserReport> UserReports => Set<UserReport>();   //  ★ NEW
 
-    /* ───── Config ───── */
+    /* ─────────── Config ─────────── */
     protected override void OnConfiguring(DbContextOptionsBuilder b)
     {
         if (!b.IsConfigured)
@@ -67,9 +69,23 @@ public class AppDbContext : DbContext
                .HasForeignKey(bu => bu.BlockedId)
                .OnDelete(DeleteBehavior.Restrict);
         });
+
+        /* —— UserReport —— */
+        b.Entity<UserReport>(cfg =>
+        {
+            cfg.HasOne(r => r.Reporter)
+               .WithMany()
+               .HasForeignKey(r => r.ReporterId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            cfg.HasOne(r => r.ReportedUser)
+               .WithMany()
+               .HasForeignKey(r => r.ReportedUserId)
+               .OnDelete(DeleteBehavior.Restrict);
+        });
     }
 
-    /* ───── walidacja FluentValidation ───── */
+    /* ─────────── walidacja FluentValidation ─────────── */
     public override int SaveChanges()
     {
         ValidateEntities();
@@ -92,7 +108,7 @@ public class AppDbContext : DbContext
             var validatorType = typeof(IValidator<>).MakeGenericType(e.Entity.GetType());
             if (sp?.GetService(validatorType) is not IValidator validator) continue;
 
-            var res = validator.Validate(new ValidationContext<object>(e.Entity));
+            ValidationResult res = validator.Validate(new ValidationContext<object>(e.Entity));
             if (!res.IsValid) throw new ValidationException(res.Errors);
         }
     }

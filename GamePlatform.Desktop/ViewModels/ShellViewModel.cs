@@ -5,60 +5,71 @@ using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Windows;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
 
 namespace GamePlatform.Desktop.ViewModels;
 
 public partial class ShellViewModel : ObservableObject
 {
-    private readonly MainViewModel _main;
-    private readonly ProfileViewModel _profile;
-    private readonly UsersViewModel _users;
-    private readonly FriendListViewModel _friends;
-    private readonly StatsViewModel _stats;
+    private readonly IServiceProvider _sp;
     private readonly IAuthService _auth;
+    private readonly FriendListViewModel _friendsVm;
 
     public ShellViewModel(IServiceProvider sp, IAuthService auth)
     {
-        _main = sp.GetRequiredService<MainViewModel>();
-        _profile = sp.GetRequiredService<ProfileViewModel>();
-        _users = sp.GetRequiredService<UsersViewModel>();
-        _friends = sp.GetRequiredService<FriendListViewModel>();
-        _stats = sp.GetRequiredService<StatsViewModel>();
+        _sp = sp;
         _auth = auth;
 
-        SetPage(new GamesPage { DataContext = _main }, "Games");
+        // pobieramy raz – żeby móc zasubskrybować StartChat
+        _friendsVm = _sp.GetRequiredService<FriendListViewModel>();
+        _friendsVm.StartChat += OnStartChat;          // event dodany w FriendListVM
+
+        ShowGames();                                  // strona domyślna
     }
 
-    /* ---------------- bindings ---------------- */
+    /* ==========  BINDS  ========== */
     [ObservableProperty] private Page _currentPage = null!;
-    [ObservableProperty] private string _currentPageTag = "Games";
+    [ObservableProperty] private string _currentTag = "";
+    [ObservableProperty] private bool _isDrawerOpen;
 
-    public bool IsAdmin => _auth.CurrentRole == UserRole.Admin;
+    // lista otwartych okien czatu (gdybyś chciał mini-dock w prawym pasku)
+    public ObservableCollection<ChatWindowViewModel> OpenChats { get; } = new();
 
-    private void SetPage(Page page, string tag)
+    public bool IsAdmin => _auth.CurrentRole is UserRole.Admin or UserRole.Moderator;
+
+    /* ==========  NAWIGACJA  ========== */
+    private void Navigate(Page page, string tag)
     {
         CurrentPage = page;
-        CurrentPageTag = tag;
+        CurrentTag = tag;
     }
 
-    /* --------------- commands ----------------- */
-    [RelayCommand] private void ShowGames() => SetPage(new GamesPage { DataContext = _main }, "Games");
-    [RelayCommand] private void ShowProfile() => SetPage(new ProfilePage { DataContext = _profile }, "Profile");
-    [RelayCommand] private void ShowFriends() => SetPage(new FriendsPage { DataContext = _friends }, "Friends");
-    [RelayCommand] private void ShowStats() => SetPage(new StatsPage { DataContext = _stats }, "Stats");
+    [RelayCommand] private void ShowGames() => Navigate(new GamesPage { DataContext = _sp.GetRequiredService<MainViewModel>() }, "Games");
+    [RelayCommand] private void ShowProfile() => Navigate(new ProfilePage { DataContext = _sp.GetRequiredService<ProfileViewModel>() }, "Profile");
+    [RelayCommand] private void ShowFriends() => Navigate(new FriendsPage { DataContext = _friendsVm }, "Friends");
+    [RelayCommand] private void ShowStats() => Navigate(new StatsPage { DataContext = _sp.GetRequiredService<StatsViewModel>() }, "Stats");
     [RelayCommand]
     private void ShowUsers()
-    { if (IsAdmin) SetPage(new UsersPage { DataContext = _users }, "Users"); }
+    {
+        if (IsAdmin)
+            Navigate(new UsersPage { DataContext = _sp.GetRequiredService<UsersViewModel>() }, "Users");
+    }
 
-    /* --------------- logout ------------------- */
+    /* ==========  CHAT HOOK  ========== */
+    private void OnStartChat(ChatWindowViewModel chatVm)
+    {
+        // możesz tu dodać logikę unikającą duplikatów w OpenChats
+        OpenChats.Add(chatVm);
+        IsDrawerOpen = true;
+    }
+
+    /* ==========  LOGOUT  ========== */
     [RelayCommand]
     private async void Logout()
     {
         await _auth.LogoutAsync();
-        OnPropertyChanged(nameof(IsAdmin));        // odśwież przycisk „Użytkownicy”
-        // zamykamy główne okno powłoki -> wracamy do pętli w App.xaml.cs
-        Application.Current.MainWindow?.Close();
+        OnPropertyChanged(nameof(IsAdmin));
+        System.Windows.Application.Current.MainWindow?.Close();
     }
 }

@@ -1,14 +1,17 @@
-﻿using System.Windows;
-using GamePlatform.Desktop.ViewModels;
+﻿using GamePlatform.Desktop.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 
 namespace GamePlatform.Desktop.Views;
 
-/// <summary>Code-behind okna głównego.</summary>
 public partial class ShellWindow : Window
 {
+    public ShellViewModel ShellVM { get; }
+
     public ShellWindow(ShellViewModel vm)
     {
+        ShellVM = vm;
         InitializeComponent();
-        DataContext = vm;
+        DataContext = ShellVM;
     }
 }

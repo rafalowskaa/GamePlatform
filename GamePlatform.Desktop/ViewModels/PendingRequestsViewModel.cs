@@ -32,7 +32,7 @@ public partial class PendingRequestsViewModel : ObservableObject
     private async Task AcceptAsync(FriendRequestDto? r)
     {
         if (r is null) return;
-        await _friends.AcceptRequestAsync(r.FromUserId /*== id zaproszenia */);
+        await _friends.AcceptRequestAsync(r.Id);   // ✅ poprawka
         await RefreshAsync();
     }
 
@@ -40,7 +40,7 @@ public partial class PendingRequestsViewModel : ObservableObject
     private async Task DeclineAsync(FriendRequestDto? r)
     {
         if (r is null) return;
-        await _friends.DeclineRequestAsync(r.FromUserId);
+        await _friends.DeclineRequestAsync(r.Id);  // ✅ poprawka
         await RefreshAsync();
     }
 }

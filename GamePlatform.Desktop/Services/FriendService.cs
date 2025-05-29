@@ -127,4 +127,11 @@ public sealed class FriendService : IFriendService
         await _db.SaveChangesAsync();
         _notify?.Info("Blokada usunięta");
     }
+
+    /// <remarks>
+    ///  Brak realnego mechanizmu on-line → zwracamy zawsze <c>false</c>.
+    ///  Dzięki temu kompilacja przechodzi, a API jest gotowe na przyszłe rozszerzenie.
+    /// </remarks>
+    public Task<bool> IsUserOnlineAsync(Guid userId)
+        => Task.FromResult(false);
 }

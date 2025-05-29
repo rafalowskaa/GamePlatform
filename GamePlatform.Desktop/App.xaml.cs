@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,7 +33,7 @@ public partial class App : Application
             a.Handled = true;
         };
 
-        /* DI + EF */
+        /* —— DI + EF —— */
         var sc = new ServiceCollection();
 
         sc.AddDbContext<AppDbContext>(o => o.UseSqlite("Data Source=games.db"));
@@ -43,6 +42,7 @@ public partial class App : Application
         sc.AddScoped<IGameRepository, GameRepositorySqlite>();
         sc.AddScoped<IProfileService, ProfileService>();
         sc.AddScoped<IFriendService, FriendService>();
+        sc.AddSingleton<IChatService, ChatService>();            // <-- czat
 
         sc.AddSingleton<INotificationService, NotificationService>();
 
@@ -56,7 +56,7 @@ public partial class App : Application
         sc.AddTransient<ShellViewModel>();
         sc.AddTransient<MainViewModel>();
         sc.AddTransient<UsersViewModel>();
-        sc.AddTransient<FriendListViewModel>();
+        sc.AddTransient<FriendListViewModel>();                    // <--
         sc.AddTransient<ProfileViewModel>();
         sc.AddTransient<StatsViewModel>();
         sc.AddTransient<AddGameDialogViewModel>();
@@ -64,7 +64,7 @@ public partial class App : Application
 
         Services = sc.BuildServiceProvider();
 
-        /* powiązanie powiadomień ↔ Snackbar */
+        /* powiadomienia ↔ Snackbar */
         if (Services.GetRequiredService<INotificationService>() is NotificationService ns)
             ns.Raised += m => Dispatcher.Invoke(() => MsgQueue.Enqueue(m));
 
@@ -88,7 +88,6 @@ public partial class App : Application
         }
 
         MsgQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(3));
-
         Resources["GlobalMsgQueue"] = MsgQueue;
 
         /* pętla logowania */
@@ -100,6 +99,7 @@ public partial class App : Application
             MainWindow = shell;
             shell.ShowDialog();
 
+            // jeśli przelogowanie – kontynuuj pętlę
             if (Services.GetRequiredService<IAuthService>().CurrentRole != UserRole.Guest)
             {
                 Shutdown();
@@ -108,8 +108,7 @@ public partial class App : Application
         }
     }
 
-    /* —— helpers —— */
-
+    /* —— helper —— */
     private bool ShowLogin()
     {
         var win = new LoginWindow

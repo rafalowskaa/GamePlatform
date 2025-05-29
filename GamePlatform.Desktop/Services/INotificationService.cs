@@ -1,16 +1,16 @@
 ﻿namespace GamePlatform.Desktop.Services;
 
-/// <summary>Bardzo proste powiadomienia UI (snackbar / toast).</summary>
+/// <summary>Bardzo proste powiadomienia UI (snackbar / toast / dialog potwierdzenia).</summary>
 public interface INotificationService
 {
     /// <param name="message">tekst komunikatu</param>
-    /// <param name="milliseconds">czas wyświetlenia; domyślnie 3 s</param>
+    /// <param name="milliseconds">czas wyświetlenia; domyślnie 3 s</param>
     void Show(string message, int milliseconds = 3000);
 
-    /* — aliasy z istniejącego kodu — */
-    void Raise(string message, int milliseconds = 3000)
-        => Show(message, milliseconds);
+    /// <summary>Modalne potwierdzenie (Yes/No). Zwraca <see langword="true"/> gdy użytkownik wybierze „Tak”.</summary>
+    Task<bool> ConfirmAsync(string message, int milliseconds = 0);
 
-    void Info(string message, int milliseconds = 3000)
-        => Show(message, milliseconds);
+    /* aliasy zgodne z istniejącym kodem */
+    void Raise(string message, int ms = 3000) => Show(message, ms);
+    void Info(string message, int ms = 3000) => Show(message, ms);
 }
