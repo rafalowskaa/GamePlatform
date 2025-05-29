@@ -18,7 +18,7 @@ public sealed class ChatService : IChatService
 
     public void Send(ChatMessage msg)
     {
-        var key = msg.From < msg.To ? (msg.From, msg.To) : (msg.To, msg.From);
+        var key = msg.FromId < msg.ToId ? (msg.FromId, msg.ToId) : (msg.ToId, msg.FromId);
         var list = _hist.GetOrAdd(key, _ => new());
         lock (list) list.Add(msg);          // historia
 
