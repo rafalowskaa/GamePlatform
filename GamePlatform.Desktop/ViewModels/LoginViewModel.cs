@@ -21,11 +21,17 @@ public partial class LoginViewModel : ObservableObject
         _auth = auth;
         _validator = val;
 
+
+        _ = LoadRememberedLoginAsync();
+    }
+
+    private async Task LoadRememberedLoginAsync()
+    {
         try
         {
             if (System.IO.File.Exists(RememberPath))
             {
-                Login = System.IO.File.ReadAllText(RememberPath);
+                Login = await System.IO.File.ReadAllTextAsync(RememberPath);
                 RememberMe = true;
             }
         }
