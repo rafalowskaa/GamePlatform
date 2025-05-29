@@ -30,7 +30,7 @@
                 <Style TargetType="ListBoxItem">
                     <Setter Property="ContextMenu">
                         <Setter.Value>
-                            <ContextMenu>
+                                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                                     <MenuItem Header="{Binding IsMyFriend, Converter={StaticResource FriendAction}}"
                                           Command="{Binding DataContext.ToggleForCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                           CommandParameter="{Binding}"/>
@@ -92,7 +92,7 @@
                         <Style TargetType="ListViewItem">
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
-                                    <ContextMenu>
+                                    <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                                         <MenuItem Header="Usuń ze znajomych"
                                                   Command="{Binding DataContext.ToggleForCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                                   CommandParameter="{Binding}"/>
