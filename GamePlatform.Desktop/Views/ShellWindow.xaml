@@ -57,8 +57,8 @@
                     </Button.Style>
                 </Button>
 
-                <Button Content="Znajomi" Command="{Binding ToggleDrawerCommand}"
-                <Button.Style>
+                <Button Content="Znajomi" Command="{Binding ToggleDrawerCommand}">
+                    <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
                         <Style.Triggers>
 
