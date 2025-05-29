@@ -18,13 +18,13 @@
             <TextBox Width="240"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      KeyDown="OnSearchEnter"
-                     md:HintAssist.Hint="Wpisz nazwę poszukiwanego użytkownika"/>
+                     md:HintAssist.Hint="Wprowadź nazwę użytkownika"/>
         </StackPanel>
 
         <!-- ===== PODPOWIEDZI ===== -->
         <ListBox ItemsSource="{Binding Suggestions}"
                  Visibility="{Binding IsSuggestOpen, Converter={StaticResource BoolToVis}}"
-                 MouseDoubleClick="OnSuggestionClick"
+                 MouseLeftButtonUp="OnSuggestionClick"
                  Margin="0 0 0 8" Width="240" HorizontalAlignment="Center"
                  HorizontalContentAlignment="Stretch">
             <ListBox.ItemContainerStyle>
@@ -67,53 +67,42 @@
         <ListView Grid.Row="1"
                   ItemsSource="{Binding Friends}"
                   SelectedItem="{Binding SelectedFriend}"
+                  MouseDoubleClick="OnFriendOpen"
                   HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:User}">
                     <Border Margin="0 2" Padding="6" Background="#333" CornerRadius="4">
-                        <DockPanel>
-                            <TextBlock DockPanel.Dock="Left"
-                                       Text="{Binding Login}"
-                                       FontSize="16" Foreground="White"/>
-
-                            <Button DockPanel.Dock="Right"
-                                    Style="{StaticResource MaterialDesignIconButton}">
-                                <Button.Content>
-                                    <Path Data="M0,0 3,0 3,3 0,3Z M6,0 9,0 9,3 6,3Z M12,0 15,0 15,3 12,3Z"
-                                          Fill="White" Stretch="Uniform"/>
-                                </Button.Content>
-
-                                <Button.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Dodaj / Usuń"
-                                                  Command="{Binding DataContext.ToggleFriendAsyncCommand,
-                                                      RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
-                                        <Separator/>
-                                        <MenuItem Header="Napisz wiadomość"
-                                                  Command="{Binding DataContext.StartChatCommand,
-                                                      RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
-                                        <MenuItem Header="Pokaż profil"
-                                                  Command="{Binding DataContext.ShowProfileCommand,
-                                                      RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
-                                        <Separator/>
-                                        <MenuItem Header="Zablokuj"
-                                                  Command="{Binding DataContext.BlockCommand,
-                                                      RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
-                                        <MenuItem Header="Zgłoś"
-                                                  Command="{Binding DataContext.ReportCommand,
-                                                      RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
-                                    </ContextMenu>
-                                </Button.ContextMenu>
-                            </Button>
-                        </DockPanel>
+                        <TextBlock Text="{Binding Login}" FontSize="16" Foreground="White"/>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="Dodaj / Usuń"
+                                          Command="{Binding DataContext.ToggleFriendAsyncCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                          CommandParameter="{Binding}"/>
+                                <Separator/>
+                                <MenuItem Header="Napisz wiadomość"
+                                          Command="{Binding DataContext.StartChatCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                          CommandParameter="{Binding}"/>
+                                <MenuItem Header="Pokaż profil"
+                                          Command="{Binding DataContext.ShowProfileCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                          CommandParameter="{Binding}"/>
+                                <Separator/>
+                                <MenuItem Header="Zablokuj"
+                                          Command="{Binding DataContext.BlockCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                          CommandParameter="{Binding}"/>
+                                <MenuItem Header="Zgłoś"
+                                          Command="{Binding DataContext.ReportCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                          CommandParameter="{Binding}"/>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
     </Grid>
 </UserControl>

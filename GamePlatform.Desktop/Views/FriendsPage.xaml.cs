@@ -15,8 +15,9 @@ public partial class FriendsPage : UserControl
             vm.RefreshSuggestionsCommand.Execute(null);
     }
 
-    private void OnSuggestionClick(object? sender, MouseButtonEventArgs _)
+    private void OnSuggestionClick(object? sender, MouseButtonEventArgs e)
     {
+        if (e.ChangedButton != MouseButton.Left) return;
         if (sender is not ListBox lb || lb.SelectedItem is not User u) return;
 
 
@@ -28,5 +29,11 @@ public partial class FriendsPage : UserControl
                 item.ContextMenu.IsOpen = true;
             }
         }
+    }
+
+    private void OnFriendOpen(object? sender, MouseButtonEventArgs e)
+    {
+        if (DataContext is FriendListViewModel vm && vm.SelectedFriend is User u && e.ChangedButton == MouseButton.Left)
+            vm.StartChatCommand.Execute(u);
     }
 }

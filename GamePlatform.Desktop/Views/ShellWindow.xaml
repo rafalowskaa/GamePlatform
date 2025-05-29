@@ -25,7 +25,8 @@
             <views:FriendsPage DataContext="{Binding FriendsVm}"/>
         </md:DrawerHost.RightDrawerContent>
 
-        <DockPanel>
+        <Grid>
+            <DockPanel>
 
             <!-- ======= GÓRNY PASEK NAWIGACJI ======= -->
             <ToolBar DockPanel.Dock="Top" Background="{DynamicResource MaterialDesignPaper}">
@@ -57,15 +58,7 @@
                     </Button.Style>
                 </Button>
 
-                <Button Content="Znajomi" Command="{Binding ToggleDrawerCommand}">
-                    <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
-                        <Style.Triggers>
-
-                        </Style.Triggers>
-                    </Style>
-                    </Button.Style>
-                </Button>
+                
 
                 <Button Content="Statystyki" Command="{Binding ShowStatsCommand}">
                     <Button.Style>
@@ -101,8 +94,23 @@
                 <Button Content="Wyloguj" Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding LogoutCommand}"/>
             </ToolBar>
 
-            <!--  zawartość  -->
-            <Frame Content="{Binding CurrentPage}"/>
-        </DockPanel>
+                <!--  zawartość  -->
+                <Frame Content="{Binding CurrentPage}"/>
+            </DockPanel>
+
+            <!-- uchwyt wysuwanego panelu znajomych -->
+            <Button Content="Znajomi"
+                    Command="{Binding ToggleDrawerCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,-32,0"
+                    Padding="4"
+                    Background="{DynamicResource PrimaryHueMidBrush}"
+                    Foreground="White">
+                <Button.LayoutTransform>
+                    <RotateTransform Angle="-90"/>
+                </Button.LayoutTransform>
+            </Button>
+        </Grid>
     </md:DrawerHost>
 </Window>
