@@ -53,6 +53,13 @@ public sealed class FriendService : IFriendService
     public async Task<bool> IsBlockedAsync(Guid blocker, Guid other) =>
         await _db.BlockedUsers.AnyAsync(bu => bu.BlockerId == blocker && bu.BlockedId == other);
 
+    public async Task<IReadOnlyList<User>> GetBlockedAsync(Guid userId) =>
+        await _db.BlockedUsers
+                 .Where(b => b.BlockerId == userId)
+                 .Select(b => b.Blocked!)
+                 .AsNoTracking()
+                 .ToListAsync();
+
     /* ─────────────  polecenia  ───────────── */
 
     public async Task SendRequestAsync(Guid fromUserId, Guid toUserId)

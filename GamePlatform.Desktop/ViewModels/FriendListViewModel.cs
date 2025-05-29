@@ -46,10 +46,13 @@ public partial class FriendListViewModel : ObservableObject
     /* =====  MODEL  ===== */
     public ObservableCollection<User> Friends { get; } = new();
     public ObservableCollection<User> Online { get; } = new();
+    public ObservableCollection<User> Blocked { get; } = new();
 
     [ObservableProperty] private string _searchText = "";
     [ObservableProperty] private bool _isSuggestOpen = false;
     [ObservableProperty] private User? _selectedFriend;
+    [ObservableProperty] private bool _friendsExpanded = true;
+    [ObservableProperty] private bool _blockedExpanded = false;
 
     /* ========== REAKCJA NA WPISYWANY TEKST ========== */
     partial void OnSearchTextChanged(string? newValue)
@@ -157,19 +160,31 @@ public partial class FriendListViewModel : ObservableObject
     {
         Friends.Clear();
         Online.Clear();
+        Blocked.Clear();
         _friendIds.Clear();
 
         if (_auth.CurrentUser is null) return;
 
-        foreach (var u in await _friends.GetFriendsAsync(_auth.CurrentUser.Id))
+        var friends = await _friends.GetFriendsAsync(_auth.CurrentUser.Id);
+        foreach (var u in friends)
         {
             u.IsOnline = _chat.IsOnline(u.Id);
             u.IsMyFriend = true;
+
+        }
+
+        foreach (var u in friends
+                        .OrderBy(u => !u.IsOnline)
+                        .ThenBy(u => u.Login, StringComparer.OrdinalIgnoreCase))
+        {
             _friendIds.Add(u.Id);
             Friends.Add(u);
             if (u.IsOnline)
                 Online.Add(u);
         }
+        var blocked = await _friends.GetBlockedAsync(_auth.CurrentUser.Id);
+        foreach (var b in blocked.OrderBy(u => u.Login, StringComparer.OrdinalIgnoreCase))
+            Blocked.Add(b);
     }
 
     private async Task LoadSuggestionsAsync()

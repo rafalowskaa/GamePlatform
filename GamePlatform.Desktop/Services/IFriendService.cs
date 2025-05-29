@@ -16,6 +16,11 @@ public interface IFriendService
     Task<bool> AreFriendsAsync(Guid userA, Guid userB);
     Task<bool> IsBlockedAsync(Guid blocker, Guid other);
 
+    /// <summary>
+    /// Zwraca listę użytkowników zablokowanych przez danego użytkownika.
+    /// </summary>
+    Task<IReadOnlyList<User>> GetBlockedAsync(Guid userId);
+
     /* komendy */
     Task SendRequestAsync(Guid fromUserId, Guid toUserId);
     Task AcceptRequestAsync(Guid requestId);

@@ -11,6 +11,7 @@
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>
             <conv:OnlineBrushConverter x:Key="OnlineBrush"/>
             <conv:FriendActionConverter x:Key="FriendAction"/>
+            <conv:OnlineStatusTextConverter x:Key="OnlineStatusText"/>
 
             <!-- globalny Snackbar -->
             <md:SnackbarMessageQueue x:Key="GlobalMsgQueue" DiscardDuplicates="True"/>
