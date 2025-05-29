@@ -5,7 +5,6 @@ using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.ObjectModel;
 using System.Windows.Controls;
 
 namespace GamePlatform.Desktop.ViewModels;
@@ -21,9 +20,9 @@ public partial class ShellViewModel : ObservableObject
         _sp = sp;
         _auth = auth;
 
-        // pobieramy raz – żeby móc zasubskrybować StartChat
+        
         _friendsVm = _sp.GetRequiredService<FriendListViewModel>();
-        _friendsVm.StartChat += OnStartChat;          // event dodany w FriendListVM
+        
 
         ShowGames();                                  // strona domyślna
     }
@@ -33,9 +32,7 @@ public partial class ShellViewModel : ObservableObject
     [ObservableProperty] private string _currentTag = "";
     [ObservableProperty] private bool _isDrawerOpen;
 
-    // lista otwartych okien czatu (gdybyś chciał mini-dock w prawym pasku)
-    public ObservableCollection<ChatWindowViewModel> OpenChats { get; } = new();
-
+ 
     public bool IsAdmin => _auth.CurrentRole is UserRole.Admin or UserRole.Moderator;
 
     /* ==========  NAWIGACJA  ========== */
@@ -56,13 +53,6 @@ public partial class ShellViewModel : ObservableObject
             Navigate(new UsersPage { DataContext = _sp.GetRequiredService<UsersViewModel>() }, "Users");
     }
 
-    /* ==========  CHAT HOOK  ========== */
-    private void OnStartChat(ChatWindowViewModel chatVm)
-    {
-        // możesz tu dodać logikę unikającą duplikatów w OpenChats
-        OpenChats.Add(chatVm);
-        IsDrawerOpen = true;
-    }
 
     /* ==========  LOGOUT  ========== */
     [RelayCommand]

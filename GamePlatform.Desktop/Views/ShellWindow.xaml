@@ -25,7 +25,7 @@
         <ToolBar DockPanel.Dock="Top" Background="{DynamicResource MaterialDesignPaper}">
 
             <!-- każda pozycja: Games / Profile / Friends / Stats / Users -->
-            <Button Content="Gry"         Style="{StaticResource NavBtn}" Command="{Binding ShowGamesCommand}">
+            <Button Content="Gry" Command="{Binding ShowGamesCommand}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
                         <Style.Triggers>
@@ -38,7 +38,7 @@
                 </Button.Style>
             </Button>
 
-            <Button Content="Profil"      Style="{StaticResource NavBtn}" Command="{Binding ShowProfileCommand}">
+            <Button Content="Profil" Command="{Binding ShowProfileCommand}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
                         <Style.Triggers>
@@ -51,7 +51,7 @@
                 </Button.Style>
             </Button>
 
-            <Button Content="Znajomi"     Style="{StaticResource NavBtn}" Command="{Binding ShowFriendsCommand}">
+            <Button Content="Znajomi" Command="{Binding ShowFriendsCommand}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
                         <Style.Triggers>
@@ -64,7 +64,7 @@
                 </Button.Style>
             </Button>
 
-            <Button Content="Statystyki"  Style="{StaticResource NavBtn}" Command="{Binding ShowStatsCommand}">
+            <Button Content="Statystyki" Command="{Binding ShowStatsCommand}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
                         <Style.Triggers>
@@ -79,7 +79,7 @@
 
             <Button Content="Użytkownicy"
                     Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
-                    Style="{StaticResource NavBtn}"
+                   
                     Command="{Binding ShowUsersCommand}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
