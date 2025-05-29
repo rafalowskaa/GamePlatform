@@ -43,7 +43,7 @@ public partial class FriendListViewModel : ObservableObject
     [ObservableProperty] private User? _selectedFriend;
 
     /* ========== REAKCJA NA WPISYWANY TEKST ========== */
-    partial void OnSearchTextChanged(string? _) => _ = RefreshSuggestionsAsync();
+    partial void OnSearchTextChanged(string _) => _ = RefreshSuggestionsAsync();
 
     /* ==========  KOMENDY  ========== */
 

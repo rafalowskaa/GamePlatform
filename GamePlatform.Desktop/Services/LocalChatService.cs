@@ -48,6 +48,12 @@ public sealed class LocalChatService : IChatService
             PresenceChanged?.Invoke(id, false);
     }
 
+    public Task SetOfflineAsync(Guid userId)
+    {
+        SetOffline(userId);
+        return Task.CompletedTask;
+    }
+
     public bool IsOnline(Guid id) => _online.ContainsKey(id);
 
     public IReadOnlyList<ChatMessage> GetHistory(Guid a, Guid b, int last = 50) =>
