@@ -15,26 +15,23 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- ===== WYSZUKIWANIE ===== -->
-        <StackPanel Margin="0 0 0 12" HorizontalAlignment="Center" Orientation="Horizontal">
+        <!-- ===== WYSZUKIWANIE + PODPOWIEDZI ===== -->
+        <StackPanel Margin="0 0 0 12" HorizontalAlignment="Center">
             <TextBox Width="240"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      KeyDown="OnSearchEnter"
                      md:HintAssist.Hint="Wprowadź nazwę użytkownika"/>
-        </StackPanel>
-
-        <!-- ===== PODPOWIEDZI ===== -->
-        <ListBox ItemsSource="{Binding Suggestions}"
-                 Visibility="{Binding IsSuggestOpen, Converter={StaticResource BoolToVis}}"
-                 MouseLeftButtonUp="OnSuggestionClick"
-                 Margin="0 0 0 8" Width="240" HorizontalAlignment="Center"
-                 HorizontalContentAlignment="Stretch">
-            <ListBox.ItemContainerStyle>
+            <ListBox ItemsSource="{Binding Suggestions}"
+                     Visibility="{Binding IsSuggestOpen, Converter={StaticResource BoolToVis}}"
+                     MouseLeftButtonUp="OnSuggestionClick"
+                     Margin="0 4 0 0" Width="240" HorizontalAlignment="Center"
+                     HorizontalContentAlignment="Stretch">
+                <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="ContextMenu">
                         <Setter.Value>
                             <ContextMenu>
-                                <MenuItem Header="Dodaj / Usuń"
+                                    <MenuItem Header="{Binding IsMyFriend, Converter={StaticResource FriendAction}}"
                                           Command="{Binding DataContext.ToggleForCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                           CommandParameter="{Binding}"/>
                                 <Separator/>
@@ -68,6 +65,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        </StackPanel>
 
         <!-- ===== LISTA ===== -->
         <ListView Grid.Row="1"
@@ -91,8 +89,8 @@
                     <Setter Property="ContextMenu">
                         <Setter.Value>
                             <ContextMenu>
-                                <MenuItem Header="Dodaj / Usuń"
-                                          Command="{Binding DataContext.ToggleFriendAsyncCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                <MenuItem Header="Usuń ze znajomych"
+                                          Command="{Binding DataContext.ToggleForCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                           CommandParameter="{Binding}"/>
                                 <Separator/>
                                 <MenuItem Header="Napisz wiadomość"

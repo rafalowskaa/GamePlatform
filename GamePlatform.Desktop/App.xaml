@@ -10,6 +10,7 @@
 
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>
             <conv:OnlineBrushConverter x:Key="OnlineBrush"/>
+            <conv:FriendActionConverter x:Key="FriendAction"/>
 
             <!-- globalny Snackbar -->
             <md:SnackbarMessageQueue x:Key="GlobalMsgQueue" DiscardDuplicates="True"/>

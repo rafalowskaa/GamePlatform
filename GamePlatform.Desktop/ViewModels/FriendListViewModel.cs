@@ -19,6 +19,7 @@ public partial class FriendListViewModel : ObservableObject
     private readonly IChatService _chat;
     private readonly INotificationService _notify;
     private readonly IServiceProvider _sp;
+    private readonly HashSet<Guid> _friendIds = new();
 
     public FriendListViewModel(IServiceProvider sp,
                                IAuthService auth,
@@ -156,12 +157,15 @@ public partial class FriendListViewModel : ObservableObject
     {
         Friends.Clear();
         Online.Clear();
+        _friendIds.Clear();
 
         if (_auth.CurrentUser is null) return;
 
         foreach (var u in await _friends.GetFriendsAsync(_auth.CurrentUser.Id))
         {
             u.IsOnline = _chat.IsOnline(u.Id);
+            u.IsMyFriend = true;
+            _friendIds.Add(u.Id);
             Friends.Add(u);
             if (u.IsOnline)
                 Online.Add(u);
@@ -170,7 +174,6 @@ public partial class FriendListViewModel : ObservableObject
 
     private async Task LoadSuggestionsAsync()
     {
-        // prostackie wyszukiwanie po prefiksie
         if (string.IsNullOrWhiteSpace(SearchText))
         {
             IsSuggestOpen = false;
@@ -181,7 +184,11 @@ public partial class FriendListViewModel : ObservableObject
                             .FindByLoginAsync(SearchText!, take: 8);
 
         Suggestions.Clear();
-        foreach (var u in list) Suggestions.Add(u);
+        foreach (var u in list)
+        {
+            u.IsMyFriend = _friendIds.Contains(u.Id);
+            Suggestions.Add(u);
+        }
 
         IsSuggestOpen = Suggestions.Count > 0;
     }

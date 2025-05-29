@@ -25,6 +25,14 @@ public class User
     [System.ComponentModel.DataAnnotations.Schema.NotMapped]
     public bool IsOnline { get; set; }
 
+    /// <summary>
+    /// Indicates whether the currently logged in user has this
+    /// person on their friends list. Runtime only, not stored.
+    /// </summary>
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public bool IsMyFriend { get; set; }
+
+
 
     /* —— przyjaźnie —— */
     public ICollection<Friend> FriendsInitiated { get; set; } = [];
