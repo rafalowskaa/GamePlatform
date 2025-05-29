@@ -13,4 +13,10 @@ public interface IProfileService
     /// <param name="newPassword"> nowe hasło (null/empty → bez zmian)</param>
     /// <param name="newAvatar"> strumień pliku graficznego (null → bez zmian)</param>
     Task<bool> UpdateAsync(User updated, string? newPassword, Stream? newAvatar);
+
+    /// <summary>
+    /// Szukanie użytkowników po prefiksie loginu. Wynik ograniczony parametrem
+    /// <paramref name="take"/>.
+    /// </summary>
+    Task<IReadOnlyList<User>> FindByLoginAsync(string prefix, int take = 20);
 }

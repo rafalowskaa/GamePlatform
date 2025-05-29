@@ -27,4 +27,10 @@ public interface IFriendService
 
     /// <summary>Czy dany użytkownik jest on-line.  ⌚ Stub – w DB brak statusów.</summary>
     Task<bool> IsUserOnlineAsync(Guid userId);
+
+    /// <summary>
+    /// Dodaj znajomego jeśli go brak, w przeciwnym wypadku usuń relację.
+    /// Wysyła zaproszenie jeśli użytkownicy nie są połączeni.
+    /// </summary>
+    Task ToggleFriendAsync(Guid userId, Guid mateId);
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -48,6 +49,23 @@ public partial class FriendListViewModel : ObservableObject
 
     [RelayCommand] private Task RefreshFriendsAsync() => LoadFriendsAsync();
     [RelayCommand] private Task RefreshSuggestionsAsync() => LoadSuggestionsAsync();
+
+    [RelayCommand]
+    private void AddFriend()
+    {
+        var page = new FindFriendsPage { DataContext = _sp.GetRequiredService<FindFriendsViewModel>() };
+        var win = new System.Windows.Window
+        {
+            Content = page,
+            Owner = System.Windows.Application.Current.MainWindow,
+            Width = 400,
+            Height = 500,
+            Title = "Dodaj znajomego"
+        };
+        win.ShowDialog();
+        _ = RefreshFriendsAsync();
+    }
+
     [RelayCommand]
     private void StartChat(User? mate)
     {
@@ -67,6 +85,30 @@ public partial class FriendListViewModel : ObservableObject
         await RefreshFriendsAsync();
 
         _notify.Info($"Zmieniono relację z użytkownikiem {SelectedFriend.Login}");
+    }
+
+    [RelayCommand]
+    private async Task BlockAsync(User? target)
+    {
+        if (target is null) return;
+        await _friends.BlockAsync(_auth.CurrentUser!.Id, target.Id);
+        await RefreshFriendsAsync();
+    }
+
+    [RelayCommand]
+    private void ShowProfile(User? target)
+    {
+        if (target is null) return;
+        System.Windows.MessageBox.Show($"{target.Login}\n{target.Email}", "Profil", System.Windows.MessageBoxButton.OK);
+    }
+
+    [RelayCommand]
+    private void Report(User? target)
+    {
+        if (target is null) return;
+        var vm = new ReportDialogViewModel(_sp.GetRequiredService<IReportService>(), _auth.CurrentUser!.Id, target.Id);
+        var dlg = new ReportDialog { DataContext = vm, Owner = System.Windows.Application.Current.MainWindow };
+        dlg.ShowDialog();
     }
 
     /* ==========  PRYWATNE  ========== */

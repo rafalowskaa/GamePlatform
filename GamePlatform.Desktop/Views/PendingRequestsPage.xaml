@@ -17,11 +17,11 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Content="Akceptuj" Width="70"
-                                        Command="{Binding DataContext.AcceptCommand,
+                                        Command="{Binding DataContext.AcceptAsyncCommand,
                                                   RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
                                 <Button Content="Odrzuć" Width="70" Margin="8 0 0 0"
-                                        Command="{Binding DataContextDeclineCommand,
+                                        Command="{Binding DataContext.DeclineAsyncCommand,
                                                   RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
                             </StackPanel>

@@ -42,7 +42,8 @@ public partial class App : Application
         sc.AddScoped<IGameRepository, GameRepositorySqlite>();
         sc.AddScoped<IProfileService, ProfileService>();
         sc.AddScoped<IFriendService, FriendService>();
-        sc.AddSingleton<IChatService, ChatService>();            // <-- czat
+        sc.AddScoped<IReportService, ReportService>();
+        sc.AddSingleton<IChatService, ChatService>();            
 
         sc.AddSingleton<INotificationService, NotificationService>();
 
@@ -56,7 +57,10 @@ public partial class App : Application
         sc.AddTransient<ShellViewModel>();
         sc.AddTransient<MainViewModel>();
         sc.AddTransient<UsersViewModel>();
-        sc.AddTransient<FriendListViewModel>();                    // <--
+        sc.AddTransient<FriendListViewModel>();
+        sc.AddTransient<FindFriendsViewModel>();
+        sc.AddTransient<PendingRequestsViewModel>();
+        sc.AddTransient<ReportsViewModel>();
         sc.AddTransient<ProfileViewModel>();
         sc.AddTransient<StatsViewModel>();
         sc.AddTransient<AddGameDialogViewModel>();

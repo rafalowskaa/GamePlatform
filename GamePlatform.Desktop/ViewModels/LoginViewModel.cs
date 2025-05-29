@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
 using GamePlatform.Shared.Validation;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -11,10 +12,24 @@ public partial class LoginViewModel : ObservableObject
     private readonly IAuthService _auth;
     private readonly RegisterValidator _validator;
 
+    private static readonly string RememberPath = System.IO.Path.Combine(
+        System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
+        "GamePlatform", "remember.txt");
+
     public LoginViewModel(IAuthService auth, RegisterValidator val)
     {
         _auth = auth;
         _validator = val;
+
+        try
+        {
+            if (System.IO.File.Exists(RememberPath))
+            {
+                Login = System.IO.File.ReadAllText(RememberPath);
+                RememberMe = true;
+            }
+        }
+        catch { }
     }
 
     /* ─────────  pola  ───────── */
@@ -57,6 +72,20 @@ public partial class LoginViewModel : ObservableObject
         if (result.IsSuccess)
         {
             // TODO: RememberMe -> zapisz token/cookie etc.
+            try
+            {
+                if (RememberMe)
+                {
+                    System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(RememberPath)!);
+                    System.IO.File.WriteAllText(RememberPath, Login);
+                }
+                else if (System.IO.File.Exists(RememberPath))
+                {
+                    System.IO.File.Delete(RememberPath);
+                }
+            }
+            catch { }
+
             ClearFields();
             win.DialogResult = true;   // zamyka okno modalne
         }

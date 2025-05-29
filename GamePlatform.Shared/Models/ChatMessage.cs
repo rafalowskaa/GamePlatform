@@ -1,9 +1,9 @@
-﻿using System;
-
-namespace GamePlatform.Shared.Models;
-
-public record ChatMessage(Guid From, Guid To, string Text, DateTime WhenUtc)
+﻿public class ChatMessage
 {
-    public ChatMessage(Guid from, Guid to, string text)
-        : this(from, to, text, DateTime.UtcNow) { }
+    public int Id { get; set; }
+    public Guid From { get; set; }
+    public Guid To { get; set; }
+    public string Text { get; set; } = "";
+    public DateTime SentUtc { get; set; } = DateTime.UtcNow;
+    public bool SeenByTo { get; set; }
 }

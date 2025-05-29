@@ -22,7 +22,7 @@
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      md:HintAssist.Hint="Szukaj znajomego…"/>
             <Button Content="Dodaj" Margin="8 0 0 0"
-                    Command="{Binding AddFriendAsyncCommand}"/>
+                     Command="{Binding AddFriendCommand}"/>
         </DockPanel>
 
         <!-- ===== LISTA ===== -->

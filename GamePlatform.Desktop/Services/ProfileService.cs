@@ -15,6 +15,17 @@ public sealed class ProfileService : IProfileService
 
     public ProfileService(AppDbContext db) => _db = db;
 
+    public async Task<IReadOnlyList<User>> FindByLoginAsync(string prefix, int take = 20)
+    {
+        return await _db.Users
+                        .Where(u => u.Login.StartsWith(prefix))
+                        .OrderBy(u => u.Login)
+                        .Take(take)
+                        .AsNoTracking()
+                        .ToListAsync();
+    }
+
+
     public async Task<bool> UpdateAsync(User updated, string? newPwd, Stream? avatar)
     {
         var user = await _db.Users.FirstAsync(u => u.Id == updated.Id);

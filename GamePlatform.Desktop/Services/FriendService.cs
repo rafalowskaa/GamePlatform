@@ -127,11 +127,18 @@ public sealed class FriendService : IFriendService
         await _db.SaveChangesAsync();
         _notify?.Info("Blokada usunięta");
     }
+    public async Task ToggleFriendAsync(Guid userId, Guid mateId)
+    {
+        if (await AreFriendsAsync(userId, mateId))
+        {
+            await RemoveFriendAsync(userId, mateId);
+        }
+        else
+        {
+            await SendRequestAsync(userId, mateId);
+        }
+    }
 
-    /// <remarks>
-    ///  Brak realnego mechanizmu on-line → zwracamy zawsze <c>false</c>.
-    ///  Dzięki temu kompilacja przechodzi, a API jest gotowe na przyszłe rozszerzenie.
-    /// </remarks>
     public Task<bool> IsUserOnlineAsync(Guid userId)
         => Task.FromResult(false);
 }

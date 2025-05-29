@@ -8,14 +8,13 @@ namespace GamePlatform.Desktop.Services;
 public interface IChatService
 {
     event Action<ChatMessage>? MessageReceived;
-    event Action<Guid, bool>? PresenceChanged;
+    event Action<Guid, bool>? PresenceChanged;           // (userId, isOnline)
 
-    void Send(ChatMessage msg);
+    Task SendAsync(ChatMessage m);
+    Task<IReadOnlyList<ChatMessage>> GetHistoryAsync(Guid a, Guid b, int take = 100);
 
-    void SetOnline(Guid userId);
-    void SetOffline(Guid userId);
+    Task SetOnlineAsync(Guid userId);
+    Task SetOfflineAsync(Guid userId);
     bool IsOnline(Guid userId);
-
-    /// <summary>Ostatnie <paramref name="last"/> wiadomości pomiędzy <paramref name="a"/> a <paramref name="b"/>.</summary>
-    IReadOnlyList<ChatMessage> GetHistory(Guid a, Guid b, int last = 50);
 }
+
