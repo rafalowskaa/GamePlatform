@@ -18,6 +18,13 @@ public class User
     public string? BlockReason { get; set; }
     public DateTime? LastLoginUtc { get; set; }
 
+    /// <summary>
+    /// Runtime flag used by the client application to indicate whether
+    /// the user is currently online. Not mapped to the database.
+    /// </summary>
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public bool IsOnline { get; set; }
+
     /* —— przyjaźnie —— */
     public ICollection<Friend> FriendsInitiated { get; set; } = [];
     public ICollection<Friend> FriendsAccepted { get; set; } = [];

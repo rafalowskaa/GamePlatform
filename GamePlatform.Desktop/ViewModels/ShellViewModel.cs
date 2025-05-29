@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GamePlatform.Desktop.Services;
 using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Enums;
+using GamePlatform.Desktop.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows.Controls;
@@ -13,6 +13,7 @@ public partial class ShellViewModel : ObservableObject
 {
     private readonly IServiceProvider _sp;
     private readonly IAuthService _auth;
+    private readonly IChatService _chat;
     private readonly FriendListViewModel _friendsVm;
     public FriendListViewModel FriendsVm => _friendsVm;
 
@@ -20,9 +21,13 @@ public partial class ShellViewModel : ObservableObject
     {
         _sp = sp;
         _auth = auth;
+        _chat = _sp.GetRequiredService<IChatService>();
 
         
         _friendsVm = _sp.GetRequiredService<FriendListViewModel>();
+
+        if (_auth.CurrentUser is not null)
+            _ = _chat.SetOnlineAsync(_auth.CurrentUser.Id);
         
 
         ShowGames();                                  // strona domyślna
@@ -60,6 +65,10 @@ public partial class ShellViewModel : ObservableObject
     [RelayCommand]
     private async void Logout()
     {
+        var id = _auth.CurrentUser?.Id;
+        if (id is not null)
+            await _chat.SetOfflineAsync(id.Value);
+
         await _auth.LogoutAsync();
         OnPropertyChanged(nameof(IsAdmin));
         System.Windows.Application.Current.MainWindow?.Close();

@@ -2,12 +2,14 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
              ShutdownMode="OnExplicitShutdown">
 
     <Application.Resources>
         <ResourceDictionary>
 
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+            <conv:OnlineBrushConverter x:Key="OnlineBrush"/>
 
             <!-- globalny Snackbar -->
             <md:SnackbarMessageQueue x:Key="GlobalMsgQueue" DiscardDuplicates="True"/>

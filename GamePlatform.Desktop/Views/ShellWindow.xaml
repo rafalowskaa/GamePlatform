@@ -99,14 +99,13 @@
             </DockPanel>
 
             <!-- uchwyt wysuwanego panelu znajomych -->
-            <Button Content="Znajomi"
-                    Command="{Binding ToggleDrawerCommand}"
+            <Button Command="{Binding ToggleDrawerCommand}"
+                    Width="30" Height="100"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Margin="0,0,-32,0"
-                    Padding="4"
-                    Background="{DynamicResource PrimaryHueMidBrush}"
-                    Foreground="White">
+                    Margin="0,0,-12,0"
+                    Background="Red"
+                    Content="">
                 <Button.LayoutTransform>
                     <RotateTransform Angle="-90"/>
                 </Button.LayoutTransform>
