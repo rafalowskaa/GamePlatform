@@ -30,13 +30,22 @@ public sealed class AuthService : IAuthService
             return LoginResult.Fail("Błędny login lub hasło.");
 
         /* sprawdź blokadę */
-        if (_current.BlockedUntilUtc is not null && _current.BlockedUntilUtc > DateTime.UtcNow)
+        if (_current.BlockedUntilUtc is not null)
         {
-            string msg = $"Konto zostało zablokowane do {_current.BlockedUntilUtc:yyyy-MM-dd HH:mm} (UTC)"
-                       + (!string.IsNullOrWhiteSpace(_current.BlockReason)
-                          ? $"\nPowód: {_current.BlockReason}"
-                          : "");
-            return LoginResult.Fail(msg);
+            if (_current.BlockedUntilUtc > DateTime.UtcNow)
+            {
+                string msg = $"Konto zostało zablokowane do {_current.BlockedUntilUtc:yyyy-MM-dd HH:mm} (UTC)"
+                           + (!string.IsNullOrWhiteSpace(_current.BlockReason)
+                              ? $"\nPowód: {_current.BlockReason}"
+                              : "");
+                return LoginResult.Fail(msg);
+            }
+            else
+            {
+                _current.BlockedUntilUtc = null;
+                _current.BlockReason = null;
+                await _db.SaveChangesAsync();
+            }
         }
 
         bool ok = _hasher.VerifyHashedPassword(_current, _current.PasswordHash, password)

@@ -112,7 +112,13 @@ public sealed class FriendService : IFriendService
         if (blockerId == blockedId) return;
         if (await IsBlockedAsync(blockerId, blockedId)) return;
 
-        _db.BlockedUsers.Add(new BlockedUser { BlockerId = blockerId, BlockedId = blockedId });
+        if (!await IsBlockedAsync(blockerId, blockedId))
+            _db.BlockedUsers.Add(new BlockedUser { BlockerId = blockerId, BlockedId = blockedId });
+        if (!await IsBlockedAsync(blockedId, blockerId))
+            _db.BlockedUsers.Add(new BlockedUser { BlockerId = blockedId, BlockedId = blockerId });
+
+
+
         await RemoveFriendAsync(blockerId, blockedId);   // blokada rozłącza znajomych
         await _db.SaveChangesAsync();
         _notify?.Info("Użytkownik zablokowany");
@@ -120,10 +126,13 @@ public sealed class FriendService : IFriendService
 
     public async Task UnblockAsync(Guid blockerId, Guid blockedId)
     {
-        var block = await _db.BlockedUsers.FindAsync(blockerId, blockedId);
-        if (block is null) return;
+        var block1 = await _db.BlockedUsers.FindAsync(blockerId, blockedId);
+        var block2 = await _db.BlockedUsers.FindAsync(blockedId, blockerId);
 
-        _db.BlockedUsers.Remove(block);
+        if (block1 is not null) _db.BlockedUsers.Remove(block1);
+        if (block2 is not null) _db.BlockedUsers.Remove(block2);
+
+        
         await _db.SaveChangesAsync();
         _notify?.Info("Blokada usunięta");
     }

@@ -17,10 +17,58 @@
         <DockPanel Margin="0 0 0 12">
             <TextBox DockPanel.Dock="Left" Width="240"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     md:HintAssist.Hint="Szukaj znajomego…"/>
+                     KeyDown="OnSearchEnter"
+                     md:HintAssist.Hint="Wpisz nazwę poszukiwanego użytkownika"/>
             <Button Content="Dodaj" Margin="8 0 0 0"
                      Command="{Binding AddFriendCommand}"/>
         </DockPanel>
+
+        <!-- ===== PODPOWIEDZI ===== -->
+        <ListBox ItemsSource="{Binding Suggestions}"
+                 Visibility="{Binding IsSuggestOpen, Converter={StaticResource BoolToVis}}"
+                 MouseDoubleClick="OnSuggestionClick"
+                 Margin="0 0 0 8"
+                 HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:User}">
+                    <Border Margin="0 1" Padding="4" Background="#444" CornerRadius="4">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Left"
+                                       Text="{Binding Login}"
+                                       Foreground="White"/>
+                            <Button DockPanel.Dock="Right"
+                                    Style="{StaticResource MaterialDesignIconButton}">
+                                <Button.Content>
+                                    <Path Data="M0,0 3,0 3,3 0,3Z M6,0 9,0 9,3 6,3Z M12,0 15,0 15,3 12,3Z"
+                                          Fill="White" Stretch="Uniform"/>
+                                </Button.Content>
+                                <Button.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Dodaj / Usuń"
+                                                  Command="{Binding DataContext.ToggleForCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                  CommandParameter="{Binding}"/>
+                                        <Separator/>
+                                        <MenuItem Header="Napisz wiadomość"
+                                                  Command="{Binding DataContext.StartChatCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                  CommandParameter="{Binding}"/>
+                                        <MenuItem Header="Pokaż profil"
+                                                  Command="{Binding DataContext.ShowProfileCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                  CommandParameter="{Binding}"/>
+                                        <Separator/>
+                                        <MenuItem Header="Zablokuj"
+                                                  Command="{Binding DataContext.BlockCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                  CommandParameter="{Binding}"/>
+                                        <MenuItem Header="Zgłoś"
+                                                  Command="{Binding DataContext.ReportCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                  CommandParameter="{Binding}"/>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+                        </DockPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <!-- ===== LISTA ===== -->
         <ListView Grid.Row="1"

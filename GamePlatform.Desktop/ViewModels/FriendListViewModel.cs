@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.AspNetCore.Identity;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -91,10 +92,38 @@ public partial class FriendListViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task ToggleForAsync(User? user)
+    {
+        if (user is null) return;
+
+        await _friends.ToggleFriendAsync(_auth.CurrentUser!.Id, user.Id);
+        await RefreshFriendsAsync();
+    }
+
+
+    [RelayCommand]
     private async Task BlockAsync(User? target)
     {
         if (target is null) return;
-        await _friends.BlockAsync(_auth.CurrentUser!.Id, target.Id);
+
+
+        var pwdDlg = new PasswordPromptWindow { Owner = Application.Current.MainWindow };
+        if (pwdDlg.ShowDialog() != true) return;
+
+        var me = _auth.CurrentUser;
+        if (me is null) return;
+
+        var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<User>();
+        if (hasher.VerifyHashedPassword(me, me.PasswordHash, pwdDlg.Password)
+            == Microsoft.AspNetCore.Identity.PasswordVerificationResult.Failed)
+        {
+            MessageBox.Show("Nieprawidłowe hasło.", "Błąd",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        await _friends.BlockAsync(me.Id, target.Id);
+
         await RefreshFriendsAsync();
     }
 
