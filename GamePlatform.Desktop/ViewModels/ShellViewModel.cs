@@ -29,7 +29,7 @@ public partial class ShellViewModel : ObservableObject
     }
 
     /* ==========  BINDS  ========== */
-    [ObservableProperty] private Page _currentPage = null!;
+    [ObservableProperty] private object _currentPage = null!;
     [ObservableProperty] private string _currentTag = "";
     [ObservableProperty] private bool _isDrawerOpen;
 
@@ -37,7 +37,7 @@ public partial class ShellViewModel : ObservableObject
     public bool IsAdmin => _auth.CurrentRole is UserRole.Admin or UserRole.Moderator;
 
     /* ==========  NAWIGACJA  ========== */
-    private void Navigate(Page page, string tag)
+    private void Navigate(object page, string tag)
     {
         CurrentPage = page;
         CurrentTag = tag;

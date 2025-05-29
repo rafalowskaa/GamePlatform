@@ -4,7 +4,7 @@ using GamePlatform.Desktop.ViewModels;
 
 namespace GamePlatform.Desktop.Views;
 
-public partial class FindFriendsPage : Page
+public partial class FindFriendsPage : UserControl
 {
     public FindFriendsPage() => InitializeComponent();
 

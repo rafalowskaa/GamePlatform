@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace GamePlatform.Desktop.Views;
 
-public partial class FriendsPage : Page
+public partial class FriendsPage : UserControl
 {
     public FriendsPage() => InitializeComponent();
 
@@ -22,8 +22,11 @@ public partial class FriendsPage : Page
 
         if (lb.ItemContainerGenerator.ContainerFromItem(u) is ListBoxItem item)
         {
-            item.ContextMenu?.DataContext = lb.DataContext;
-            item.ContextMenu?.IsOpen = true;
+            if (item.ContextMenu != null)
+            {
+                item.ContextMenu.DataContext = lb.DataContext;
+                item.ContextMenu.IsOpen = true;
+            }
         }
     }
 }
