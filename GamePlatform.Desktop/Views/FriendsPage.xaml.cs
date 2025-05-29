@@ -25,7 +25,7 @@ public partial class FriendsPage : UserControl
         {
             if (item.ContextMenu != null)
             {
-                item.ContextMenu.DataContext = lb.DataContext;
+                item.ContextMenu.DataContext = u;
                 item.ContextMenu.IsOpen = true;
             }
         }
