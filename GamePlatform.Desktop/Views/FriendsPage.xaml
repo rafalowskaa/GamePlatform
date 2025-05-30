@@ -6,13 +6,7 @@
              Background="Transparent"
              Width="300">
 
-    <!-- ==========  ZASOBY  ========== -->
-    <UserControl.Resources>
-        <!-- Relatywne źródło do VM strony; używamy kilka razy -->
-        <Binding x:Key="VmBinding"
-                 Path="DataContext"
-                 RelativeSource="{RelativeSource AncestorType=UserControl}" />
-    </UserControl.Resources>
+    
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -41,7 +35,7 @@
                                      Handler="DisableContextMenu"/>
                         <Setter Property="ContextMenu">
                             <Setter.Value>
-                                <ContextMenu DataContext="{StaticResource VmBinding}">
+                                <ContextMenu>
                                     <MenuItem Header="{Binding PlacementTarget.DataContext.IsMyFriend,
                                                                Converter={StaticResource FriendAction},
                                                                RelativeSource={RelativeSource AncestorType=ContextMenu}}"
@@ -122,7 +116,7 @@
                                          Handler="DisableContextMenu"/>
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
-                                    <ContextMenu DataContext="{StaticResource VmBinding}">
+                                    <ContextMenu>
                                         <MenuItem Header="Usuń ze znajomych"
                                                   Command="{Binding ToggleForCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
