@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
 using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Enums;
-using GamePlatform.Desktop.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows.Controls;
@@ -61,6 +60,12 @@ public partial class ShellViewModel : ObservableObject
             Navigate(new UsersPage { DataContext = _sp.GetRequiredService<UsersViewModel>() }, "Users");
     }
 
+    [RelayCommand]
+    private void ShowReports()
+    {
+        if (IsAdmin)
+            Navigate(new ReportsPage { DataContext = _sp.GetRequiredService<ReportsViewModel>() }, "Reports");
+    }
 
     /* ==========  LOGOUT  ========== */
     [RelayCommand]
