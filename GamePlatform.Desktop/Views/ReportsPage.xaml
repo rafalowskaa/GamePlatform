@@ -4,7 +4,8 @@
       Title="Zgłoszenia">
     <DockPanel Margin="12">
         <Button DockPanel.Dock="Top" Content="Odśwież" Width="100"
-                Command="{Binding RefreshCommand}"/>
+                Command="{Binding RefreshCommand}"
+                Background="Black" Foreground="White" BorderBrush="Black"/>
         <DataGrid ItemsSource="{Binding Reports}" AutoGenerateColumns="False"
                   IsReadOnly="True" Margin="0 8 0 0">
             <DataGrid.Columns>

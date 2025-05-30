@@ -117,6 +117,8 @@ public partial class FriendListViewModel : ObservableObject
     {
         if (target is null) return;
 
+        if (!await _notify.ConfirmAsync($"Czy na pewno zablokować użytkownika {target.Login}?", 0))
+            return;
 
         var pwdDlg = new PasswordPromptWindow { Owner = Application.Current.MainWindow };
         if (pwdDlg.ShowDialog() != true) return;

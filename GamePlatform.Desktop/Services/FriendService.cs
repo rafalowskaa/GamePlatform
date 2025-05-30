@@ -79,7 +79,10 @@ public sealed class FriendService : IFriendService
             ToUserId = toUserId
         });
         await _db.SaveChangesAsync();
-        _notify?.Info("Wysłano zaproszenie");
+
+        var target = await _db.Users.FindAsync(toUserId);
+        string name = target?.Login ?? "użytkownika";
+        _notify?.Info($"Zaproszenie zostało wysłane do {name}");
     }
 
     public async Task AcceptRequestAsync(Guid requestId)
@@ -96,7 +99,10 @@ public sealed class FriendService : IFriendService
         _db.FriendRequests.Remove(r);
         if (reverseReq is not null) _db.FriendRequests.Remove(reverseReq);
         await _db.SaveChangesAsync();
-        _notify?.Info("Zaproszenie zaakceptowane");
+
+        var mate = await _db.Users.FindAsync(r.FromUserId);
+        string name = mate?.Login ?? "użytkownika";
+        _notify?.Info($"Zaproszenie od {name} zostało zaakceptowane");
     }
 
     public async Task DeclineRequestAsync(Guid requestId)
@@ -106,7 +112,10 @@ public sealed class FriendService : IFriendService
 
         _db.FriendRequests.Remove(r);
         await _db.SaveChangesAsync();
-        _notify?.Info("Zaproszenie odrzucone");
+
+        var mate = await _db.Users.FindAsync(r.FromUserId);
+        string name = mate?.Login ?? "użytkownika";
+        _notify?.Info($"Zaproszenie od {name} zostało odrzucone");
     }
 
     public async Task RemoveFriendAsync(Guid userId, Guid mateId)
@@ -118,7 +127,10 @@ public sealed class FriendService : IFriendService
 
         _db.Friends.Remove(rel);
         await _db.SaveChangesAsync();
-        _notify?.Info("Usunięto znajomego");
+
+        var mate = await _db.Users.FindAsync(mateId);
+        string name = mate?.Login ?? "użytkownika";
+        _notify?.Info($"Użytkownik {name} został usunięty ze znajomych");
     }
 
     public async Task BlockAsync(Guid blockerId, Guid blockedId)
@@ -138,7 +150,10 @@ public sealed class FriendService : IFriendService
 
         await RemoveFriendAsync(blockerId, blockedId);   // blokada rozłącza znajomych
         await _db.SaveChangesAsync();
-        _notify?.Info("Użytkownik zablokowany");
+
+        var mate = await _db.Users.FindAsync(blockedId);
+        string name = mate?.Login ?? "użytkownika";
+        _notify?.Info($"Użytkownik {name} został zablokowany");
     }
 
     public async Task UnblockAsync(Guid blockerId, Guid blockedId)
@@ -151,7 +166,11 @@ public sealed class FriendService : IFriendService
 
         
         await _db.SaveChangesAsync();
-        _notify?.Info("Blokada usunięta");
+
+
+        var mate = await _db.Users.FindAsync(blockedId);
+        string name = mate?.Login ?? "użytkownika";
+        _notify?.Info($"Blokada użytkownika {name} została usunięta");
     }
     public async Task ToggleFriendAsync(Guid userId, Guid mateId)
     {

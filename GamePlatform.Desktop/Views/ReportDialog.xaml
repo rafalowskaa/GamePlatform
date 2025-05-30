@@ -33,11 +33,12 @@
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0 16 0 0">
-            <Button Content="Anuluj"
-                    IsCancel="True"/>
+            <Button Content="Anuluj" IsCancel="True"
+                    Background="Black" Foreground="White" BorderBrush="Black"/>
             <Button Content="Wyślij"
                     Width="80"
                     Margin="12 0 0 0"
+                    Background="Black" Foreground="White" BorderBrush="Black"
                     Command="{Binding SubmitCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                     Style="{StaticResource MaterialDesignRaisedButton}"

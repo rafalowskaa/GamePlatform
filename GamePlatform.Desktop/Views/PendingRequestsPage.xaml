@@ -5,7 +5,8 @@
     <DockPanel Margin="24">
 
         <Button DockPanel.Dock="Top" Content="Odśwież"
-                Command="{Binding RefreshCommand}" Width="90"/>
+                Command="{Binding RefreshCommand}" Width="90"
+                Background="Black" Foreground="White" BorderBrush="Black"/>
 
         <DataGrid ItemsSource="{Binding Requests}" AutoGenerateColumns="False"
                   IsReadOnly="True" Margin="0 12 0 0">
@@ -17,10 +18,12 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Content="Akceptuj" Width="70"
+                                        Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.AcceptAsyncCommand,
                                                   RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
                                 <Button Content="Odrzuć" Width="70" Margin="8 0 0 0"
+                                        Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.DeclineAsyncCommand,
                                                   RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>

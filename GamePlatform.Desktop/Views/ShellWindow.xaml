@@ -111,6 +111,11 @@
 
                 <!--  zawartość  -->
                 <Frame Content="{Binding CurrentPage}"/>
+                <!-- globalny snackbar na komunikaty -->
+                <md:Snackbar MessageQueue="{StaticResource GlobalMsgQueue}"
+                             VerticalAlignment="Bottom"
+                             HorizontalAlignment="Center"
+                             Margin="0 0 0 20"/>
             </DockPanel>
 
             <!-- uchwyt wysuwanego panelu znajomych -->
