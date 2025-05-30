@@ -9,12 +9,14 @@ public partial class FriendsPage : UserControl
 {
     public FriendsPage() => InitializeComponent();
 
+    /* ENTER w polu wyszukiwania */
     private void OnSearchEnter(object? _, KeyEventArgs e)
     {
         if (e.Key == Key.Return && DataContext is FriendListViewModel vm)
             vm.RefreshSuggestionsCommand.Execute(null);
     }
 
+    /* ===== PODPOWIEDŹ (lewy klik) ===== */
     private void OnSuggestionItemClick(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton != MouseButton.Left) return;
@@ -22,27 +24,30 @@ public partial class FriendsPage : UserControl
 
         if (item.ContextMenu != null)
         {
-            item.ContextMenu.DataContext = DataContext; 
+            item.ContextMenu.DataContext = DataContext;   // <── KLUCZ
             item.ContextMenu.IsOpen = true;
         }
     }
 
+    /* ===== ZNAJOMY (lewy klik) ===== */
     private void OnFriendItemClick(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton != MouseButton.Left) return;
         if (sender is not ListViewItem item) return;
 
-
         if (item.ContextMenu != null)
         {
-            item.ContextMenu.DataContext = DataContext; 
+            item.ContextMenu.DataContext = DataContext;   // <── KLUCZ
             item.ContextMenu.IsOpen = true;
         }
     }
 
-    private void OnFriendOpen(object? sender, MouseButtonEventArgs e)
+    /* podwójny klik ⇒ start czatu */
+    private void OnFriendOpen(object? _, MouseButtonEventArgs e)
     {
-        if (DataContext is FriendListViewModel vm && vm.SelectedFriend is User u && e.ChangedButton == MouseButton.Left)
+        if (e.ChangedButton != MouseButton.Left) return;
+        if (DataContext is FriendListViewModel vm && vm.SelectedFriend is User u)
             vm.StartChatCommand.Execute(u);
     }
 }
+  
