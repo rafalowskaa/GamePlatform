@@ -15,19 +15,28 @@ public partial class FriendsPage : UserControl
             vm.RefreshSuggestionsCommand.Execute(null);
     }
 
-    private void OnSuggestionClick(object? sender, MouseButtonEventArgs e)
+    private void OnSuggestionItemClick(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton != MouseButton.Left) return;
-        if (sender is not ListBox lb || lb.SelectedItem is not User u) return;
+        if (sender is not ListBoxItem item) return;
 
-
-        if (lb.ItemContainerGenerator.ContainerFromItem(u) is ListBoxItem item)
+        if (item.ContextMenu != null)
         {
-            if (item.ContextMenu != null)
-            {
-                item.ContextMenu.DataContext = u;
-                item.ContextMenu.IsOpen = true;
-            }
+            item.ContextMenu.DataContext = item.DataContext;
+            item.ContextMenu.IsOpen = true;
+        }
+    }
+
+    private void OnFriendItemClick(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton != MouseButton.Left) return;
+        if (sender is not ListViewItem item) return;
+
+
+        if (item.ContextMenu != null)
+        {
+            item.ContextMenu.DataContext = item.DataContext;
+            item.ContextMenu.IsOpen = true;
         }
     }
 

@@ -119,7 +119,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Margin="0,0,-16,0"
-                    Background="Tomato"/>          
+                    Background="Black"/>          
             
             
         </Grid>

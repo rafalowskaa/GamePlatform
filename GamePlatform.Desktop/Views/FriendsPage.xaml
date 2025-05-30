@@ -23,12 +23,12 @@
                      md:HintAssist.Hint="Wprowadź nazwę użytkownika"/>
             <ListBox ItemsSource="{Binding Suggestions}"
                      Visibility="{Binding IsSuggestOpen, Converter={StaticResource BoolToVis}}"
-                     MouseLeftButtonUp="OnSuggestionClick"
                      Margin="0 4 0 0" Width="240" HorizontalAlignment="Center"
                      HorizontalContentAlignment="Stretch">
                 <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
-                    <Setter Property="ContextMenu">
+                        <EventSetter Event="MouseLeftButtonUp" Handler="OnSuggestionItemClick"/>
+                        <Setter Property="ContextMenu">
                         <Setter.Value>
                                 <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                                     <MenuItem Header="{Binding IsMyFriend, Converter={StaticResource FriendAction}}"
@@ -53,11 +53,11 @@
                     </Setter>
                 </Style>
             </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:User}">
-                    <Border Margin="0 1" Padding="4" Background="#444" CornerRadius="4">
-                        <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="10" Height="10" Margin="0 0 6 0"
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:User}">
+                        <Border Margin="0 1" Padding="4" Background="#444" CornerRadius="4">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="10" Height="10" Margin="0 0 6 0"
                                      Fill="{Binding IsOnline, Converter={StaticResource OnlineBrush}}"/>
                             <TextBlock Text="{Binding Login}" Foreground="White"/>
                         </StackPanel>
@@ -90,6 +90,7 @@
                     </ListView.ItemTemplate>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
+                            <EventSetter Event="MouseLeftButtonUp" Handler="OnFriendItemClick"/>
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
                                     <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
