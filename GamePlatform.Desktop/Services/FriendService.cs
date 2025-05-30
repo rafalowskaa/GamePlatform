@@ -69,7 +69,8 @@ public sealed class FriendService : IFriendService
         if (await IsBlockedAsync(toUserId, fromUserId)) return;   // zablokowany nie zaprosi
 
         bool dup = await _db.FriendRequests.AnyAsync(r =>
-                    r.FromUserId == fromUserId && r.ToUserId == toUserId);
+                    (r.FromUserId == fromUserId && r.ToUserId == toUserId) ||
+                    (r.FromUserId == toUserId && r.ToUserId == fromUserId));
         if (dup) return;
 
         _db.FriendRequests.Add(new FriendRequest
@@ -86,8 +87,14 @@ public sealed class FriendService : IFriendService
         var r = await _db.FriendRequests.FindAsync(requestId);
         if (r is null) return;
 
-        _db.Friends.Add(new Friend { UserId = r.FromUserId, MateId = r.ToUserId });
+        if (!await AreFriendsAsync(r.FromUserId, r.ToUserId))
+            _db.Friends.Add(new Friend { UserId = r.FromUserId, MateId = r.ToUserId });
+
+        // remove both requests in case users invited each other
+        var reverseReq = await _db.FriendRequests.FirstOrDefaultAsync(fr =>
+            fr.FromUserId == r.ToUserId && fr.ToUserId == r.FromUserId); ;
         _db.FriendRequests.Remove(r);
+        if (reverseReq is not null) _db.FriendRequests.Remove(reverseReq);
         await _db.SaveChangesAsync();
         _notify?.Info("Zaproszenie zaakceptowane");
     }
@@ -124,7 +131,10 @@ public sealed class FriendService : IFriendService
         if (!await IsBlockedAsync(blockedId, blockerId))
             _db.BlockedUsers.Add(new BlockedUser { BlockerId = blockedId, BlockedId = blockerId });
 
-
+        var req1 = await _db.FriendRequests.FirstOrDefaultAsync(fr => fr.FromUserId == blockerId && fr.ToUserId == blockedId);
+        var req2 = await _db.FriendRequests.FirstOrDefaultAsync(fr => fr.FromUserId == blockedId && fr.ToUserId == blockerId);
+        if (req1 is not null) _db.FriendRequests.Remove(req1);
+        if (req2 is not null && req2 != req1) _db.FriendRequests.Remove(req2);
 
         await RemoveFriendAsync(blockerId, blockedId);   // blokada rozłącza znajomych
         await _db.SaveChangesAsync();

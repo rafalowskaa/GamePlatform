@@ -142,7 +142,12 @@ public partial class FriendListViewModel : ObservableObject
     private void ShowProfile(User? target)
     {
         if (target is null) return;
-        System.Windows.MessageBox.Show($"{target.Login}\n{target.Email}", "Profil", System.Windows.MessageBoxButton.OK);
+        var dlg = new UserProfileDialog
+        {
+            DataContext = target,
+            Owner = Application.Current.MainWindow
+        };
+        dlg.ShowDialog();
     }
 
     [RelayCommand]
