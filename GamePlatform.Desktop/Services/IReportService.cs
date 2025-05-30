@@ -12,4 +12,8 @@ public interface IReportService
                      string category, string desc);
     Task<IReadOnlyList<UserReport>> GetAllAsync();
     Task UpdateStatusAsync(Guid id, ReportStatus st, string? notes);
+
+    Task SendWarningAsync(Guid reportId);
+    Task CancelAsync(Guid reportId);
+    Task BlockReportedUserAsync(Guid reportId);
 }

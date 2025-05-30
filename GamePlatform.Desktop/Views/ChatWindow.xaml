@@ -44,7 +44,7 @@
                         </StackPanel>
                     </Border>
                 </DataTemplate>
-            </ListBox.ItemTemplate>Z
+            </ListBox.ItemTemplate>
         </ListBox>
 
         <!-- ===== INPUT ===== -->

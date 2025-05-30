@@ -18,4 +18,27 @@ public partial class ReportsViewModel : ObservableObject
         Reports.Clear();
         foreach (var r in await _svc.GetAllAsync()) Reports.Add(r);
     }
+
+    [RelayCommand]
+    private Task WarnAsync(UserReport? r)
+    {
+        if (r is null) return Task.CompletedTask;
+        return _svc.SendWarningAsync(r.Id);
+    }
+
+    [RelayCommand]
+    private async Task CancelAsync(UserReport? r)
+    {
+        if (r is null) return;
+        await _svc.CancelAsync(r.Id);
+        await RefreshAsync();
+    }
+
+    [RelayCommand]
+    private async Task BlockUserAsync(UserReport? r)
+    {
+        if (r is null) return;
+        await _svc.BlockReportedUserAsync(r.Id);
+        await RefreshAsync();
+    }
 }

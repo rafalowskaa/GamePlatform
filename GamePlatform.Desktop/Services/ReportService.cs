@@ -40,4 +40,34 @@ public sealed class ReportService : IReportService
         r.StaffNotes = notes;
         await _db.SaveChangesAsync();
     }
+
+    public async Task SendWarningAsync(Guid reportId)
+    {
+        var r = await _db.UserReports.FindAsync(reportId);
+        if (r is null) return;
+        r.Status = ReportStatus.Closed;
+        r.StaffNotes = "Warning";
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task CancelAsync(Guid reportId)
+    {
+        var r = await _db.UserReports.FindAsync(reportId);
+        if (r is null) return;
+        r.Status = ReportStatus.Closed;
+        r.StaffNotes = "Cancelled";
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task BlockReportedUserAsync(Guid reportId)
+    {
+        var r = await _db.UserReports.Include(u => u.ReportedUser)
+                                     .FirstOrDefaultAsync(u => u.Id == reportId);
+        if (r is null || r.ReportedUser is null) return;
+
+        r.ReportedUser.BlockedUntilUtc = DateTime.UtcNow.AddDays(7);
+        r.ReportedUser.BlockReason = "Report block";
+        r.Status = ReportStatus.Closed;
+        await _db.SaveChangesAsync();
+    }
 }
