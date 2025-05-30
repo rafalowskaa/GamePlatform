@@ -22,7 +22,7 @@ public partial class FriendsPage : UserControl
 
         if (item.ContextMenu != null)
         {
-            item.ContextMenu.DataContext = item.DataContext;
+            item.ContextMenu.DataContext = DataContext; 
             item.ContextMenu.IsOpen = true;
         }
     }
@@ -35,7 +35,7 @@ public partial class FriendsPage : UserControl
 
         if (item.ContextMenu != null)
         {
-            item.ContextMenu.DataContext = item.DataContext;
+            item.ContextMenu.DataContext = DataContext; 
             item.ContextMenu.IsOpen = true;
         }
     }

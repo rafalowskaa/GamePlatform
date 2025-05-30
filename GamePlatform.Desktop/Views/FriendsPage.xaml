@@ -30,25 +30,25 @@
                         <EventSetter Event="MouseLeftButtonUp" Handler="OnSuggestionItemClick"/>
                         <Setter Property="ContextMenu">
                         <Setter.Value>
-                                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                                    <MenuItem Header="{Binding IsMyFriend, Converter={StaticResource FriendAction}}"
-                                          Command="{Binding DataContext.ToggleForCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                          CommandParameter="{Binding}"/>
-                                <Separator/>
-                                <MenuItem Header="Napisz wiadomość"
-                                          Command="{Binding DataContext.StartChatCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                          CommandParameter="{Binding}"/>
+                                <ContextMenu>
+                                    <MenuItem Header="{Binding PlacementTarget.DataContext.IsMyFriend, Converter={StaticResource FriendAction}, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                          Command="{Binding ToggleForCommand}"
+                                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    <Separator/>
+                                    <MenuItem Header="Napisz wiadomość"
+                                          Command="{Binding StartChatCommand}"
+                                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                 <MenuItem Header="Pokaż profil"
-                                          Command="{Binding DataContext.ShowProfileCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                          CommandParameter="{Binding}"/>
+                                          Command="{Binding ShowProfileCommand}"
+                                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                 <Separator/>
                                 <MenuItem Header="Zablokuj"
-                                          Command="{Binding DataContext.BlockCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                          CommandParameter="{Binding}"/>
+                                          Command="{Binding BlockCommand}"
+                                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                 <MenuItem Header="Zgłoś"
-                                          Command="{Binding DataContext.ReportCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                          CommandParameter="{Binding}"/>
-                            </ContextMenu>
+                                          Command="{Binding ReportCommand}"
+                                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                            </>
                         </Setter.Value>
                     </Setter>
                 </Style>
@@ -93,24 +93,24 @@
                             <EventSetter Event="MouseLeftButtonUp" Handler="OnFriendItemClick"/>
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
-                                    <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                    <ContextMenu>
                                         <MenuItem Header="Usuń ze znajomych"
-                                                  Command="{Binding DataContext.ToggleForCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
+                                                  Command="{Binding ToggleForCommand}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <Separator/>
                                         <MenuItem Header="Napisz wiadomość"
-                                                  Command="{Binding DataContext.StartChatCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
+                                                  Command="{Binding StartChatCommand}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <MenuItem Header="Pokaż profil"
-                                                  Command="{Binding DataContext.ShowProfileCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
+                                                  Command="{Binding ShowProfileCommand}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <Separator/>
                                         <MenuItem Header="Zablokuj"
-                                                  Command="{Binding DataContext.BlockCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
+                                                  Command="{Binding BlockCommand}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <MenuItem Header="Zgłoś"
-                                                  Command="{Binding DataContext.ReportCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}"/>
+                                                  Command="{Binding ReportCommand}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                     </ContextMenu>
                                 </Setter.Value>
                             </Setter>
