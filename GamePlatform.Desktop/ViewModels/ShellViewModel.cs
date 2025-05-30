@@ -15,6 +15,7 @@ public partial class ShellViewModel : ObservableObject
     private readonly IAuthService _auth;
     private readonly IChatService _chat;
     private readonly FriendListViewModel _friendsVm;
+    private readonly INotificationService _notify;
     public FriendListViewModel FriendsVm => _friendsVm;
 
     public ShellViewModel(IServiceProvider sp, IAuthService auth)
@@ -22,6 +23,7 @@ public partial class ShellViewModel : ObservableObject
         _sp = sp;
         _auth = auth;
         _chat = _sp.GetRequiredService<IChatService>();
+        _notify = _sp.GetRequiredService<INotificationService>();
 
 
         _friendsVm = _sp.GetRequiredService<FriendListViewModel>();
@@ -66,6 +68,11 @@ public partial class ShellViewModel : ObservableObject
         if (IsAdmin)
             Navigate(new ReportsPage { DataContext = _sp.GetRequiredService<ReportsViewModel>() }, "Reports");
     }
+
+    [RelayCommand]
+    private void ShowNotifications()
+       => Navigate(new NotificationCenterPage { DataContext = _notify }, "Notify");
+
 
     /* ==========  LOGOUT  ========== */
     [RelayCommand]

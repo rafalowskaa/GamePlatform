@@ -185,6 +185,7 @@ public partial class FriendListViewModel : ObservableObject
         Friends.Clear();
         Online.Clear();
         Blocked.Clear();
+        Chats.Clear();
         _friendIds.Clear();
 
         if (_auth.CurrentUser is null) return;
@@ -209,6 +210,14 @@ public partial class FriendListViewModel : ObservableObject
         var blocked = await _friends.GetBlockedAsync(_auth.CurrentUser.Id);
         foreach (var b in blocked.OrderBy(u => u.Login, StringComparer.OrdinalIgnoreCase))
             Blocked.Add(b);
+
+        var me = _auth.CurrentUser.Id;
+        foreach (var u in friends)
+        {
+            var hist = await _chat.GetHistoryAsync(me, u.Id, 1);
+            if (hist.Count > 0)
+                Chats.Add(u);
+        }
     }
 
     private async Task LoadSuggestionsAsync()
