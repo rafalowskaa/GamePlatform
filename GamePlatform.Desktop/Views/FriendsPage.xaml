@@ -48,7 +48,7 @@
                                 <MenuItem Header="Zgłoś"
                                           Command="{Binding ReportCommand}"
                                           CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                            </>
+                            </ContextMenu>
                         </Setter.Value>
                     </Setter>
                 </Style>
