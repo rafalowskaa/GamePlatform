@@ -2,6 +2,7 @@
 using GamePlatform.Shared.Models;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Controls.Primitives;
 
 namespace GamePlatform.Desktop.Views;
 
@@ -25,7 +26,10 @@ public partial class FriendsPage : UserControl
         if (item.ContextMenu != null)
         {
             item.ContextMenu.DataContext = DataContext;   // <── KLUCZ
+            item.ContextMenu.PlacementTarget = item;
+            item.ContextMenu.Placement = PlacementMode.MousePoint;
             item.ContextMenu.IsOpen = true;
+            e.Handled = true;
         }
     }
 
@@ -38,7 +42,10 @@ public partial class FriendsPage : UserControl
         if (item.ContextMenu != null)
         {
             item.ContextMenu.DataContext = DataContext;   // <── KLUCZ
+            item.ContextMenu.PlacementTarget = item;
+            item.ContextMenu.Placement = PlacementMode.MousePoint;
             item.ContextMenu.IsOpen = true;
+            e.Handled = true;
         }
     }
 
