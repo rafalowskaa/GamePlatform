@@ -49,5 +49,9 @@ public partial class FriendsPage : UserControl
         if (DataContext is FriendListViewModel vm && vm.SelectedFriend is User u)
             vm.StartChatCommand.Execute(u);
     }
+
+    /* blokuje domyślne menu po prawym kliku */
+    private void DisableContextMenu(object? _, ContextMenuEventArgs e)
+        => e.Handled = true;
 }
   

@@ -6,7 +6,13 @@
              Background="Transparent"
              Width="300">
 
-    <!-- ====== NIE ma żadnych zasobów ====== -->
+    <!-- ==========  ZASOBY  ========== -->
+    <UserControl.Resources>
+        <!-- Relatywne źródło do VM strony; używamy kilka razy -->
+        <Binding x:Key="VmBinding"
+                 Path="DataContext"
+                 RelativeSource="{RelativeSource AncestorType=UserControl}" />
+    </UserControl.Resources>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -14,7 +20,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- ===== PODPOWIEDZI ===== -->
+        <!-- ===== WYSZUKIWANIE + PODPOWIEDZI ===== -->
         <StackPanel Margin="0 0 0 12" HorizontalAlignment="Center">
             <TextBox Width="240"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
@@ -26,16 +32,16 @@
                      Margin="0 4 0 0" Width="240" HorizontalAlignment="Center"
                      HorizontalContentAlignment="Stretch">
 
-                <!-- kontener podpowiedzi -->
+                <!-- ====== STYLE KONTENERA (podpowiedź) ====== -->
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
-                        <EventSetter Event="MouseLeftButtonUp"
+                        <EventSetter Event="PreviewMouseLeftButtonUp"
                                      Handler="OnSuggestionItemClick"/>
+                        <EventSetter Event="ContextMenuOpening"
+                                     Handler="DisableContextMenu"/>
                         <Setter Property="ContextMenu">
                             <Setter.Value>
-                                <!-- ►►► DataContext bierzemy bezpośrednim Bindingiem ◄◄◄ -->
-                                <ContextMenu DataContext="{Binding DataContext,
-                                                                   RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                <ContextMenu DataContext="{StaticResource VmBinding}">
                                     <MenuItem Header="{Binding PlacementTarget.DataContext.IsMyFriend,
                                                                Converter={StaticResource FriendAction},
                                                                RelativeSource={RelativeSource AncestorType=ContextMenu}}"
@@ -66,7 +72,7 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
 
-                <!-- szablon jednej podpowiedzi -->
+                <!-- ====== SZABLON PODPOWIEDZI ====== -->
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:User}">
                         <Border Margin="0 1" Padding="4" Background="#444" CornerRadius="4">
@@ -81,16 +87,16 @@
             </ListBox>
         </StackPanel>
 
-        <!-- ===== LISTA ZNAJOMYCH / BLOCK ===== -->
+        <!-- ===== LISTA ZNAJOMYCH I ZABLOKOWANI ===== -->
         <StackPanel Grid.Row="1">
-
-            <!-- znajomi -->
+            
             <Expander Header="Lista znajomych" IsExpanded="{Binding FriendsExpanded}">
                 <ListView ItemsSource="{Binding Friends}"
                           SelectedItem="{Binding SelectedFriend}"
                           MouseDoubleClick="OnFriendOpen"
                           HorizontalContentAlignment="Stretch">
 
+                    <!-- szablon -->
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:User}">
                             <Border Margin="0 2" Padding="6" Background="#333" CornerRadius="4">
@@ -107,14 +113,16 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
 
+                    <!-- kontener (LVItem) -->
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <EventSetter Event="MouseLeftButtonUp"
+                            <EventSetter Event="PreviewMouseLeftButtonUp"
                                          Handler="OnFriendItemClick"/>
+                            <EventSetter Event="ContextMenuOpening"
+                                         Handler="DisableContextMenu"/>
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
-                                    <ContextMenu DataContext="{Binding DataContext,
-                                                                       RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                    <ContextMenu DataContext="{StaticResource VmBinding}">
                                         <MenuItem Header="Usuń ze znajomych"
                                                   Command="{Binding ToggleForCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
@@ -145,8 +153,9 @@
                 </ListView>
             </Expander>
 
-            <!-- blokowani -->
-            <Expander Header="Zablokowani" Margin="0 8 0 0"
+            
+            <Expander Header="Zablokowani"
+                      Margin="0 8 0 0"
                       IsExpanded="{Binding BlockedExpanded}">
                 <ListView ItemsSource="{Binding Blocked}"
                           HorizontalContentAlignment="Stretch">

@@ -12,6 +12,8 @@
             <conv:OnlineBrushConverter x:Key="OnlineBrush"/>
             <conv:FriendActionConverter x:Key="FriendAction"/>
             <conv:OnlineStatusTextConverter x:Key="OnlineStatusText"/>
+            <conv:MessageBackgroundConverter x:Key="MsgBg"/>
+            <conv:MessageSenderConverter x:Key="MsgSender"/>
 
             <!-- globalny Snackbar -->
             <md:SnackbarMessageQueue x:Key="GlobalMsgQueue" DiscardDuplicates="True"/>

@@ -19,19 +19,32 @@
                  HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:ChatMessage}">
-                    <Border Margin="0 4" Padding="8"
-                            Background="#424242" CornerRadius="6">
+                    <Border Margin="0 4" Padding="8" CornerRadius="6">
+                        <Border.Background>
+                            <MultiBinding Converter="{StaticResource MsgBg}">
+                                <Binding Path="FromId"/>
+                                <Binding Path="DataContext.Me.Id"
+                                         RelativeSource="{RelativeSource AncestorType=Window}"/>
+                            </MultiBinding>
+                        </Border.Background>
                         <StackPanel>
-                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap"
-                                       Foreground="White" />
-                            <TextBlock Text="{Binding WhenUtc,
-                                       StringFormat={}{0:dd.MM HH\\:mm}}"
-                                       FontSize="11" Foreground="#aaa"
-                                       HorizontalAlignment="Right"/>
+                            <TextBlock FontWeight="SemiBold" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource MsgSender}">
+                                        <Binding Path="FromId"/>
+                                        <Binding Path="DataContext.Me.Id" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                        <Binding Path="DataContext.Me.Login" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                        <Binding Path="DataContext.Mate.Login" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Foreground="White" />
+                            <TextBlock Text="{Binding WhenUtc, StringFormat={}{0:dd.MM HH\\:mm}}"
+                                       FontSize="11" Foreground="#aaa" HorizontalAlignment="Right"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>
-            </ListBox.ItemTemplate>
+            </ListBox.ItemTemplate>Z
         </ListBox>
 
         <!-- ===== INPUT ===== -->

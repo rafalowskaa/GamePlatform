@@ -12,6 +12,8 @@
         </Border>
         <TextBlock Text="{Binding Login}" FontWeight="SemiBold" FontSize="16" Margin="0 8 0 0" HorizontalAlignment="Center"/>
         <TextBlock Text="{Binding Email}" HorizontalAlignment="Center"/>
-        <Button Content="OK" Width="80" Margin="0 16 0 0" IsCancel="True" IsDefault="True" HorizontalAlignment="Center"/>
+        <Button Content="OK" Width="80" Margin="0 16 0 0"
+                Background="Black" Foreground="White" BorderBrush="Black"
+                IsCancel="True" IsDefault="True" HorizontalAlignment="Center"/>
     </StackPanel>
 </Window>
