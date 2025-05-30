@@ -4,6 +4,9 @@ using GamePlatform.Desktop.Services;
 using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Models;
 using Microsoft.Extensions.DependencyInjection;
+using GamePlatform.Shared.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -34,6 +37,7 @@ public partial class FriendListViewModel : ObservableObject
         _notify = notify;
 
         _chat.PresenceChanged += OnPresenceChanged;
+        _chat.MessageReceived += OnMessageReceived;
 
         _ = RefreshFriendsAsync();   // fire-and-forget przy starcie
     }
@@ -41,17 +45,20 @@ public partial class FriendListViewModel : ObservableObject
     ~FriendListViewModel()
     {
         _chat.PresenceChanged -= OnPresenceChanged;
+        _chat.MessageReceived -= OnMessageReceived;
     }
 
     /* =====  MODEL  ===== */
     public ObservableCollection<User> Friends { get; } = new();
     public ObservableCollection<User> Online { get; } = new();
     public ObservableCollection<User> Blocked { get; } = new();
+    public ObservableCollection<User> Chats { get; } = new();
 
     [ObservableProperty] private string _searchText = "";
     [ObservableProperty] private bool _isSuggestOpen = false;
     [ObservableProperty] private User? _selectedFriend;
     [ObservableProperty] private bool _friendsExpanded = true;
+    [ObservableProperty] private bool _chatsExpanded = true;
     [ObservableProperty] private bool _blockedExpanded = false;
 
     /* ========== REAKCJA NA WPISYWANY TEKST ========== */
@@ -86,6 +93,8 @@ public partial class FriendListViewModel : ObservableObject
     {
         if (mate is null) return;
         ChatWindow.Open(_auth.CurrentUser!, mate);      // singleton-like otwarcie okna
+        if (!Chats.Any(c => c.Id == mate.Id))
+            Chats.Add(mate);
     }
 
     [RelayCommand]
@@ -137,6 +146,14 @@ public partial class FriendListViewModel : ObservableObject
 
         await _friends.BlockAsync(me.Id, target.Id);
 
+        await RefreshFriendsAsync();
+    }
+
+    [RelayCommand]
+    private async Task UnblockAsync(User? target)
+    {
+        if (target is null) return;
+        await _friends.UnblockAsync(_auth.CurrentUser!.Id, target.Id);
         await RefreshFriendsAsync();
     }
 
@@ -232,5 +249,24 @@ public partial class FriendListViewModel : ObservableObject
                 break;
             }
     }
+
+    private async void OnMessageReceived(ChatMessage msg)
+    {
+        var me = _auth.CurrentUser;
+        if (me is null) return;
+        if (msg.FromId != me.Id && msg.ToId != me.Id) return;
+
+        var mateId = msg.FromId == me.Id ? msg.ToId : msg.FromId;
+        if (Chats.Any(u => u.Id == mateId)) return;
+
+        var db = _sp.GetRequiredService<AppDbContext>();
+        var mate = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == mateId);
+        if (mate is null) return;
+
+        mate.IsMyFriend = _friendIds.Contains(mate.Id);
+        App.Current.Dispatcher.Invoke(() => Chats.Add(mate));
+        _notify.Show($"Nowa wiadomość od {mate.Login}");
+    }
+
     public ObservableCollection<User> Suggestions { get; } = new();
 }

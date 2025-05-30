@@ -139,9 +139,9 @@ public sealed class FriendService : IFriendService
         if (await IsBlockedAsync(blockerId, blockedId)) return;
 
         if (!await IsBlockedAsync(blockerId, blockedId))
-            _db.BlockedUsers.Add(new BlockedUser { BlockerId = blockerId, BlockedId = blockedId });
+            _db.BlockedUsers.Add(new BlockedUser { BlockerId = blockerId, BlockedId = blockedId, BlockedUtc = DateTime.UtcNow });
         if (!await IsBlockedAsync(blockedId, blockerId))
-            _db.BlockedUsers.Add(new BlockedUser { BlockerId = blockedId, BlockedId = blockerId });
+            _db.BlockedUsers.Add(new BlockedUser { BlockerId = blockedId, BlockedId = blockerId, BlockedUtc = DateTime.UtcNow });
 
         var req1 = await _db.FriendRequests.FirstOrDefaultAsync(fr => fr.FromUserId == blockerId && fr.ToUserId == blockedId);
         var req2 = await _db.FriendRequests.FirstOrDefaultAsync(fr => fr.FromUserId == blockedId && fr.ToUserId == blockerId);
@@ -153,12 +153,20 @@ public sealed class FriendService : IFriendService
 
         var mate = await _db.Users.FindAsync(blockedId);
         string name = mate?.Login ?? "użytkownika";
-        _notify?.Info($"Użytkownik {name} został zablokowany");
+        _notify?.Info($"Użytkownik {name} został zablokowany. Odblokowanie będzie możliwe po 24 godzinach.");
     }
 
     public async Task UnblockAsync(Guid blockerId, Guid blockedId)
     {
         var block1 = await _db.BlockedUsers.FindAsync(blockerId, blockedId);
+        if (block1 is null)
+            return;
+
+        if (DateTime.UtcNow - block1.BlockedUtc < TimeSpan.FromDays(1))
+        {
+            _notify?.Info("Odblokowanie możliwe dopiero po upływie 24 godzin od blokady.");
+            return;
+        }
         var block2 = await _db.BlockedUsers.FindAsync(blockedId, blockerId);
 
         if (block1 is not null) _db.BlockedUsers.Remove(block1);

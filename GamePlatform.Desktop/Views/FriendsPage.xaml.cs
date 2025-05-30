@@ -49,6 +49,21 @@ public partial class FriendsPage : UserControl
         }
     }
 
+    private void OnBlockedItemClick(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton != MouseButton.Left) return;
+        if (sender is not ListViewItem item) return;
+
+        if (item.ContextMenu != null)
+        {
+            item.ContextMenu.DataContext = DataContext;
+            item.ContextMenu.PlacementTarget = item;
+            item.ContextMenu.Placement = PlacementMode.MousePoint;
+            item.ContextMenu.IsOpen = true;
+            e.Handled = true;
+        }
+    }
+
     /* podwójny klik ⇒ start czatu */
     private void OnFriendOpen(object? _, MouseButtonEventArgs e)
     {

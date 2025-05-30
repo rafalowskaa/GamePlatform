@@ -25,7 +25,7 @@ public partial class AddGameDialogViewModel : ObservableObject
     [RelayCommand]
     private void PickZip()
     {
-        var dlg = new OpenFileDialog { Filter = "ZIP (*.zip)|*.zip" };
+        var dlg = new OpenFileDialog { Filter = "Game package (*.zip;*.exe)|*.zip;*.exe" };
         if (dlg.ShowDialog() == true) ZipPath = dlg.FileName;
     }
 

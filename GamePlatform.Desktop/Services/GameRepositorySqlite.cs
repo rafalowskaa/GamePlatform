@@ -43,14 +43,22 @@ public sealed class GameRepositorySqlite : IGameRepository
             "GamePlatform", "Games", game.Id.ToString());
         Directory.CreateDirectory(root);
 
-        /* kopiujemy ZIP */
-        string zipDest = Path.Combine(root, $"{firstVersion.Number}.zip");
-        File.Copy(firstVersion.FolderPath, zipDest, overwrite: true);
-
-        /* rozpakowujemy */
+        string ext = Path.GetExtension(firstVersion.FolderPath).ToLowerInvariant();
         string extractDir = Path.Combine(root, firstVersion.Number);
         if (Directory.Exists(extractDir)) Directory.Delete(extractDir, true);
-        ZipFile.ExtractToDirectory(zipDest, extractDir);
+
+
+        if (ext == ".zip")
+        {
+            string zipDest = Path.Combine(root, $"{firstVersion.Number}.zip");
+            File.Copy(firstVersion.FolderPath, zipDest, overwrite: true);
+            ZipFile.ExtractToDirectory(zipDest, extractDir);
+        }
+        else if (ext == ".exe")
+        {
+            Directory.CreateDirectory(extractDir);
+            File.Copy(firstVersion.FolderPath, Path.Combine(extractDir, Path.GetFileName(firstVersion.FolderPath)), true);
+        }
 
         firstVersion.FolderPath = extractDir;
         game.Versions.Add(firstVersion);

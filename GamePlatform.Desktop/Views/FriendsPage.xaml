@@ -70,10 +70,14 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:User}">
                         <Border Margin="0 1" Padding="4" Background="#444" CornerRadius="4">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                                 <Ellipse Width="10" Height="10" Margin="0 0 6 0"
                                          Fill="{Binding IsOnline, Converter={StaticResource OnlineBrush}}"/>
-                                <TextBlock Text="{Binding Login}" Foreground="White"/>
+                                <TextBlock Text="{Binding Login}" Foreground="White" Width="120"/>
+                                <Button Content="{Binding IsMyFriend, Converter={StaticResource FriendAction}}"
+                                        Command="{Binding DataContext.ToggleForCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                        CommandParameter="{Binding}" Width="80" Margin="8 0 0 0"
+                                        Background="Black" Foreground="White" BorderBrush="Black"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
@@ -81,8 +85,35 @@
             </ListBox>
         </StackPanel>
 
-        <!-- ===== LISTA ZNAJOMYCH I ZABLOKOWANI ===== -->
+        <!-- ===== LISTA ROZMÓW, ZNAJOMYCH I ZABLOKOWANI ===== -->
         <StackPanel Grid.Row="1">
+
+            <Expander Header="Rozmowy" IsExpanded="{Binding ChatsExpanded}">
+                <ListView ItemsSource="{Binding Chats}"
+                          HorizontalContentAlignment="Stretch">
+                    <ListView.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:User}">
+                            <Border Margin="0 2" Padding="6" Background="#333" CornerRadius="4">
+                                <TextBlock Text="{Binding Login}" FontSize="16"/>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <EventSetter Event="PreviewMouseLeftButtonUp" Handler="OnFriendItemClick"/>
+                            <EventSetter Event="ContextMenuOpening" Handler="DisableContextMenu"/>
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu>
+                                        <MenuItem Header="Napisz wiadomość" Command="{Binding StartChatCommand}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                        <MenuItem Header="Pokaż profil" Command="{Binding ShowProfileCommand}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </Expander>
             
             <Expander Header="Lista znajomych" IsExpanded="{Binding FriendsExpanded}">
                 <ListView ItemsSource="{Binding Friends}"
@@ -160,6 +191,19 @@
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <EventSetter Event="PreviewMouseLeftButtonUp" Handler="OnBlockedItemClick"/>
+                            <EventSetter Event="ContextMenuOpening" Handler="DisableContextMenu"/>
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu>
+                                        <MenuItem Header="Odblokuj" Command="{Binding UnblockCommand}" CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                 </ListView>
             </Expander>
         </StackPanel>
