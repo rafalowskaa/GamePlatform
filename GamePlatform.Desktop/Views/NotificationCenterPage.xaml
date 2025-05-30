@@ -3,9 +3,19 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="Powiadomienia">
     <DockPanel Margin="24">
-        <Button Content="Usuń zaznaczone" DockPanel.Dock="Bottom"
-                Margin="0,8,0,0"
-                Click="RemoveSelected_Click"/>
-        <ListBox x:Name="List" ItemsSource="{Binding History}"/>
+        <ListBox x:Name="List" ItemsSource="{Binding History}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Margin="0,0,0,4">
+                        <Button Width="16" Height="16" Padding="0" Margin="4,0,0,0"
+                                DockPanel.Dock="Right"
+                                Background="Black" Foreground="White"
+                                Content="✖"
+                                Click="RemoveItem_Click"/>
+                        <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </DockPanel>
 </Page>

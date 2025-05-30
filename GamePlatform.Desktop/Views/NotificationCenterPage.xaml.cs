@@ -10,9 +10,12 @@ public partial class NotificationCenterPage : Page
     {
         InitializeComponent();
     }
-    private void RemoveSelected_Click(object sender, RoutedEventArgs e)
+    private void RemoveItem_Click(object sender, RoutedEventArgs e)
     {
-        if (DataContext is INotificationService svc && List.SelectedItem is string msg)
+        if (DataContext is not INotificationService svc)
+            return;
+
+        if (sender is Button btn && btn.DataContext is string msg)
             svc.History.Remove(msg);
     }
 }
