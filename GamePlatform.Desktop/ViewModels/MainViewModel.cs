@@ -6,6 +6,9 @@ using GamePlatform.Shared.Models;
 using GamePlatform.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -83,11 +86,27 @@ public partial class MainViewModel : ObservableObject
     {
         g ??= SelectedGame;
         if (g is null) return;
-        new PlayWindow
+        var latest = g.Versions.OrderByDescending(v => v.Number).FirstOrDefault();
+        if (latest is null) return;
+
+        string html = Path.Combine(latest.FolderPath, "index.html");
+        if (File.Exists(html))
         {
-            DataContext = new PlayWindowViewModel(g),
-            Owner = Application.Current.MainWindow
-        }.Show();
+            new PlayWindow
+            {
+                DataContext = new PlayWindowViewModel(g),
+                Owner = Application.Current.MainWindow
+            }.Show();
+        }
+        else
+        {
+            string? exe = Directory.GetFiles(latest.FolderPath, "*.exe").FirstOrDefault();
+            if (exe is not null)
+            {
+                try { Process.Start(new ProcessStartInfo(exe) { UseShellExecute = true }); }
+                catch { }
+            }
+        }
     }
 
 

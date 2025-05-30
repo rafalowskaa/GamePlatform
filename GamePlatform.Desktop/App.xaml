@@ -14,6 +14,7 @@
             <conv:OnlineStatusTextConverter x:Key="OnlineStatusText"/>
             <conv:MessageBackgroundConverter x:Key="MsgBg"/>
             <conv:MessageSenderConverter x:Key="MsgSender"/>
+            <conv:AvatarPathToImageConverter x:Key="AvatarConverter"/>
 
             <!-- globalny Snackbar -->
             <md:SnackbarMessageQueue x:Key="GlobalMsgQueue" DiscardDuplicates="True"/>
