@@ -21,10 +21,10 @@
             <ListBox.ItemTemplate>
 
                 <DataTemplate DataType="{x:Type vm:ChatMessageView}">
-                    <Border Margin="0 4" Padding="6" CornerRadius="6">
+                    <Border Margin="0 2" Padding="6" CornerRadius="6">
                         <Border.Style>
                             <Style TargetType="Border">
-                                <Setter Property="Margin" Value="0 4"/>
+                                <Setter Property="Margin" Value="0 2"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ContinuePrev}" Value="True">
                                         <Setter Property="Margin" Value="0"/>

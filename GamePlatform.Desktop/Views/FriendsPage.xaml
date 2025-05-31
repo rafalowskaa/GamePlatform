@@ -106,7 +106,7 @@
                                                     <DataTrigger.EnterActions>
                                                         <BeginStoryboard x:Name="FlashUnread">
                                                             <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                                                                <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                                <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
                                                                                To="#FF1493FF" Duration="0:0:0.6"/>
                                                             </Storyboard>
                                                         </BeginStoryboard>
