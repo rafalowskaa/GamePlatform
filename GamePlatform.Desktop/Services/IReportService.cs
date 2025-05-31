@@ -16,4 +16,5 @@ public interface IReportService
     Task SendWarningAsync(Guid reportId);
     Task CancelAsync(Guid reportId);
     Task BlockReportedUserAsync(Guid reportId);
+    Task DeleteAsync(Guid reportId);
 }

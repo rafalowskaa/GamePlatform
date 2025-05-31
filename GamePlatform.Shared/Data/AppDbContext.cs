@@ -25,7 +25,8 @@ public class AppDbContext : DbContext
     public DbSet<Friend> Friends => Set<Friend>();
     public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
     public DbSet<BlockedUser> BlockedUsers => Set<BlockedUser>();
-    public DbSet<UserReport> UserReports => Set<UserReport>();   //  ★ NEW
+    public DbSet<UserReport> UserReports => Set<UserReport>();
+    public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
 
     /* ─────────── Config ─────────── */
     protected override void OnConfiguring(DbContextOptionsBuilder b)
@@ -82,6 +83,13 @@ public class AppDbContext : DbContext
                .WithMany()
                .HasForeignKey(r => r.ReportedUserId)
                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        /* —— ChatMessage —— */
+        b.Entity<ChatMessage>(cfg =>
+        {
+            cfg.HasKey(m => m.Id);
+            cfg.HasIndex(m => new { m.FromId, m.ToId });
         });
     }
 

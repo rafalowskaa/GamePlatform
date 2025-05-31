@@ -35,6 +35,35 @@ namespace GamePlatform.Shared.Migrations
                     b.ToTable("BlockedUsers");
                 });
 
+            modelBuilder.Entity("GamePlatform.Shared.Models.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("FromId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("SeenByTo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ToId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("WhenUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromId", "ToId");
+
+                    b.ToTable("ChatMessages");
+                });
+
             modelBuilder.Entity("GamePlatform.Shared.Models.Friend", b =>
                 {
                     b.Property<Guid>("UserId")

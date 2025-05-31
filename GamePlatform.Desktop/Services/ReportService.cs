@@ -70,4 +70,12 @@ public sealed class ReportService : IReportService
         r.Status = ReportStatus.Closed;
         await _db.SaveChangesAsync();
     }
+
+    public async Task DeleteAsync(Guid reportId)
+    {
+        var r = await _db.UserReports.FindAsync(reportId);
+        if (r is null) return;
+        _db.UserReports.Remove(r);
+        await _db.SaveChangesAsync();
+    }
 }

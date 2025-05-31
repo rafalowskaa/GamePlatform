@@ -39,7 +39,10 @@ public sealed class FriendService : IFriendService
     public async Task<IReadOnlyList<User>> FindUsersAsync(string term, Guid currentId) =>
         await _db.Users
                  .Where(u => (u.Login.Contains(term) || u.Email.Contains(term)) &&
-                             u.Id != currentId)
+                             u.Id != currentId &&
+                             !_db.BlockedUsers.Any(b =>
+                                 (b.BlockerId == currentId && b.BlockedId == u.Id) ||
+                                 (b.BlockerId == u.Id && b.BlockedId == currentId)))
                  .OrderBy(u => u.Login)
                  .Take(20)
                  .AsNoTracking()

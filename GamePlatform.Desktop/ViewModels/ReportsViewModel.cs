@@ -41,4 +41,12 @@ public partial class ReportsViewModel : ObservableObject
         await _svc.BlockReportedUserAsync(r.Id);
         await RefreshAsync();
     }
+
+    [RelayCommand]
+    private async Task DeleteAsync(UserReport? r)
+    {
+        if (r is null) return;
+        await _svc.DeleteAsync(r.Id);
+        await RefreshAsync();
+    }
 }

@@ -4,26 +4,27 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using GamePlatform.Shared.Data;
+using GamePlatform.Shared.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GamePlatform.Desktop.Services;
 
 /// <summary>Najprostszy „bus” w pamięci – zastępnik SignalR.</summary>
 public sealed class ChatService : IChatService
 {
+    private readonly AppDbContext _db;
     private readonly ConcurrentDictionary<Guid, bool> _online = new();
-    private readonly ConcurrentDictionary<(Guid, Guid), List<ChatMessage>> _hist =
-        new();
+    public ChatService(AppDbContext db) => _db = db;
 
     public event Action<ChatMessage>? MessageReceived;
     public event Action<Guid, bool>? PresenceChanged;
 
-    public void Send(ChatMessage msg)
+    public async void Send(ChatMessage msg)
     {
-        var key = msg.FromId < msg.ToId ? (msg.FromId, msg.ToId) : (msg.ToId, msg.FromId);
-        var list = _hist.GetOrAdd(key, _ => new());
-        lock (list) list.Add(msg);          // historia
-
-        MessageReceived?.Invoke(msg);       // echo dla UI
+        _db.ChatMessages.Add(msg);
+        await _db.SaveChangesAsync();
+        MessageReceived?.Invoke(msg);
     }
 
     public Task SendAsync(ChatMessage m)
@@ -32,16 +33,20 @@ public sealed class ChatService : IChatService
         return Task.CompletedTask;
     }
 
-    public IReadOnlyList<ChatMessage> GetHistory(Guid me, Guid mate, int top = 100)
-    {
-        var key = me < mate ? (me, mate) : (mate, me);
-        return _hist.TryGetValue(key, out var lst)
-               ? lst.TakeLast(top).ToList()
-               : Array.Empty<ChatMessage>();
-    }
+    private async Task<IReadOnlyList<ChatMessage>> GetHistoryAsyncInternal(Guid a, Guid b, int take)
+        => await _db.ChatMessages
+                     .Where(m => (m.FromId == a && m.ToId == b) || (m.FromId == b && m.ToId == a))
+                     .OrderByDescending(m => m.WhenUtc)
+                     .Take(take)
+                     .OrderBy(m => m.WhenUtc)
+                     .AsNoTracking()
+                     .ToListAsync();
 
     public Task<IReadOnlyList<ChatMessage>> GetHistoryAsync(Guid a, Guid b, int take = 100)
-      => Task.FromResult(GetHistory(a, b, take) as IReadOnlyList<ChatMessage>);
+      => GetHistoryAsyncInternal(a, b, take);
+
+    public IReadOnlyList<ChatMessage> GetHistory(Guid me, Guid mate, int top = 100)
+        => GetHistoryAsyncInternal(me, mate, top).Result;
 
 
     /* ——— presence ——— */

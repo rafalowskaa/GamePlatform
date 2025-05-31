@@ -13,7 +13,13 @@ namespace GamePlatform.Shared.Validation
 
             RuleFor(x => x.ZipPath)
                 .Must(File.Exists)
-                .WithMessage("Plik nie istnieje");
+                .WithMessage("Plik nie istnieje")
+                .Must(p =>
+                {
+                    var ext = Path.GetExtension(p).ToLowerInvariant();
+                    return ext is ".zip" or ".exe";
+                })
+                .WithMessage("Obsługiwane są tylko pliki .zip lub .exe");
 
             RuleFor(x => x.MaxPlayers)
                 .Must(p => p is null || p > 0)
