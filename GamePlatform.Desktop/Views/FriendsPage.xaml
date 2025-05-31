@@ -101,20 +101,10 @@
                                                 <Setter>
                                                     <Setter.Property>Background</Setter.Property>
                                                     <Setter.Value>
-                                                        <SolidColorBrush x:Name="FlashBrush" Color="#AA0015A6"/>
+                                                        <SolidColorBrush Color="#330015A6"/>
                                                     </Setter.Value>
                                                 </Setter>
-                                                <DataTrigger.EnterActions>
-                                                    <BeginStoryboard Name="FlashStoryboard">
-                                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                                                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                                           To="#330015A6" Duration="0:0:0.5"/>
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </DataTrigger.EnterActions>
-                                                <DataTrigger.ExitActions>
-                                                    <StopStoryboard BeginStoryboardName="FlashStoryboard"/>
-                                                </DataTrigger.ExitActions>
+                                                
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

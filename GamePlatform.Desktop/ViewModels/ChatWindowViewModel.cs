@@ -16,7 +16,9 @@ public partial class ChatWindowViewModel : ObservableObject, IDisposable
     public User Me { get; }
     public User Mate { get; }
 
-    public ObservableCollection<ChatMessage> Messages { get; } = new();
+    public sealed record ChatMessageView(Guid FromId, Guid ToId, string Text, DateTime WhenUtc, bool ContinuePrev);
+
+    public ObservableCollection<ChatMessageView> Messages { get; } = new();
 
     /* ==========  BINDINGS  ========== */
     [ObservableProperty] private string _text = "";
@@ -41,8 +43,14 @@ public partial class ChatWindowViewModel : ObservableObject, IDisposable
     private async Task LoadHistoryAsync()
     {
         var history = await _chat.GetHistoryAsync(Me.Id, Mate.Id);
+        ChatMessageView? prev = null;
         foreach (var m in history)
-            Messages.Add(m);
+        {
+            var view = new ChatMessageView(m.FromId, m.ToId, m.Text, m.WhenUtc,
+                                           prev != null && prev.FromId == m.FromId);
+            Messages.Add(view);
+            prev = view;
+        }
         await _chat.MarkAsSeenAsync(Me.Id, Mate.Id);
     }
 
@@ -52,7 +60,10 @@ public partial class ChatWindowViewModel : ObservableObject, IDisposable
         if ((msg.FromId == Me.Id && msg.ToId == Mate.Id) ||
             (msg.FromId == Mate.Id && msg.ToId == Me.Id))
         {
-            App.Current.Dispatcher.Invoke(() => Messages.Add(msg));
+            var prev = Messages.Count > 0 ? Messages[^1] : null;
+            var view = new ChatMessageView(msg.FromId, msg.ToId, msg.Text, msg.WhenUtc,
+                                           prev != null && prev.FromId == msg.FromId);
+            App.Current.Dispatcher.Invoke(() => Messages.Add(view));
             if (msg.ToId == Me.Id)
                 _ = _chat.MarkAsSeenAsync(Me.Id, Mate.Id);
         }
