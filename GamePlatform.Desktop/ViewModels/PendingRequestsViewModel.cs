@@ -5,16 +5,20 @@ using GamePlatform.Desktop.Services;
 using GamePlatform.Shared.DTO;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using GamePlatform.Desktop.ViewModels;
 
 public partial class PendingRequestsViewModel : ObservableObject
 {
     private readonly IFriendService _friends;
     private readonly IAuthService _auth;
+    private readonly FriendListViewModel _friendsVm;
 
-    public PendingRequestsViewModel(IFriendService fs, IAuthService au)
+    public PendingRequestsViewModel(IFriendService fs, IAuthService au, FriendListViewModel fl)
     {
         _friends = fs;
         _auth = au;
+        _friendsVm = fl;
+
         _ = RefreshAsync();
     }
 
@@ -32,15 +36,17 @@ public partial class PendingRequestsViewModel : ObservableObject
     private async Task AcceptAsync(FriendRequestDto? r)
     {
         if (r is null) return;
-        await _friends.AcceptRequestAsync(r.Id);   // ✅ poprawka
+        await _friends.AcceptRequestAsync(r.Id);
         await RefreshAsync();
+        await _friendsVm.RefreshFriendsAsync();
     }
 
     [RelayCommand]
     private async Task DeclineAsync(FriendRequestDto? r)
     {
         if (r is null) return;
-        await _friends.DeclineRequestAsync(r.Id);  // ✅ poprawka
+        await _friends.DeclineRequestAsync(r.Id);
         await RefreshAsync();
+        await _friendsVm.RefreshFriendsAsync();
     }
 }

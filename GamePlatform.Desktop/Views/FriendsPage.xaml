@@ -84,14 +84,14 @@
 
         <!-- ===== LISTA ROZMÓW, ZNAJOMYCH I ZABLOKOWANI ===== -->
         <StackPanel Grid.Row="1">
-
-            <Expander Header="Rozmowy" IsExpanded="{Binding ChatsExpanded}"
+            <Border CornerRadius="6" Margin="0 0 0 8">
+                <Expander Header="Rozmowy" IsExpanded="{Binding ChatsExpanded}"
                      Background="Black" Foreground="White">
                 <ListView ItemsSource="{Binding Chats}"
                           HorizontalContentAlignment="Stretch">
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:User}">
-                            <Border Margin="0 2" Padding="6" CornerRadius="4"
+                                <Border x:Name="UnreadTarget" Margin="0 2" Padding="6" CornerRadius="4"
                                    BorderBrush="White" BorderThickness="0,0,0,1">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -101,11 +101,22 @@
                                                 <Setter>
                                                     <Setter.Property>Background</Setter.Property>
                                                     <Setter.Value>
-                                                        <SolidColorBrush Color="#330015A6"/>
-                                                    </Setter.Value>
+                                                            <SolidColorBrush x:Name="UnreadBrush" Color="#55007FF7"/>
+                                                        </Setter.Value>
                                                 </Setter>
-                                                
-                                            </DataTrigger>
+                                                    <DataTrigger.EnterActions>
+                                                        <BeginStoryboard x:Name="FlashUnread">
+                                                            <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                                                <ColorAnimation Storyboard.TargetName="UnreadTarget"
+                                                                           Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                                           To="#FF1493FF" Duration="0:0:0.6"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+                                                    <DataTrigger.ExitActions>
+                                                        <StopStoryboard BeginStoryboardName="FlashUnread"/>
+                                                    </DataTrigger.ExitActions>
+                                                </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
@@ -136,8 +147,10 @@
                     </ListView.ItemContainerStyle>
                 </ListView>
             </Expander>
+            </Border>
 
-            <Expander Header="Lista znajomych" IsExpanded="{Binding FriendsExpanded}"
+            <Border CornerRadius="6" Margin="0 0 0 8">
+                <Expander Header="Lista znajomych" IsExpanded="{Binding FriendsExpanded}"
                      Background="Black" Foreground="White">
                 <ListView ItemsSource="{Binding Friends}"
                           SelectedItem="{Binding SelectedFriend}"
@@ -201,10 +214,12 @@
                     </ListView.ItemContainerStyle>
                 </ListView>
             </Expander>
+            </Border>
 
-            
-            <Expander Header="Zablokowani"
-                      Margin="0 8 0 0"
+            <Border CornerRadius="6" Margin="0">
+
+                <Expander Header="Zablokowani"
+                      
                       IsExpanded="{Binding BlockedExpanded}"
                       Background="Black" Foreground="White">
                 <ListView ItemsSource="{Binding Blocked}"
@@ -232,6 +247,7 @@
                     </ListView.ItemContainerStyle>
                 </ListView>
             </Expander>
+            </Border>
         </StackPanel>
     </Grid>
 </UserControl>

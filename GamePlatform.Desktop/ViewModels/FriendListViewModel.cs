@@ -23,6 +23,7 @@ public partial class FriendListViewModel : ObservableObject
     private readonly INotificationService _notify;
     private readonly IServiceProvider _sp;
     private readonly HashSet<Guid> _friendIds = new();
+    private readonly HashSet<Guid> _notifiedChats = new();
 
     public FriendListViewModel(IServiceProvider sp,
                                IAuthService auth,
@@ -94,6 +95,7 @@ public partial class FriendListViewModel : ObservableObject
         if (mate is null) return;
         ChatWindow.Open(_auth.CurrentUser!, mate);
         mate.HasUnread = false;
+        _notifiedChats.Remove(mate.Id);
         if (!Chats.Any(c => c.Id == mate.Id))
             Chats.Add(mate);
     }
@@ -293,9 +295,12 @@ public partial class FriendListViewModel : ObservableObject
         }
         if (msg.ToId == me.Id)
         {
-            chatUser.HasUnread = true;
-            
-            _notify.Show($"Nowa wiadomość od {chatUser.Login}");
+            if (!chatUser.HasUnread)
+            {
+                chatUser.HasUnread = true;
+                if (_notifiedChats.Add(chatUser.Id))
+                    _notify.Show($"Nowa wiadomość od {chatUser.Login}");
+            }
         }
     }
 
@@ -318,8 +323,12 @@ public partial class FriendListViewModel : ObservableObject
                 usr.IsOnline = _chat.IsOnline(usr.Id);
                 Chats.Add(usr);
             }
-            usr.HasUnread = true;
-            _notify.Show($"Nowa wiadomość od {usr.Login}");
+            if (!usr.HasUnread)
+            {
+                usr.HasUnread = true;
+                if (_notifiedChats.Add(usr.Id))
+                    _notify.Show($"Nowa wiadomość od {usr.Login}");
+            }
         }
 
     }

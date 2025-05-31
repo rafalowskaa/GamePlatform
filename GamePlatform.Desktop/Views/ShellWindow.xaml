@@ -129,7 +129,7 @@
                 <md:Snackbar MessageQueue="{StaticResource GlobalMsgQueue}"
                              VerticalAlignment="Top"
                              HorizontalAlignment="Center"
-                             Margin="0 20 0 0"
+                             Margin="0 50 0 0"
                              Panel.ZIndex="1"/>
             </DockPanel>
 
