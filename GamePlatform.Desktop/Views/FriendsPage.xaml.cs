@@ -49,6 +49,32 @@ public partial class FriendsPage : UserControl
         }
     }
 
+    private void OnChatItemClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not ListViewItem item) return;
+
+        if (DataContext is not FriendListViewModel vm) return;
+
+        if (item.DataContext is not User u) return;
+
+        if (e.ChangedButton == MouseButton.Left)
+        {
+            u.HasUnread = false;
+            vm.StartChatCommand.Execute(u);
+            e.Handled = true;
+            return;
+        }
+
+        if (e.ChangedButton == MouseButton.Right && item.ContextMenu != null)
+        {
+            item.ContextMenu.DataContext = vm;
+            item.ContextMenu.PlacementTarget = item;
+            item.ContextMenu.Placement = PlacementMode.MousePoint;
+            item.ContextMenu.IsOpen = true;
+            e.Handled = true;
+        }
+    }
+
     private void OnBlockedItemClick(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton != MouseButton.Left) return;

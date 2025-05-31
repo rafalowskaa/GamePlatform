@@ -292,8 +292,11 @@ public partial class FriendListViewModel : ObservableObject
             App.Current.Dispatcher.Invoke(() => Chats.Add(chatUser));
         }
         if (msg.ToId == me.Id)
+        {
             chatUser.HasUnread = true;
-        _notify.Show($"Nowa wiadomość od {chatUser.Login}");
+            
+            _notify.Show($"Nowa wiadomość od {chatUser.Login}");
+        }
     }
 
     private async Task MarkUnreadAsync()

@@ -8,12 +8,32 @@
         <!-- czarny przycisk -->
         <Style x:Key="BlackBtn" TargetType="Button"
                BasedOn="{StaticResource MaterialDesignRaisedButton}">
-            <Setter Property="Width"       Value="80"/>
+            <Setter Property="Width"       Value="60"/>
             <Setter Property="Padding"     Value="4 2"/>
             <Setter Property="Background"  Value="#111"/>
             <Setter Property="Foreground"  Value="White"/>
             <Setter Property="BorderBrush" Value="#111"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground"   Value="White"/>
+            <Setter Property="Background"   Value="#222"/>
+            <Setter Property="BorderBrush"  Value="#444"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#444"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="WrapCell" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
     </Page.Resources>
     <DockPanel Margin="12">
@@ -28,9 +48,13 @@
                 <DataGridTextColumn Header="Zgłaszający" Width="120" Binding="{Binding Reporter.Login}"/>
                 <DataGridTextColumn Header="Oskarżony" Width="120" Binding="{Binding ReportedUser.Login}"/>
                 <DataGridTextColumn Header="Kategoria" Width="140" Binding="{Binding Category}"/>
-                <DataGridTextColumn Header="Opis" Width="*" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Opis" Width="*" Binding="{Binding Description}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource WrapCell}"/>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Status" Width="100" Binding="{Binding Status, Converter={StaticResource ReportStatusConv}}"/>
-                <DataGridTemplateColumn Header="AKCJE" Width="320">
+                <DataGridTemplateColumn Header="AKCJE" Width="260">
                     <DataGridTemplateColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -42,7 +66,7 @@
                                 <Button Style="{StaticResource BlackBtn}" Content="Ostrzeż" Command="{Binding DataContext.WarnCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
                                 <Button Style="{StaticResource BlackBtn}" Margin="8 0 0 0" Content="Anuluj" Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
                                 <Button Style="{StaticResource BlackBtn}" Margin="8 0 0 0" Content="Zablokuj" Command="{Binding DataContext.BlockUserCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
-                                <Button Style="{StaticResource BlackBtn}" Margin="8 0 0 0" Content="Usuń" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
+                                <Button Style="{StaticResource BlackBtn}" Margin="8 0 0 0" Content="✖" Foreground="Red" Width="40" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
