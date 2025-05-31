@@ -15,7 +15,8 @@
             <Setter Property="BorderBrush" Value="#111"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
-        <Style TargetType="DataGridColumnHeader">
+        <!-- style for all headers -->
+        <Style x:Key="GridHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Foreground"   Value="White"/>
             <Setter Property="Background"   Value="#222"/>
@@ -41,7 +42,8 @@
                 Command="{Binding RefreshCommand}"
                 Background="Black" Foreground="White" BorderBrush="Black"/>
         <DataGrid ItemsSource="{Binding Reports}" AutoGenerateColumns="False"
-                  IsReadOnly="True" Margin="0 8 0 0">
+                  IsReadOnly="True" Margin="0 8 0 0"
+                  ColumnHeaderStyle="{StaticResource GridHeaderStyle}">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Data" Width="120" Binding="{Binding CreatedUtc}"/>
@@ -56,7 +58,8 @@
                 <DataGridTextColumn Header="Status" Width="100" Binding="{Binding Status, Converter={StaticResource ReportStatusConv}}"/>
                 <DataGridTemplateColumn Header="AKCJE" Width="260">
                     <DataGridTemplateColumn.HeaderStyle>
-                        <Style TargetType="DataGridColumnHeader">
+                        <Style TargetType="DataGridColumnHeader"
+                               BasedOn="{StaticResource GridHeaderStyle}">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         </Style>
                     </DataGridTemplateColumn.HeaderStyle>

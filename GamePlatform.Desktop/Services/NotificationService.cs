@@ -9,15 +9,18 @@ namespace GamePlatform.Desktop.Services;
 
 public sealed class NotificationService : INotificationService
 {
-    private readonly string _file;
+    private string _file = null!;
     public event Action<string>? Raised;
     public ObservableCollection<string> History { get; } = new();
 
-    public NotificationService()
+    public NotificationService() { }
+
+    public void LoadForUser(Guid userId)
     {
         _file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                             "GamePlatform", "notifications.log");
+                             "GamePlatform", $"notifications_{userId}.log");
         Directory.CreateDirectory(Path.GetDirectoryName(_file)!);
+        History.Clear();
         if (File.Exists(_file))
         {
             foreach (var line in File.ReadAllLines(_file))
@@ -30,12 +33,20 @@ public sealed class NotificationService : INotificationService
     {
         Debug.WriteLine($"[NOTIFY] {message}");
         History.Add(message);
-        try
+        if (!string.IsNullOrEmpty(_file))
         {
-            File.AppendAllLines(_file, [message]);
+            try { File.AppendAllLines(_file, [message]); } catch { }
         }
-        catch { }
+        
         Raised?.Invoke(message);
+    }
+
+    public void Remove(string message)
+    {
+        if (History.Remove(message) && !string.IsNullOrEmpty(_file))
+        {
+            try { File.WriteAllLines(_file, History); } catch { }
+        }
     }
 
     public Task<bool> ConfirmAsync(string message, int _)  // ms ignorujemy – MessageBox blokuje

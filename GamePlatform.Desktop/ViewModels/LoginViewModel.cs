@@ -11,15 +11,17 @@ public partial class LoginViewModel : ObservableObject
 {
     private readonly IAuthService _auth;
     private readonly RegisterValidator _validator;
+    private readonly INotificationService _notify;
 
     private static readonly string RememberPath = System.IO.Path.Combine(
         System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
         "GamePlatform", "remember.txt");
 
-    public LoginViewModel(IAuthService auth, RegisterValidator val)
+    public LoginViewModel(IAuthService auth, RegisterValidator val, INotificationService notify)
     {
         _auth = auth;
         _validator = val;
+        _notify = notify;
 
 
         _ = LoadRememberedLoginAsync();
@@ -91,6 +93,9 @@ public partial class LoginViewModel : ObservableObject
                 }
             }
             catch { }
+
+            if (_auth.CurrentUser is not null)
+                _notify.LoadForUser(_auth.CurrentUser.Id);
 
             ClearFields();
             win.DialogResult = true;   // zamyka okno modalne

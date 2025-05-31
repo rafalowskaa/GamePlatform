@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 
 namespace GamePlatform.Desktop.Services;
 
@@ -15,6 +16,11 @@ public interface INotificationService
     /// <summary>Historia wyświetlonych komunikatów.</summary>
     ObservableCollection<string> History { get; }
 
+    /// <summary>Wczytuje historię komunikatów dla danego użytkownika.</summary>
+    void LoadForUser(Guid userId);
+
+    /// <summary>Usuwa komunikat z historii (także z dysku).</summary>
+    void Remove(string message);
 
     /* aliasy zgodne z istniejącym kodem */
     void Raise(string message, int ms = 3000) => Show(message, ms);

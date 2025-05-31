@@ -4,11 +4,12 @@ using GamePlatform.Desktop.Services;
 using GamePlatform.Shared.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System;
 
 namespace GamePlatform.Desktop.ViewModels;
 
 /// <summary>VM pojedynczego okna czatu (me ⇄ mate).</summary>
-public partial class ChatWindowViewModel : ObservableObject
+public partial class ChatWindowViewModel : ObservableObject, IDisposable
 {
     private readonly IChatService _chat;
 
@@ -30,6 +31,11 @@ public partial class ChatWindowViewModel : ObservableObject
 
         _chat.MessageReceived += OnIncoming;
         _ = _chat.SetOnlineAsync(Me.Id);
+    }
+
+    public void Dispose()
+    {
+        _chat.MessageReceived -= OnIncoming;
     }
 
     private async Task LoadHistoryAsync()

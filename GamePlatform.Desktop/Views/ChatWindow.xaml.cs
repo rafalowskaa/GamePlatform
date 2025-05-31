@@ -4,12 +4,20 @@ using GamePlatform.Shared.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Input;
+using System;
 
 namespace GamePlatform.Desktop.Views;
 
 public partial class ChatWindow : Window
 {
     public ChatWindow() => InitializeComponent();
+
+    protected override void OnClosed(EventArgs e)
+    {
+        if (DataContext is IDisposable d)
+            d.Dispose();
+        base.OnClosed(e);
+    }
 
     private void TextBox_KeyDown(object sender, KeyEventArgs e)
     {

@@ -16,6 +16,6 @@ public partial class NotificationCenterPage : Page
             return;
 
         if (sender is Button btn && btn.DataContext is string msg)
-            svc.History.Remove(msg);
+            svc.Remove(msg);
     }
 }
