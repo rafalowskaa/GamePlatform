@@ -19,7 +19,8 @@
                  Background="Transparent" BorderThickness="0"
                  HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type vm:ChatWindowViewModel.ChatMessageView}">
+                
+                <DataTemplate DataType="{x:Type vm:ChatWindowViewModel+ChatMessageView}">
                     <Border Margin="0 4" Padding="6" CornerRadius="6">
                         <Border.Style>
                             <Style TargetType="Border">
