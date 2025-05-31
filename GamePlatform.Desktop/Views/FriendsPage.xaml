@@ -91,12 +91,16 @@
                           HorizontalContentAlignment="Stretch">
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:User}">
-                                <Border Margin="0 2" Padding="6" CornerRadius="4"
+                                <Border x:Name="UnreadBorder" Margin="0 2" Padding="6" CornerRadius="4"
                                    BorderBrush="White" BorderThickness="0,0,0,1">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="#333"/>
-                                        <Style.Triggers>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <SolidColorBrush Color="#333"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
                                             <DataTrigger Binding="{Binding HasUnread}" Value="True">
                                                     <Setter Property="Background">
                                                         <Setter.Value>
