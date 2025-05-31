@@ -56,6 +56,24 @@ public sealed class LocalChatService : IChatService
 
     public bool IsOnline(Guid id) => _online.ContainsKey(id);
 
+    public Task<IReadOnlyList<ChatMessage>> GetUnseenForAsync(Guid userId)
+       => Task.FromResult(_log.Where(m => m.ToId == userId && !m.SeenByTo)
+                               .Cast<ChatMessage>()
+                               .ToList() as IReadOnlyList<ChatMessage>);
+
+    public Task MarkAsSeenAsync(Guid userId, Guid mateId)
+    {
+        foreach (var m in _log.Where(m => m.ToId == userId && m.FromId == mateId))
+            m.SeenByTo = true;
+        return Task.CompletedTask;
+    }
+
+    public Task<IReadOnlyList<Guid>> GetConversationsAsync(Guid userId)
+        => Task.FromResult(_log.Where(m => m.FromId == userId || m.ToId == userId)
+                                .Select(m => m.FromId == userId ? m.ToId : m.FromId)
+                                .Distinct()
+                                .ToList() as IReadOnlyList<Guid>);
+
     public IReadOnlyList<ChatMessage> GetHistory(Guid a, Guid b, int last = 50) =>
         _log.Where(m => (m.FromId == a && m.ToId == b) || (m.FromId == b && m.ToId == a))
             .OrderByDescending(m => m.WhenUtc)

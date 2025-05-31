@@ -37,6 +37,7 @@ public partial class ChatWindowViewModel : ObservableObject
         var history = await _chat.GetHistoryAsync(Me.Id, Mate.Id);
         foreach (var m in history)
             Messages.Add(m);
+        await _chat.MarkAsSeenAsync(Me.Id, Mate.Id);
     }
 
     /* ---- incoming ---- */
@@ -44,7 +45,11 @@ public partial class ChatWindowViewModel : ObservableObject
     {
         if ((msg.FromId == Me.Id && msg.ToId == Mate.Id) ||
             (msg.FromId == Mate.Id && msg.ToId == Me.Id))
+        {
             App.Current.Dispatcher.Invoke(() => Messages.Add(msg));
+            if (msg.ToId == Me.Id)
+                _ = _chat.MarkAsSeenAsync(Me.Id, Mate.Id);
+        }
     }
 
     /* ---- outgoing ---- */
@@ -57,6 +62,7 @@ public partial class ChatWindowViewModel : ObservableObject
         var msg = new ChatMessage(Me.Id, Mate.Id, txt);
         await _chat.SendAsync(msg);
         Text = "";
-        
+        await _chat.MarkAsSeenAsync(Me.Id, Mate.Id);
+
     }
 }

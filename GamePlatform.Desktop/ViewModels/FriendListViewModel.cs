@@ -92,7 +92,8 @@ public partial class FriendListViewModel : ObservableObject
     private void StartChat(User? mate)
     {
         if (mate is null) return;
-        ChatWindow.Open(_auth.CurrentUser!, mate);      // singleton-like otwarcie okna
+        ChatWindow.Open(_auth.CurrentUser!, mate);
+        mate.HasUnread = false;
         if (!Chats.Any(c => c.Id == mate.Id))
             Chats.Add(mate);
     }
@@ -218,6 +219,20 @@ public partial class FriendListViewModel : ObservableObject
             if (hist.Count > 0)
                 Chats.Add(u);
         }
+
+        var convIds = await _chat.GetConversationsAsync(me);
+        var db = _sp.GetRequiredService<AppDbContext>();
+        foreach (var id in convIds)
+        {
+            if (Chats.Any(c => c.Id == id)) continue;
+            var usr = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+            if (usr is null) continue;
+            usr.IsOnline = _chat.IsOnline(id);
+            usr.IsMyFriend = _friendIds.Contains(id);
+            Chats.Add(usr);
+        }
+
+        await MarkUnreadAsync();
     }
 
     private async Task LoadSuggestionsAsync()
@@ -266,15 +281,44 @@ public partial class FriendListViewModel : ObservableObject
         if (msg.FromId != me.Id && msg.ToId != me.Id) return;
 
         var mateId = msg.FromId == me.Id ? msg.ToId : msg.FromId;
-        if (Chats.Any(u => u.Id == mateId)) return;
+
+        var chatUser = Chats.FirstOrDefault(u => u.Id == mateId);
+        if (chatUser is null)
+        {
+            var db = _sp.GetRequiredService<AppDbContext>();
+            chatUser = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == mateId);
+            if (chatUser is null) return;
+            chatUser.IsMyFriend = _friendIds.Contains(chatUser.Id);
+            App.Current.Dispatcher.Invoke(() => Chats.Add(chatUser));
+        }
+        if (msg.ToId == me.Id)
+            chatUser.HasUnread = true;
+        _notify.Show($"Nowa wiadomość od {chatUser.Login}");
+    }
+
+    private async Task MarkUnreadAsync()
+    {
+        var me = _auth.CurrentUser?.Id;
+        if (me is null) return;
+        var unseen = await _chat.GetUnseenForAsync(me.Value);
 
         var db = _sp.GetRequiredService<AppDbContext>();
-        var mate = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == mateId);
-        if (mate is null) return;
 
-        mate.IsMyFriend = _friendIds.Contains(mate.Id);
-        App.Current.Dispatcher.Invoke(() => Chats.Add(mate));
-        _notify.Show($"Nowa wiadomość od {mate.Login}");
+        foreach (var m in unseen)
+        {
+            var usr = Chats.FirstOrDefault(u => u.Id == m.FromId);
+            if (usr is null)
+            {
+                usr = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == m.FromId);
+                if (usr is null) continue;
+                usr.IsMyFriend = _friendIds.Contains(usr.Id);
+                usr.IsOnline = _chat.IsOnline(usr.Id);
+                Chats.Add(usr);
+            }
+            usr.HasUnread = true;
+            _notify.Show($"Nowa wiadomość od {usr.Login}");
+        }
+
     }
 
     public ObservableCollection<User> Suggestions { get; } = new();

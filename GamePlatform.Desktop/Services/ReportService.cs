@@ -11,7 +11,12 @@ namespace GamePlatform.Desktop.Services;
 public sealed class ReportService : IReportService
 {
     private readonly AppDbContext _db;
-    public ReportService(AppDbContext db) => _db = db;
+    private readonly IChatService _chat;
+    public ReportService(AppDbContext db, IChatService chat)
+    {
+        _db = db;
+        _chat = chat;
+    }
 
     public async Task SubmitAsync(Guid from, Guid to, string cat, string desc)
     {
@@ -48,6 +53,11 @@ public sealed class ReportService : IReportService
         r.Status = ReportStatus.Closed;
         r.StaffNotes = "Warning";
         await _db.SaveChangesAsync();
+
+        var msg = new ChatMessage(Guid.Empty, r.ReportedUserId,
+           "Otrzymałeś ostrzeżenie od administracji z powodu zgłoszenia, " +
+           "kolejny raz będzie powodem do zablokowania konta na tydzień bez możliwości odwołania");
+        await _chat.SendAsync(msg);
     }
 
     public async Task CancelAsync(Guid reportId)

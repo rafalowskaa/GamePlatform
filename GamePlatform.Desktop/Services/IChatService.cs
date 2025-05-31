@@ -17,5 +17,9 @@ public interface IChatService
     Task SetOnlineAsync(Guid userId);
     Task SetOfflineAsync(Guid userId);
     bool IsOnline(Guid userId);
+
+    Task<IReadOnlyList<ChatMessage>> GetUnseenForAsync(Guid userId);
+    Task MarkAsSeenAsync(Guid userId, Guid mateId);
+    Task<IReadOnlyList<Guid>> GetConversationsAsync(Guid userId);
 }
 

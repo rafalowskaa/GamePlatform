@@ -91,8 +91,18 @@
                           HorizontalContentAlignment="Stretch">
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:User}">
-                            <Border Margin="0 2" Padding="6" Background="#333" CornerRadius="4"
+                            <Border Margin="0 2" Padding="6" CornerRadius="4"
                                    BorderBrush="White" BorderThickness="0,0,0,1">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="#333"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding HasUnread}" Value="True">
+                                                <Setter Property="Background" Value="Yellow"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
                                 <TextBlock Text="{Binding Login}" FontSize="16"/>
                             </Border>
                         </DataTemplate>

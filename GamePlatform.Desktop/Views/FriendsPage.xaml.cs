@@ -69,7 +69,10 @@ public partial class FriendsPage : UserControl
     {
         if (e.ChangedButton != MouseButton.Left) return;
         if (DataContext is FriendListViewModel vm && vm.SelectedFriend is User u)
+        {
+            u.HasUnread = false;
             vm.StartChatCommand.Execute(u);
+        }
     }
 
     /* blokuje domyślne menu po prawym kliku */

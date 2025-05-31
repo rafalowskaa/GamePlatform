@@ -32,6 +32,9 @@ public class User
     [System.ComponentModel.DataAnnotations.Schema.NotMapped]
     public bool IsMyFriend { get; set; }
 
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public bool HasUnread { get; set; }
+
 
 
     /* —— przyjaźnie —— */

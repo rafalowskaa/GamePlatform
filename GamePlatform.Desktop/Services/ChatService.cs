@@ -76,4 +76,28 @@ public sealed class ChatService : IChatService
     }
 
     public bool IsOnline(Guid id) => _online.TryGetValue(id, out var on) && on;
+
+    public async Task<IReadOnlyList<ChatMessage>> GetUnseenForAsync(Guid userId)
+       => await _db.ChatMessages
+                    .Where(m => m.ToId == userId && !m.SeenByTo)
+                    .OrderBy(m => m.WhenUtc)
+                    .AsNoTracking()
+                    .ToListAsync();
+
+    public async Task MarkAsSeenAsync(Guid userId, Guid mateId)
+    {
+        var msgs = await _db.ChatMessages
+                             .Where(m => m.ToId == userId && m.FromId == mateId && !m.SeenByTo)
+                             .ToListAsync();
+        if (msgs.Count == 0) return;
+        foreach (var m in msgs) m.SeenByTo = true;
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<IReadOnlyList<Guid>> GetConversationsAsync(Guid userId)
+        => await _db.ChatMessages
+                     .Where(m => m.FromId == userId || m.ToId == userId)
+                     .Select(m => m.FromId == userId ? m.ToId : m.FromId)
+                     .Distinct()
+                     .ToListAsync();
 }
