@@ -36,12 +36,22 @@ public partial class FriendsPage : UserControl
     /* ===== ZNAJOMY (lewy klik) ===== */
     private void OnFriendItemClick(object sender, MouseButtonEventArgs e)
     {
-        if (e.ChangedButton != MouseButton.Left) return;
         if (sender is not ListViewItem item) return;
+        if (DataContext is not FriendListViewModel vm) return;
+        if (item.DataContext is not User u) return;
 
-        if (item.ContextMenu != null)
+
+        if (e.ChangedButton == MouseButton.Left)
         {
-            item.ContextMenu.DataContext = DataContext;   // <── KLUCZ
+            u.HasUnread = false;
+            vm.StartChatCommand.Execute(u);
+            e.Handled = true;
+            return;
+        }
+
+        if (e.ChangedButton == MouseButton.Right && item.ContextMenu != null)
+        {
+            item.ContextMenu.DataContext = vm;   // <── KLUCZ
             item.ContextMenu.PlacementTarget = item;
             item.ContextMenu.Placement = PlacementMode.MousePoint;
             item.ContextMenu.IsOpen = true;

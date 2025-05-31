@@ -6,7 +6,7 @@
         WindowStartupLocation="CenterOwner"
         SizeToContent="Height"
         Style="{StaticResource MaterialDesignWindow}">
-    <StackPanel Margin="24" Width="260">
+    <StackPanel Margin="24" Width="260" HorizontalAlignment="Center">
         <Border Width="120" Height="120" HorizontalAlignment="Center" CornerRadius="60" Background="#333">
             <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill" ClipToBounds="True"/>
         </Border>
