@@ -70,7 +70,8 @@ public partial class FriendListViewModel : ObservableObject
 
     /* ==========  KOMENDY  ========== */
 
-    [RelayCommand] private Task RefreshFriendsAsync() => LoadFriendsAsync();
+    [RelayCommand]
+    public Task RefreshFriendsAsync() => LoadFriendsAsync();
     [RelayCommand] private Task RefreshSuggestionsAsync() => LoadSuggestionsAsync();
 
     [RelayCommand]

@@ -91,25 +91,23 @@
                           HorizontalContentAlignment="Stretch">
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:User}">
-                                <Border x:Name="UnreadTarget" Margin="0 2" Padding="6" CornerRadius="4"
+                                <Border Margin="0 2" Padding="6" CornerRadius="4"
                                    BorderBrush="White" BorderThickness="0,0,0,1">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="Background" Value="#333"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding HasUnread}" Value="True">
-                                                <Setter>
-                                                    <Setter.Property>Background</Setter.Property>
-                                                    <Setter.Value>
-                                                            <SolidColorBrush x:Name="UnreadBrush" Color="#55007FF7"/>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <SolidColorBrush Color="#55007FF7"/>
                                                         </Setter.Value>
-                                                </Setter>
+                                                    </Setter>
                                                     <DataTrigger.EnterActions>
                                                         <BeginStoryboard x:Name="FlashUnread">
                                                             <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                                                                <ColorAnimation Storyboard.TargetName="UnreadTarget"
-                                                                           Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                                           To="#FF1493FF" Duration="0:0:0.6"/>
+                                                                <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                                               To="#FF1493FF" Duration="0:0:0.6"/>
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </DataTrigger.EnterActions>

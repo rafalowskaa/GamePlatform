@@ -16,7 +16,7 @@ public partial class ChatWindowViewModel : ObservableObject, IDisposable
     public User Me { get; }
     public User Mate { get; }
 
-    public sealed record ChatMessageView(Guid FromId, Guid ToId, string Text, DateTime WhenUtc, bool ContinuePrev);
+    
 
     public ObservableCollection<ChatMessageView> Messages { get; } = new();
 
