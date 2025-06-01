@@ -11,7 +11,7 @@
     <UserControl.Resources>
 
         <!-- Pusty avatar -->
-        <BitmapImage x:Key="EmptyAvatar" UriSource="pack://application:,,,/Resources/DefaultAvatar.png"/>
+        <BitmapImage x:Key="EmptyAvatar" UriSource="pack://application:,,,/Resources/avatar_empty.png"/>
 
         <!-- ==== STYLOWANIE ==== -->
         <!-- Nagłówki sekcji -->

@@ -3,6 +3,7 @@
   <ItemGroup>
     <None Remove="Resources\avatar_empty.png" />
     <None Remove="Resources\login_banner.png" />
+	  <None Remove="Resources\DefaultAvatar.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +40,9 @@
     <Resource Include="Resources\avatar_empty.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+	  <Resource Include="Resources\DefaultAvatar.png">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
     <Resource Include="Resources\login_banner.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
