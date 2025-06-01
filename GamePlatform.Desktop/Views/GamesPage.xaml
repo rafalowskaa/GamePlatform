@@ -12,17 +12,19 @@
     <DockPanel Margin="12">
 
         <!-- top bar -->
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0 0 0 8">
-            <TextBox Width="260"
+        
+            
+                     <DockPanel DockPanel.Dock="Top" Margin="0 0 0 8">
+            <TextBox Width="260" DockPanel.Dock="Left"
                      Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
                      md:HintAssist.Hint="Szukaj…"/>
-            <Button Content="Dodaj" Background="Black" Foreground="White" BorderBrush="Black"
-                    Command="{Binding AddGameAsyncCommand}"
+            <Button Content="Dodaj grę" DockPanel.Dock="Right"
+                    Background="Black" Foreground="White" BorderBrush="Black"
                     Style="{StaticResource MaterialDesignRaisedButton}"
-                    Margin="12 0"/>
-        </StackPanel>
+                    Click="OnAddGameClick"/>
+    </DockPanel>
 
-        <Grid>
+    <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -61,7 +63,18 @@
                             <TextBlock Text="{Binding Category}"/>
                             <TextBlock Text="{Binding Mode}"/>
                             <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0 8 0 8"/>
-                            <Button Content="Zagraj" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
+                            <Button Content="Zagraj" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsApproved}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                         </StackPanel>
                     </DataTemplate>
                 </md:TransitioningContent.ContentTemplate>

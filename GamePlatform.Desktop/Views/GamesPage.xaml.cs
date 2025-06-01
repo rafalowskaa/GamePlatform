@@ -10,6 +10,12 @@ public partial class GamesPage : Page
 {
     public GamesPage() => InitializeComponent();
 
+    private void OnAddGameClick(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+            vm.AddGameAsyncCommand.Execute(null);
+    }
+
     private void OnDoubleClick(object s, MouseButtonEventArgs e)
     {
         if (DataContext is MainViewModel vm && vm.SelectedGame is Game g)
