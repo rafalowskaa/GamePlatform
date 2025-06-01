@@ -4,11 +4,19 @@ using GamePlatform.Desktop.Services;
 using GamePlatform.Shared.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 public partial class ReportsViewModel : ObservableObject
 {
     private readonly IReportService _svc;
-    public ReportsViewModel(IReportService svc) { _svc = svc; _ = RefreshAsync(); }
+    private readonly INotificationService _notify;
+
+    public ReportsViewModel(IReportService svc, INotificationService notify)
+    {
+        _svc = svc;
+        _notify = notify;
+        _ = RefreshAsync();
+    }
 
     public ObservableCollection<UserReport> Reports { get; } = new();
 
@@ -20,10 +28,12 @@ public partial class ReportsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private Task WarnAsync(UserReport? r)
+    private async Task WarnAsync(UserReport? r)
     {
-        if (r is null) return Task.CompletedTask;
-        return _svc.SendWarningAsync(r.Id);
+        if (r is null) return;
+        await _svc.SendWarningAsync(r.Id);
+        r.Status = Shared.Enums.ReportStatus.Warned;
+        _notify.Show($"Użytkownik {r.ReportedUser.Login} został ostrzeżony.");
     }
 
     [RelayCommand]

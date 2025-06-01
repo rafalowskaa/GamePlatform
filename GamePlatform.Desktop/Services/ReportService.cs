@@ -12,7 +12,9 @@ public sealed class ReportService : IReportService
 {
     private readonly AppDbContext _db;
     private readonly IChatService _chat;
-    public ReportService(AppDbContext db, IChatService chat)
+    private readonly INotificationService _notify;
+
+    public ReportService(AppDbContext db, IChatService chat, INotificationService notify)
     {
         _db = db;
         _chat = chat;
@@ -50,14 +52,15 @@ public sealed class ReportService : IReportService
     {
         var r = await _db.UserReports.FindAsync(reportId);
         if (r is null) return;
-        r.Status = ReportStatus.Closed;
+        r.Status = ReportStatus.Warned;
         r.StaffNotes = "Warning";
         await _db.SaveChangesAsync();
 
         var msg = new ChatMessage(Guid.Empty, r.ReportedUserId,
-           "Otrzymałeś ostrzeżenie od administracji z powodu zgłoszenia, " +
-           "kolejny raz będzie powodem do zablokowania konta na tydzień bez możliwości odwołania");
+            "Otrzymałeś ostrzeżenie od administracji. Powtórne zgłoszenie spowoduje blokadę konta.");
         await _chat.SendAsync(msg);
+
+        _notify.PushToUser(r.ReportedUserId, "Otrzymałeś ostrzeżenie od administracji.");
     }
 
     public async Task CancelAsync(Guid reportId)

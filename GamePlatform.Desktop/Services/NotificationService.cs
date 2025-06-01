@@ -63,4 +63,14 @@ public sealed class NotificationService : INotificationService
                                    MessageBoxImage.Question);
         return Task.FromResult(res == MessageBoxResult.Yes);
     }
+
+    public void PushToUser(Guid userId, string message)
+    {
+        // In a real app this would push via SignalR or REST. Here we simply
+        // append to the user's notification file so the client can pick it up.
+        var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                               "GamePlatform", $"notifications_{userId}.log");
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        File.AppendAllLines(path, new[] { message });
+    }
 }

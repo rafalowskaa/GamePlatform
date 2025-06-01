@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
-using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Models;
 using GamePlatform.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,24 +52,21 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task AddGameAsync()
     {
-        var dlgVm = _sp.GetRequiredService<AddGameDialogViewModel>();
-        var dlg = new AddGameDialog { DataContext = dlgVm, Owner = Application.Current.MainWindow };
+        var dlg = new Microsoft.Win32.OpenFileDialog { Filter = "Executable|*.exe" };
 
         if (dlg.ShowDialog() != true) return;
 
         var game = new Game
         {
-            Title = dlgVm.Title,
-            Description = dlgVm.Description,
-            Category = dlgVm.SelectedCategory,
-            Mode = dlgVm.SelectedMode,
-            MaxPlayers = dlgVm.MaxPlayers,
-            IsLive = dlgVm.IsLive
+            Title = System.IO.Path.GetFileNameWithoutExtension(dlg.FileName),
+            Category = Shared.Enums.GameCategory.Other,
+            Mode = Shared.Enums.GameMode.SinglePlayer,
+            IsLive = false
         };
-        var ver = new GameVersion { Number = dlgVm.Version, FolderPath = dlgVm.ZipPath };
+        var ver = new GameVersion { Number = "1.0", FolderPath = dlg.FileName };
 
         await _repo.AddAsync(game, ver);
-        await RefreshAsync();
+        Games.Add(game);
     }
 
     [RelayCommand]

@@ -5,5 +5,5 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GamePlatform.Shared.Enums;
-public enum ReportStatus { Pending, InReview, Closed }
+public enum ReportStatus { Pending, InReview, Closed, Warned }
 

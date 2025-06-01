@@ -22,6 +22,9 @@ public interface INotificationService
     /// <summary>Usuwa komunikat z historii (także z dysku).</summary>
     void Remove(string message);
 
+    /// <summary>Wysyła powiadomienie do wskazanego użytkownika.</summary>
+    void PushToUser(Guid userId, string message);
+
     /* aliasy zgodne z istniejącym kodem */
     void Raise(string message, int ms = 3000) => Show(message, ms);
     void Info(string message, int ms = 3000) => Show(message, ms);

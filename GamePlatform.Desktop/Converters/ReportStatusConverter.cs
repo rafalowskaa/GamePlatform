@@ -16,6 +16,7 @@ public sealed class ReportStatusConverter : IValueConverter
                 ReportStatus.Pending => "Oczekuje",
                 ReportStatus.InReview => "W trakcie",
                 ReportStatus.Closed => "Zamknięte",
+                ReportStatus.Warned => "Ostrzeżono",
                 _ => status.ToString()
             };
         }

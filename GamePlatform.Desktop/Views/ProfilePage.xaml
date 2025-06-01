@@ -8,7 +8,7 @@
                 VerticalAlignment="Center">
 
         <Border Width="120" Height="120" HorizontalAlignment="Center"
-                CornerRadius="60" Background="#333">
+                 CornerRadius="60" Background="#333" AllowDrop="True" Drop="OnAvatarDrop">
             <Image Source="{Binding Avatar}" Stretch="UniformToFill" ClipToBounds="True"/>
         </Border>
 
