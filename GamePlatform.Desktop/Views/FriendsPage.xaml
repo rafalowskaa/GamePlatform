@@ -4,7 +4,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
             xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared"
             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-            xmlns:pack="http://materialdesigninxaml.net/winfx/xaml/controls"
+            xmlns:pack="http://materialdesigninxaml.net/winfx/xaml/controls;assembly=MaterialDesignThemes.Wpf"
              Background="Transparent"
              Width="300">
 
@@ -12,7 +12,7 @@
     <UserControl.Resources>
 
         <!-- Pusty avatar -->
-        <BitmapImage x:Key="EmptyAvatar" UriSource="pack://application:,,,/Assets/avatar_empty.png"/>
+        <BitmapImage x:Key="EmptyAvatar" UriSource="pack://application:,,,/Resources/DefaultAvatar.png"/>
 
         <!-- ==== STYLOWANIE ==== -->
         <!-- Nagłówki sekcji -->

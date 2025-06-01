@@ -15,7 +15,18 @@ public partial class AddGameDialogViewModel : ObservableObject
     [ObservableProperty] private string _title = "";
     [ObservableProperty] private string _version = "1.0.0";
     [ObservableProperty] private string _zipPath = "";
-    [ObservableProperty] private string? _coverPath;
+    private string? _coverPath;
+
+    /// <summary>
+    /// Ścieżka do wybranego obrazka okładki.
+    /// Dodajemy jawne właściwości, aby projekt kompilował się również bez
+    /// uruchomionych generatorów źródeł.
+    /// </summary>
+    public string? CoverPath
+    {
+        get => _coverPath;
+        set => SetProperty(ref _coverPath, value);
+    }
     [ObservableProperty] private GameCategory _selectedCategory = GameCategory.Other;
     [ObservableProperty] private GameMode _selectedMode = GameMode.SinglePlayer;
     [ObservableProperty] private int? _maxPlayers;
