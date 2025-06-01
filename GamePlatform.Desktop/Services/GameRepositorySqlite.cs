@@ -41,7 +41,8 @@ public sealed class GameRepositorySqlite : IGameRepository
         return list;
     }
 
-    public async Task<Game?> GetAsync(Guid id) =>
+    public async Task<Game?> GetAsync(Guid id)
+    {
         var g = await _db.Games
                          .Include(g => g.Versions)
                          .Include(g => g.Scores)
@@ -49,6 +50,7 @@ public sealed class GameRepositorySqlite : IGameRepository
                          .FirstOrDefaultAsync(g => g.Id == id);
         if (g is not null) SetCover(g);
         return g;
+    }
 
     /* ------------ COMMANDS ------------ */
 
