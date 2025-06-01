@@ -5,6 +5,7 @@ using GamePlatform.Shared.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
+using GamePlatform.Shared.Enums;
 
 public partial class ReportsViewModel : ObservableObject
 {
@@ -32,7 +33,7 @@ public partial class ReportsViewModel : ObservableObject
     {
         if (r is null) return;
         await _svc.SendWarningAsync(r.Id);
-        r.Status = Shared.Enums.ReportStatus.Warned;
+        r.Status = ReportStatus.Warned;
         _notify.Show($"Użytkownik {r.ReportedUser.Login} został ostrzeżony.");
     }
 

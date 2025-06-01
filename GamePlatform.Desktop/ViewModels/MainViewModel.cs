@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using GamePlatform.Shared.Enums;
+using GamePlatform.Desktop.Views;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -59,8 +61,8 @@ public partial class MainViewModel : ObservableObject
         var game = new Game
         {
             Title = System.IO.Path.GetFileNameWithoutExtension(dlg.FileName),
-            Category = Shared.Enums.GameCategory.Other,
-            Mode = Shared.Enums.GameMode.SinglePlayer,
+            Category = GameCategory.Other,
+            Mode = GameMode.SinglePlayer,
             IsLive = false
         };
         var ver = new GameVersion { Number = "1.0", FolderPath = dlg.FileName };
