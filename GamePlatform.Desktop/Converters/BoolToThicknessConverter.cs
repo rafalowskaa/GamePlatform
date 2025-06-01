@@ -9,7 +9,7 @@ namespace GamePlatform.Desktop.Converters;
 public sealed class BoolToThicknessConverter : IValueConverter
 {
     public Thickness TrueThickness { get; set; } = new Thickness(0);
-    public Thickness FalseThickness { get; set; } = new Thickness(0, 2, 0, 2);
+    public Thickness FalseThickness { get; set; } = new Thickness(0, 4, 0, 0);
 
     public object Convert(object value, Type targetType, object? parameter, CultureInfo culture)
         => value is bool b && b ? TrueThickness : FalseThickness;

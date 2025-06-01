@@ -32,21 +32,29 @@ public sealed class NotificationService : INotificationService
     public void Show(string message, int ms = 3000)
     {
         Debug.WriteLine($"[NOTIFY] {message}");
-        History.Add(message);
-        if (!string.IsNullOrEmpty(_file))
+
+        Application.Current.Dispatcher.Invoke(() =>
         {
-            try { File.AppendAllLines(_file, [message]); } catch { }
-        }
-        
-        Raised?.Invoke(message);
+
+            History.Add(message);
+            if (!string.IsNullOrEmpty(_file))
+            {
+                try { File.AppendAllLines(_file, [message]); } catch { }
+            }
+
+            Raised?.Invoke(message);
+        });
     }
 
     public void Remove(string message)
     {
-        if (History.Remove(message) && !string.IsNullOrEmpty(_file))
+        Application.Current.Dispatcher.Invoke(() =>
         {
-            try { File.WriteAllLines(_file, History); } catch { }
-        }
+            if (History.Remove(message) && !string.IsNullOrEmpty(_file))
+            {
+                try { File.WriteAllLines(_file, History); } catch { }
+            }
+        });
     }
 
     public Task<bool> ConfirmAsync(string message, int _)  // ms ignorujemy – MessageBox blokuje

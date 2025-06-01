@@ -56,6 +56,9 @@ public partial class ChatWindowViewModel : ObservableObject, IDisposable
         {
             var view = CreateView(m, prev);
 
+            if (prev != null && prev.IsMine == view.IsMine)
+                prev.ShowMeta = false;
+
             Messages.Add(view);
             prev = view;
         }
@@ -71,7 +74,12 @@ public partial class ChatWindowViewModel : ObservableObject, IDisposable
             var prev = Messages.Count > 0 ? Messages[^1] : null;
             var view = CreateView(msg, prev);
 
-            App.Current.Dispatcher.Invoke(() => Messages.Add(view));
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                if (prev != null && prev.IsMine == view.IsMine)
+                    prev.ShowMeta = false;
+                Messages.Add(view);
+            });
             if (msg.ToId == Me.Id)
                 _ = _chat.MarkAsSeenAsync(Me.Id, Mate.Id);
         }

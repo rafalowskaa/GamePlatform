@@ -19,6 +19,12 @@
                  ItemsSource="{Binding Messages}"
                  Background="Transparent" BorderThickness="0"
                  HorizontalContentAlignment="Stretch">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
 
                 <DataTemplate DataType="{x:Type vm:ChatMessageView}">
@@ -28,11 +34,11 @@
                             HorizontalAlignment="{Binding IsMine, Converter={StaticResource BoolToAlign}}">
                         <StackPanel>
                             <TextBlock FontWeight="SemiBold" Foreground="White"
-                                       Visibility="{Binding ContinuePrev, Converter={StaticResource BoolToVisibility}}"
+                                       Visibility="{Binding ShowMeta, Converter={StaticResource BoolToVis}}"
                                        Text="{Binding SenderLogin}"/>
                             <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Foreground="White" Margin="0,2,0,0"/>
                             <TextBlock FontSize="11" Foreground="#aaa" HorizontalAlignment="Right"
-                                       Visibility="{Binding ContinuePrev, Converter={StaticResource BoolToVisibility}}"
+                                       Visibility="{Binding ShowMeta, Converter={StaticResource BoolToVis}}"
                                        Text="{Binding WhenLocal, StringFormat={}{0:dd.MM HH\\:mm}}"/>
                         </StackPanel>
                     </Border>
@@ -48,6 +54,7 @@
             <TextBox DockPanel.Dock="Left"
                      Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                      Width="300" Height="32"
+                     AcceptsReturn="True"
                      KeyDown="TextBox_KeyDown"/>
             <Button Content="Wyślij" Width="80" Margin="8 0 0 0"
                     Background="Black" Foreground="White" BorderBrush="Black"

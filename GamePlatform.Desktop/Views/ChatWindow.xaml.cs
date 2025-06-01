@@ -40,9 +40,9 @@ public partial class ChatWindow : Window
 
     private void TextBox_KeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt)
+        if (e.Key == Key.Enter && (Keyboard.Modifiers & (ModifierKeys.Alt | ModifierKeys.Shift)) == ModifierKeys.None)
         {
-            if(DataContext is ChatWindowViewModel vm && vm.SendCommand.CanExecute(null))
+            if (DataContext is ChatWindowViewModel vm && vm.SendCommand.CanExecute(null))
                 vm.SendCommand.Execute(null);
             e.Handled = true;
         }
