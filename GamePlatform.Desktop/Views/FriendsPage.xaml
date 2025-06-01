@@ -18,33 +18,27 @@
                         <Border x:Name="Bd" Padding="6" CornerRadius="4"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="White" BorderThickness="0,0,0,1">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="UnreadStates">
-                                    <VisualState x:Name="Normal"/>
-                                    <VisualState x:Name="Unread">
-                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                                            <DoubleAnimation Storyboard.TargetName="Bd"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             From="0.4" To="0" Duration="0:0:0.6"/>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
+                            
                             <ContentPresenter />
                         </Border>
+                    </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding HasUnread}" Value="True">
                     <Setter Property="Background" Value="#44A8D9FF"/>
                     <DataTrigger.EnterActions>
-                        <i:GoToStateAction StateName="Unread"/>
+                        <BeginStoryboard x:Name="UnreadBlinkStoryboard">
+                            <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                <DoubleAnimation Storyboard.TargetName="Bd"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 From="0.4" To="0" Duration="0:0:0.6"/>
+                            </Storyboard>
+                        </BeginStoryboard>
                     </DataTrigger.EnterActions>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding HasUnread}" Value="False">
-                    <DataTrigger.EnterActions>
-                        <i:GoToStateAction StateName="Normal"/>
-                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <StopStoryboard BeginStoryboardName="UnreadBlinkStoryboard"/>
+                    </DataTrigger.ExitActions>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
