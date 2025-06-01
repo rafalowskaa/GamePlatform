@@ -13,7 +13,7 @@ public partial class ChatMessageView : ObservableObject
     public DateTime WhenLocal { get; }
 
     [ObservableProperty]
-    private bool _showMeta;
+    private bool _showMeta = true;
 
 
     public ChatMessageView(string text, bool isMine, bool continuePrev, string senderLogin, DateTime whenLocal)
