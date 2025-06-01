@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <None Remove="Resources\avatar_empty.png" />
     <None Remove="Resources\login_banner.png" />
   </ItemGroup>
 
@@ -14,7 +15,6 @@
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc5.4" />
     <PackageReference Include="MaterialDesignColors" Version="5.2.1" />
     <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
-	<PackageReference Include="MaterialDesignThemes.Wpf" Version="5.2.1" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="5.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
@@ -36,6 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\avatar_empty.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\login_banner.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

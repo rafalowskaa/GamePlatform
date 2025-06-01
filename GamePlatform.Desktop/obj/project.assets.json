@@ -5571,7 +5571,6 @@
       "MaterialDesignColors >= 5.2.1",
       "MaterialDesignThemes >= 5.2.1",
       "MaterialDesignThemes.MahApps >= 5.2.1",
-      "MaterialDesignThemes.Wpf >= 5.2.1",
       "Microsoft.AspNetCore.Identity >= 2.3.1",
       "Microsoft.EntityFrameworkCore >= 9.0.4",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.4",
@@ -5659,10 +5658,6 @@
             "target": "Package",
             "version": "[5.2.1, )"
           },
-          "MaterialDesignThemes.Wpf": {
-            "target": "Package",
-            "version": "[5.2.1, )"
-          },
           "Microsoft.AspNetCore.Identity": {
             "target": "Package",
             "version": "[2.3.1, )"
@@ -5716,15 +5711,6 @@
     }
   },
   "logs": [
-    {
-      "code": "NU1102",
-      "level": "Error",
-      "message": "Nie można znaleźć pakietu MaterialDesignThemes.Wpf w wersji (>= 5.2.1)\r\n  - Znalezione wersje w nuget.org: 1 [ Najbliższa wersja: 1.0.1 ]\r\n  - Znalezione wersje w Microsoft Visual Studio Offline Packages: 0\r\n  - Znalezione wersje w C:\\Program Files\\dotnet\\library-packs: 0",
-      "libraryId": "MaterialDesignThemes.Wpf",
-      "targetGraphs": [
-        "net8.0-windows7.0"
-      ]
-    },
     {
       "code": "NU1701",
       "level": "Warning",

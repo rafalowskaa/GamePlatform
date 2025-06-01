@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "89xFKNdDgUs=",
-  "success": false,
+  "dgSpecHash": "Ak7jT+XZkBw=",
+  "success": true,
   "projectFilePath": "C:\\Users\\nrafa\\source\\repos\\GamePlatform\\GamePlatform.Desktop\\GamePlatform.Desktop.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\nrafa\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.0\\communitytoolkit.mvvm.8.4.0.nupkg.sha512",
@@ -110,17 +110,6 @@
     "C:\\Users\\nrafa\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512"
   ],
   "logs": [
-    {
-      "code": "NU1102",
-      "level": "Error",
-      "message": "Nie można znaleźć pakietu MaterialDesignThemes.Wpf w wersji (>= 5.2.1)\r\n  - Znalezione wersje w nuget.org: 1 [ Najbliższa wersja: 1.0.1 ]\r\n  - Znalezione wersje w Microsoft Visual Studio Offline Packages: 0\r\n  - Znalezione wersje w C:\\Program Files\\dotnet\\library-packs: 0",
-      "projectPath": "C:\\Users\\nrafa\\source\\repos\\GamePlatform\\GamePlatform.Desktop\\GamePlatform.Desktop.csproj",
-      "filePath": "C:\\Users\\nrafa\\source\\repos\\GamePlatform\\GamePlatform.Desktop\\GamePlatform.Desktop.csproj",
-      "libraryId": "MaterialDesignThemes.Wpf",
-      "targetGraphs": [
-        "net8.0-windows7.0"
-      ]
-    },
     {
       "code": "NU1701",
       "level": "Warning",

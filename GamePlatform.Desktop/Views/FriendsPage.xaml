@@ -4,7 +4,6 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
             xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared"
             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-            xmlns:pack="http://materialdesigninxaml.net/winfx/xaml/controls"
              Background="Transparent"
              Width="300">
 
@@ -152,8 +151,12 @@
 
         <!-- ===== 1) SZUKAJ W CZACIE (Messenger-like) ===== -->
         <DockPanel Grid.Row="0" Margin="0 0 0 10">
-            <pack:PackIcon DockPanel.Dock="Left" Kind="Magnify" Width="20" Height="20"
-                           Foreground="#999" Margin="4 0 0 0"/>
+            <TextBlock DockPanel.Dock="Left"
+                       FontFamily="Segoe MDL2 Assets"
+                       Text="&#xE721;"
+                       FontSize="20"
+                       Foreground="#999"
+                       Margin="4 0 0 0"/>
             <TextBox Width="260" Height="30"
                      Padding="28 0 4 0"
                      md:HintAssist.Hint="Szukaj w czacie"
