@@ -139,11 +139,22 @@ namespace GamePlatform.Shared.Migrations
                     b.Property<int>("Mode")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SubmittedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("SubmittedByUserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubmittedByUserId");
 
                     b.ToTable("Games");
                 });
@@ -340,6 +351,15 @@ namespace GamePlatform.Shared.Migrations
                     b.Navigation("FromUser");
 
                     b.Navigation("ToUser");
+                });
+
+            modelBuilder.Entity("GamePlatform.Shared.Models.Game", b =>
+                {
+                    b.HasOne("GamePlatform.Shared.Models.User", "SubmittedByUser")
+                        .WithMany()
+                        .HasForeignKey("SubmittedByUserId");
+
+                    b.Navigation("SubmittedByUser");
                 });
 
             modelBuilder.Entity("GamePlatform.Shared.Models.Score", b =>

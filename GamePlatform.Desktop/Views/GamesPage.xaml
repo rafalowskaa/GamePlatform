@@ -51,8 +51,8 @@
             </ScrollViewer>
 
             <!-- szczegóły -->
-            <md:TransitioningContentControl Grid.Column="1" Content="{Binding SelectedGame}">
-                <md:TransitioningContentControl.ContentTemplate>
+            <md:TransitioningContent Grid.Column="1" Content="{Binding SelectedGame}">
+                <md:TransitioningContent.ContentTemplate>
                     <DataTemplate DataType="{x:Type models:Game}">
                         <StackPanel Margin="12">
                             <Image Height="220" Width="300" Stretch="Uniform"
@@ -64,8 +64,8 @@
                             <Button Content="Zagraj" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
                         </StackPanel>
                     </DataTemplate>
-                </md:TransitioningContentControl.ContentTemplate>
-            </md:TransitioningContentControl>
+                </md:TransitioningContent.ContentTemplate>
+            </md:TransitioningContent>
         </Grid>
     </DockPanel>
 </Page>
