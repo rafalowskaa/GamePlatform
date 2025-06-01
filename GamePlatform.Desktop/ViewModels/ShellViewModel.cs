@@ -56,6 +56,12 @@ public partial class ShellViewModel : ObservableObject
     [RelayCommand] private void ToggleDrawer() => IsDrawerOpen = !IsDrawerOpen;
     [RelayCommand] private void ShowStats() => Navigate(new StatsPage { DataContext = _sp.GetRequiredService<StatsViewModel>() }, "Stats");
     [RelayCommand]
+    private void ShowPending()
+    {
+        if (IsAdmin)
+            Navigate(new AdminReviewPage { DataContext = _sp.GetRequiredService<AdminReviewViewModel>() }, "Pending");
+    }
+    [RelayCommand]
     private void ShowUsers()
     {
         if (IsAdmin)

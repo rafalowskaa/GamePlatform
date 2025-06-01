@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
 using GamePlatform.Shared.Models;
-using GamePlatform.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -31,7 +30,8 @@ public partial class MainViewModel : ObservableObject
     }
 
     /* ---------------- observable props ---------------- */
-    public ObservableCollection<Game> Games { get; } = new();
+    [ObservableProperty]
+    private ObservableCollection<Game> _games = new();
 
     [ObservableProperty] private string _filterText = "";
     partial void OnFilterTextChanged(string? _unused)   // param nieużywany
@@ -46,29 +46,34 @@ public partial class MainViewModel : ObservableObject
     {
         IsBusy = true;
         var list = await _repo.GetAllAsync(FilterText);
-        Games.Clear();
-        foreach (var g in list) Games.Add(g);
+        Games = new ObservableCollection<Game>(list);
         IsBusy = false;
     }
 
     [RelayCommand]
     private async Task AddGameAsync()
     {
-        var dlg = new Microsoft.Win32.OpenFileDialog { Filter = "Executable|*.exe" };
+        var vm = _sp.GetRequiredService<AddGameDialogViewModel>();
+        var win = new AddGameDialog { DataContext = vm, Owner = Application.Current.MainWindow };
+        if (win.ShowDialog() != true) return;
 
-        if (dlg.ShowDialog() != true) return;
+        var me = _sp.GetRequiredService<IAuthService>().CurrentUser!;
 
         var game = new Game
         {
-            Title = System.IO.Path.GetFileNameWithoutExtension(dlg.FileName),
-            Category = GameCategory.Other,
-            Mode = GameMode.SinglePlayer,
-            IsLive = false
+            Title = vm.Title,
+            Description = vm.Description,
+            Category = vm.SelectedCategory,
+            Mode = vm.SelectedMode,
+            MaxPlayers = vm.MaxPlayers,
+            IsLive = vm.IsLive,
+            SubmittedBy = me.Id,
+            SubmittedAt = DateTime.UtcNow
         };
-        var ver = new GameVersion { Number = "1.0", FolderPath = dlg.FileName };
+        var ver = new GameVersion { Number = vm.Version, FolderPath = vm.ZipPath };
 
         await _repo.AddAsync(game, ver);
-        Games.Add(game);
+        await RefreshAsync();
     }
 
     [RelayCommand]

@@ -4,7 +4,6 @@ using GamePlatform.Desktop.Views;
 using GamePlatform.Shared.Data;
 using GamePlatform.Shared.Enums;
 using GamePlatform.Shared.Models;
-using GamePlatform.Shared.Services;
 using GamePlatform.Shared.Validation;
 using MaterialDesignThemes.Wpf;
 using Microsoft.AspNetCore.Identity;
@@ -67,6 +66,7 @@ public partial class App : Application
         sc.AddTransient<ProfileViewModel>();
         sc.AddTransient<StatsViewModel>();
         sc.AddTransient<AddGameDialogViewModel>();
+        sc.AddTransient<AdminReviewViewModel>();
         sc.AddTransient<EditUserViewModel>();
 
         Services = sc.BuildServiceProvider();

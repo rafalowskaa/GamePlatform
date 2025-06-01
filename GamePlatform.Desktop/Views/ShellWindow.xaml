@@ -73,6 +73,21 @@
                     </Button.Style>
                 </Button>
 
+                    <Button Content="Do akceptacji"
+                        Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding ShowPendingCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentTag}" Value="Pending">
+                                        <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
                     <Button Content="Powiadomienia" Command="{Binding ShowNotificationsCommand}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">

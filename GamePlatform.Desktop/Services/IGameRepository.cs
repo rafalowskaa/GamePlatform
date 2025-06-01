@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GamePlatform.Shared.Services;
+namespace GamePlatform.Desktop.Services;
 
 public interface IGameRepository
 {
@@ -11,6 +11,9 @@ public interface IGameRepository
     Task<IReadOnlyList<Game>> GetAllAsync(string? filter = null);
     Task<Game?> GetAsync(Guid id);
     Task AddAsync(Game game, GameVersion firstVersion);
+
+    Task UpdateAsync(Game game);
+    Task<IReadOnlyList<Game>> GetPendingAsync();
     Task DeleteAsync(Guid id);
 
     /* ---- wyniki gier ---- */

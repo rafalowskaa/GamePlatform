@@ -14,6 +14,13 @@ public class Game
     public bool IsLive { get; set; }
     public bool IsApproved { get; set; }
 
+    public Guid SubmittedBy { get; set; }
+    public DateTime SubmittedAt { get; set; }
+    public User? SubmittedByUser { get; set; }
+
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public string? CoverPath { get; set; }
+
     public ICollection<GameVersion> Versions { get; set; } = [];
     public ICollection<Score> Scores { get; set; } = [];
 }

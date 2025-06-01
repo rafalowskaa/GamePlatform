@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GamePlatform.Shared.Data;
 using GamePlatform.Shared.Models;
-using GamePlatform.Shared.Services;
+using GamePlatform.Desktop.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace GamePlatform.Desktop.Services;
@@ -17,21 +17,38 @@ public sealed class GameRepositorySqlite : IGameRepository
     private readonly AppDbContext _db;
     public GameRepositorySqlite(AppDbContext db) => _db = db;
 
+    private static void SetCover(Game g)
+    {
+        var folder = g.Versions.OrderByDescending(v => v.Number).FirstOrDefault()?.FolderPath;
+        if (!string.IsNullOrEmpty(folder))
+        {
+            var path = Path.Combine(folder, "cover.jpg");
+            if (File.Exists(path)) g.CoverPath = path;
+        }
+    }
+
     /* ------------ QUERY ------------ */
 
     public async Task<IReadOnlyList<Game>> GetAllAsync(string? filter = null)
     {
-        IQueryable<Game> q = _db.Games.Include(g => g.Versions).AsNoTracking();
+        IQueryable<Game> q = _db.Games.Include(g => g.Versions)
+                                      .Include(g => g.SubmittedByUser)
+                                      .AsNoTracking();
         if (!string.IsNullOrWhiteSpace(filter))
             q = q.Where(g => g.Title.Contains(filter));
-        return await q.ToListAsync();
+        var list = await q.ToListAsync();
+        foreach (var g in list) SetCover(g);
+        return list;
     }
 
     public async Task<Game?> GetAsync(Guid id) =>
-        await _db.Games
-                 .Include(g => g.Versions)
-                 .Include(g => g.Scores)
-                 .FirstOrDefaultAsync(g => g.Id == id);
+        var g = await _db.Games
+                         .Include(g => g.Versions)
+                         .Include(g => g.Scores)
+                         .Include(g => g.SubmittedByUser)
+                         .FirstOrDefaultAsync(g => g.Id == id);
+        if (g is not null) SetCover(g);
+        return g;
 
     /* ------------ COMMANDS ------------ */
 
@@ -65,6 +82,24 @@ public sealed class GameRepositorySqlite : IGameRepository
 
         _db.Games.Add(game);
         await _db.SaveChangesAsync();
+         SetCover(game);
+    }
+
+    public async Task UpdateAsync(Game game)
+    {
+        _db.Games.Update(game);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<IReadOnlyList<Game>> GetPendingAsync()
+    {
+        var list = await _db.Games.Include(g => g.Versions)
+                                  .Include(g => g.SubmittedByUser)
+                                  .Where(g => !g.IsApproved)
+                                  .AsNoTracking()
+                                  .ToListAsync();
+        foreach (var g in list) SetCover(g);
+        return list;
     }
 
     public async Task DeleteAsync(Guid id)

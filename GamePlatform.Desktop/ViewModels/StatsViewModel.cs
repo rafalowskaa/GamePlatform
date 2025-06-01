@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Shared.Models;
-using GamePlatform.Shared.Services;
+using GamePlatform.Desktop.Services;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;

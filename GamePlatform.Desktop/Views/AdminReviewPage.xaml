@@ -1,0 +1,47 @@
+﻿<Page x:Class="GamePlatform.Desktop.Views.AdminReviewPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Title="Do akceptacji">
+    <Page.Resources>
+        <Style x:Key="ActBtn" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+            <Setter Property="MinWidth" Value="70"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </Page.Resources>
+    <DockPanel Margin="12">
+        <Button DockPanel.Dock="Top" Content="Odśwież" Command="{Binding RefreshCommand}" Width="100"
+                Background="Black" Foreground="White" BorderBrush="Black"/>
+        <DataGrid ItemsSource="{Binding Games}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0 8 0 0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tytuł" Binding="{Binding Title}" Width="*"/>
+                <DataGridTextColumn Header="Wersja" Binding="{Binding Versions[0].Number}" Width="80"/>
+                <DataGridTextColumn Header="Gracz" Binding="{Binding SubmittedByUser.Login}" Width="*"/>
+                <DataGridTextColumn Header="Data" Binding="{Binding SubmittedAt}" Width="140"/>
+                <DataGridTemplateColumn Header="AKCJE">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Style="{StaticResource ActBtn}" Content="GRAJ"
+                                        Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"/>
+                                <Button Style="{StaticResource ActBtn}" Content="ZAAKCEPTUJ"
+                                        Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"/>
+                                <Button Style="{StaticResource ActBtn}" Content="ZGŁOŚ POPRAWKI"
+                                        Command="{Binding DataContext.RequestFixCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"/>
+                                <Button Style="{StaticResource ActBtn}" Content="USUŃ"
+                                        Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Page>

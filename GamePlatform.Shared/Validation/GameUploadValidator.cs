@@ -19,7 +19,9 @@ namespace GamePlatform.Shared.Validation
                     var ext = Path.GetExtension(p).ToLowerInvariant();
                     return ext is ".zip" or ".exe";
                 })
-                .WithMessage("Obsługiwane są tylko pliki .zip lub .exe");
+                .WithMessage("Obsługiwane są tylko pliki .zip lub .exe")
+                .Must(p => new FileInfo(p).Length <= 300 * 1024 * 1024)
+                .WithMessage("Maksymalny rozmiar to 300 MB");
 
             RuleFor(x => x.MaxPlayers)
                 .Must(p => p is null || p > 0)
