@@ -72,7 +72,9 @@ public sealed class AuthService : IAuthService
             Login = login,
             Email = email,
             Role = UserRole.User,
-            PasswordHash = _hasher.HashPassword(null!, password)
+            PasswordHash = _hasher.HashPassword(null!, password),
+            Xp = 0,
+            Rank = UserRank.Bronze
         };
         _db.Users.Add(user);
         await _db.SaveChangesAsync();

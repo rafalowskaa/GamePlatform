@@ -46,6 +46,7 @@ public partial class App : Application
         sc.AddScoped<IFriendService, FriendService>();
         sc.AddScoped<IReportService, ReportService>();
         sc.AddScoped<IChatService, ChatService>();
+        sc.AddScoped<IRankService, RankService>();
 
         sc.AddSingleton<INotificationService, NotificationService>();
 

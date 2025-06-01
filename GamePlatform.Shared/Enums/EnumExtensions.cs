@@ -15,4 +15,7 @@ public static class EnumExtensions
 
     public static IEnumerable<GameMode> ModeValues =>
         Enum.GetValues<GameMode>();
+
+    public static IEnumerable<UserRank> RankValues =>
+        Enum.GetValues<UserRank>();
 }

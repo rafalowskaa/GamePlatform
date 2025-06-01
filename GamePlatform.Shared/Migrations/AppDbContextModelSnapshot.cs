@@ -205,11 +205,17 @@ namespace GamePlatform.Shared.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Rank")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("RecoveryMail")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Role")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Xp")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

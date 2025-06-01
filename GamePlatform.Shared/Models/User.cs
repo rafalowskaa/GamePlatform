@@ -14,6 +14,9 @@ public class User
     public string PasswordHash { get; set; } = "";
     public UserRole Role { get; set; } = UserRole.User;
 
+    public int Xp { get; set; } = 0;
+    public UserRank Rank { get; set; } = UserRank.Bronze;
+
     public DateTime? BlockedUntilUtc { get; set; }
     public string? BlockReason { get; set; }
     public DateTime? LastLoginUtc { get; set; }
