@@ -18,6 +18,7 @@ public sealed class ReportService : IReportService
     {
         _db = db;
         _chat = chat;
+        _notify = notify;
     }
 
     public async Task SubmitAsync(Guid from, Guid to, string cat, string desc)
@@ -81,6 +82,7 @@ public sealed class ReportService : IReportService
         r.ReportedUser.BlockedUntilUtc = DateTime.UtcNow.AddDays(7);
         r.ReportedUser.BlockReason = "Report block";
         r.Status = ReportStatus.Closed;
+        r.StaffNotes = "Blocked";
         await _db.SaveChangesAsync();
     }
 
