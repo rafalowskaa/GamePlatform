@@ -27,10 +27,11 @@ public sealed class ChatService : IChatService
         MessageReceived?.Invoke(msg);
     }
 
-    public Task SendAsync(ChatMessage m)
+    public async Task SendAsync(ChatMessage msg)
     {
-        Send(m);
-        return Task.CompletedTask;
+        _db.ChatMessages.Add(msg);
+        await _db.SaveChangesAsync();          // już bez async void
+        MessageReceived?.Invoke(msg);
     }
 
     private async Task<IReadOnlyList<ChatMessage>> GetHistoryAsyncInternal(Guid a, Guid b, int take)
