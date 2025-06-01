@@ -2,17 +2,25 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
+      xmlns:pack="http://materialdesigninxaml.net/winfx/xaml/controls"
       Title="Zgłoszenia">
+
+    <!-- ==========  Z A S O B Y  ========== -->
     <Page.Resources>
-        <conv:ReportStatusConverter x:Key="ReportStatusConv"/>
-        <conv:ReportStatusTextMultiConverter x:Key="ReportStatusTextConv"/>
-        <conv:ReportStatusBrushMultiConverter x:Key="ReportStatusBrushConv"/>
+        <!-- konwertery -->
+        <conv:ReportStatusConverter            x:Key="ReportStatusConv"/>
+        <conv:ReportStatusTextMultiConverter   x:Key="ReportStatusTextConv"/>
+        <conv:ReportStatusBrushMultiConverter  x:Key="ReportStatusBrushConv"/>
+
+        <!-- ciemny tooltip -->
         <Style x:Key="DarkToolTip" TargetType="ToolTip">
             <Setter Property="Background"  Value="#111"/>
             <Setter Property="Foreground"  Value="White"/>
             <Setter Property="Padding"     Value="6"/>
             <Setter Property="BorderBrush" Value="#111"/>
         </Style>
+
+        <!-- widoczność chmurki -->
         <Style x:Key="CloudVisibilityStyle" TargetType="TextBlock">
             <Setter Property="Visibility" Value="Visible"/>
             <Style.Triggers>
@@ -24,7 +32,8 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <!-- czarny przycisk -->
+
+        <!-- czarny przycisk  -->
         <Style x:Key="BlackBtn" TargetType="Button"
                BasedOn="{StaticResource MaterialDesignRaisedButton}">
             <Setter Property="MinWidth"       Value="80"/>
@@ -35,8 +44,25 @@
             <Setter Property="Foreground"     Value="White"/>
             <Setter Property="BorderBrush"    Value="#111"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment"   Value="Center"/>
         </Style>
-        <!-- style for all headers -->
+
+        <!-- czerwony przycisk ✖  -->
+        <Style x:Key="DangerBtn" TargetType="Button"
+               BasedOn="{StaticResource MaterialDesignFlatButton}">
+            <Setter Property="Width"          Value="28"/>
+            <Setter Property="Height"         Value="28"/>
+            <Setter Property="Padding"        Value="0"/>
+            <Setter Property="FontSize"       Value="18"/>
+            <Setter Property="FontWeight"     Value="Bold"/>
+            <Setter Property="Background"     Value="Transparent"/>
+            <Setter Property="BorderBrush"    Value="Transparent"/>
+            <Setter Property="Foreground"     Value="Red"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment"   Value="Center"/>
+        </Style>
+
+        <!-- nagłówki -->
         <Style x:Key="GridHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Foreground"   Value="White"/>
@@ -44,51 +70,104 @@
             <Setter Property="BorderBrush"  Value="#444"/>
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
         </Style>
+
+        <!-- wiersze -->
         <Style TargetType="DataGridRow">
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground"         Value="White"/>
+            <Setter Property="Background"         Value="Transparent"/>
+            <Setter Property="BorderBrush"        Value="Transparent"/>
+            <!-- zbite wiersze + pionowe wyśrodkowanie komórek  -->
+            <Setter Property="Height"             Value="38"/>
+            <Setter Property="VerticalAlignment"  Value="Center"/>
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#444"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="WrapCell" TargetType="TextBlock">
-            <Setter Property="TextWrapping" Value="Wrap"/>
+
+        <!-- komórki -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="VerticalContentAlignment"   Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- wyśrodkowany TextBlock do kolumn tekstowych -->
+        <Style x:Key="CenterTextStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment"   Value="Center"/>
+            <Setter Property="TextAlignment"       Value="Center"/>
         </Style>
     </Page.Resources>
+
+    <!-- ==========  UI  ========== -->
     <DockPanel Margin="12">
-        <Button DockPanel.Dock="Top" Content="Odśwież" Width="100"
+        <Button DockPanel.Dock="Top"
+                Content="Odśwież"
+                Width="100"
                 Command="{Binding RefreshCommand}"
-                Background="Black" Foreground="White" BorderBrush="Black"/>
-        <DataGrid ItemsSource="{Binding Reports}" AutoGenerateColumns="False"
-                  IsReadOnly="True" Margin="0 8 0 0"
+                Background="Black"
+                Foreground="White"
+                BorderBrush="Black"/>
+
+        <DataGrid ItemsSource="{Binding Reports}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Margin="0 8 0 0"
                   CanUserResizeColumns="False"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   ColumnHeaderStyle="{StaticResource GridHeaderStyle}">
-            
+
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Data" Width="162" Binding="{Binding CreatedUtc}"/>
-                <DataGridTextColumn Header="Zgłaszający" Width="*" Binding="{Binding Reporter.Login}"/>
-                <DataGridTextColumn Header="Oskarżony" Width="*" Binding="{Binding ReportedUser.Login}"/>
-                <DataGridTextColumn Header="Kategoria" Width="*" Binding="{Binding Category}"/>
-                <DataGridTemplateColumn Header="Opis" Width="80">
+                <!-- Data -->
+                <DataGridTextColumn Header="Data"
+                                    Width="162"
+                                    Binding="{Binding CreatedUtc}"
+                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+
+                <!-- Zgłaszający -->
+                <DataGridTextColumn Header="Zgłaszający"
+                                    Width="*"
+                                    Binding="{Binding Reporter.Login}"
+                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+
+                <!-- Oskarżony -->
+                <DataGridTextColumn Header="Oskarżony"
+                                    Width="*"
+                                    Binding="{Binding ReportedUser.Login}"
+                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+
+                <!-- Kategoria -->
+                <DataGridTextColumn Header="Kategoria"
+                                    Width="*"
+                                    Binding="{Binding Category}"
+                                    ElementStyle="{StaticResource CenterTextStyle}"/>
+
+                <!-- Opis -->
+                <DataGridTemplateColumn Header="Opis" Width="50">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="☁" FontSize="14" Style="{StaticResource CloudVisibilityStyle}">
+                            <TextBlock Text="☁"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"
+                                       TextAlignment="Center"
+                                       Style="{StaticResource CloudVisibilityStyle}">
                                 <TextBlock.ToolTip>
-                                    <ToolTip Style="{StaticResource DarkToolTip}" Content="{Binding Description}"/>
+                                    <ToolTip Style="{StaticResource DarkToolTip}"
+                                             Content="{Binding Description}"/>
                                 </TextBlock.ToolTip>
                             </TextBlock>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Status" MinWidth="80" Width="120">
+                <!-- Status -->
+                <DataGridTemplateColumn Header="Status" MinWidth="80" Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock FontWeight="Bold">
+                            <TextBlock FontWeight="Bold"
+                                       VerticalAlignment="Center"
+                                       TextAlignment="Center">
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource ReportStatusTextConv}">
                                         <Binding Path="Status"/>
@@ -105,24 +184,52 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="AKCJE" MinWidth="160" Width="Auto">
-                        <DataGridTemplateColumn.HeaderStyle>
+
+                <!-- Akcje -->
+                <DataGridTemplateColumn Header="AKCJE" MinWidth="200" Width="Auto">
+                    <DataGridTemplateColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader"
                                BasedOn="{StaticResource GridHeaderStyle}">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         </Style>
                     </DataGridTemplateColumn.HeaderStyle>
+
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Style="{StaticResource BlackBtn}" Content="OSTRZEŻ" Command="{Binding DataContext.WarnCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
-                                <Button Style="{StaticResource BlackBtn}" Margin="8 0 0 0" Content="ANULUJ" Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
-                                <Button Style="{StaticResource BlackBtn}" Margin="8 0 0 0" Content="ZABLOKUJ" Command="{Binding DataContext.BlockUserCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
-                                <Button Content="✖" Width="24" Margin="8 0 0 0"
-                                        Background="#111" Foreground="Red" BorderBrush="#111"
-                                        Style="{StaticResource MaterialDesignRaisedButton}"
-                                        Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+
+                                <!-- Ostrzeż -->
+                                <Button Style="{StaticResource BlackBtn}"
+                                        Content="OSTRZEŻ"
+                                        Command="{Binding DataContext.WarnCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
+
+                                <!-- Anuluj -->
+                                <Button Style="{StaticResource BlackBtn}"
+                                        Margin="8 0 0 0"
+                                        Content="ANULUJ"
+                                        Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"/>
+
+                                <!-- Zablokuj -->
+                                <Button Style="{StaticResource BlackBtn}"
+                                        Margin="8 0 0 0"
+                                        Content="ZABLOKUJ"
+                                        Command="{Binding DataContext.BlockUserCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"/>
+
+                                <!-- Usuń (czerwony ✖) -->
+                                <Button Style="{StaticResource DangerBtn}"
+                                        Margin="8 0 0 0"
+                                        Content="✖"
+                                        Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}">
+                                    <Button.ToolTip>
+                                        <ToolTip Style="{StaticResource DarkToolTip}" Content="Usuń"/>
+                                    </Button.ToolTip>
+                                </Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
