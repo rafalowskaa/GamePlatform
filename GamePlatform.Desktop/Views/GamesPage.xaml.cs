@@ -13,7 +13,7 @@ public partial class GamesPage : Page
     private void OnAddGameClick(object sender, RoutedEventArgs e)
     {
         if (DataContext is MainViewModel vm)
-            vm.AddGameAsyncCommand.Execute(null);
+            vm.AddGameCommand.Execute(null);
     }
 
     private void OnDoubleClick(object s, MouseButtonEventArgs e)
