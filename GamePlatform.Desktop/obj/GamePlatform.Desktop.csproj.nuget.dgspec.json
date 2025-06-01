@@ -79,6 +79,10 @@
               "target": "Package",
               "version": "[5.2.1, )"
             },
+            "MaterialDesignThemes.Wpf": {
+              "target": "Package",
+              "version": "[5.2.1, )"
+            },
             "Microsoft.AspNetCore.Identity": {
               "target": "Package",
               "version": "[2.3.1, )"
