@@ -15,6 +15,10 @@
             <conv:MessageBackgroundConverter x:Key="MsgBg"/>
             <conv:MessageSenderConverter x:Key="MsgSender"/>
             <conv:AvatarPathToImageConverter x:Key="AvatarConverter"/>
+            <conv:BoolToBrushConverter x:Key="BoolToBrush"/>
+            <conv:BoolToThicknessConverter x:Key="BoolToThickness"/>
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibility" Invert="True"/>
+            <conv:BoolToHAlignmentConverter x:Key="BoolToAlign"/>
 
             <!-- globalny Snackbar -->
             <md:SnackbarMessageQueue x:Key="GlobalMsgQueue" DiscardDuplicates="True"/>

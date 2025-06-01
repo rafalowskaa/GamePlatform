@@ -1,4 +1,22 @@
-﻿namespace GamePlatform.Desktop.ViewModels;
+﻿using System;
 
-/// <summary>Representation of a message in the chat view.</summary>
-public sealed record ChatMessageView(Guid FromId, Guid ToId, string Text, DateTime WhenUtc, bool ContinuePrev);
+namespace GamePlatform.Desktop.ViewModels;
+
+/// <summary>View model representing a single chat message bubble.</summary>
+public sealed class ChatMessageView
+{
+    public string Text { get; }
+    public bool IsMine { get; }
+    public bool ContinuePrev { get; }
+    public string SenderLogin { get; }
+    public DateTime WhenLocal { get; }
+
+    public ChatMessageView(string text, bool isMine, bool continuePrev, string senderLogin, DateTime whenLocal)
+    {
+        Text = text;
+        IsMine = isMine;
+        ContinuePrev = continuePrev;
+        SenderLogin = senderLogin;
+        WhenLocal = whenLocal;
+    }
+}

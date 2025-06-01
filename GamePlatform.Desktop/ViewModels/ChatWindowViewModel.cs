@@ -40,14 +40,22 @@ public partial class ChatWindowViewModel : ObservableObject, IDisposable
         _chat.MessageReceived -= OnIncoming;
     }
 
+    private ChatMessageView CreateView(ChatMessage m, ChatMessageView? prev)
+    {
+        bool mine = m.FromId == Me.Id;
+        bool cont = prev != null && prev.IsMine == mine;
+        string login = mine ? Me.Login : Mate.Login;
+        return new ChatMessageView(m.Text, mine, cont, login, m.WhenUtc.ToLocalTime());
+    }
+
     private async Task LoadHistoryAsync()
     {
         var history = await _chat.GetHistoryAsync(Me.Id, Mate.Id);
         ChatMessageView? prev = null;
         foreach (var m in history)
         {
-            var view = new ChatMessageView(m.FromId, m.ToId, m.Text, m.WhenUtc,
-                                           prev != null && prev.FromId == m.FromId);
+            var view = CreateView(m, prev);
+
             Messages.Add(view);
             prev = view;
         }
@@ -61,8 +69,8 @@ public partial class ChatWindowViewModel : ObservableObject, IDisposable
             (msg.FromId == Mate.Id && msg.ToId == Me.Id))
         {
             var prev = Messages.Count > 0 ? Messages[^1] : null;
-            var view = new ChatMessageView(msg.FromId, msg.ToId, msg.Text, msg.WhenUtc,
-                                           prev != null && prev.FromId == msg.FromId);
+            var view = CreateView(msg, prev);
+
             App.Current.Dispatcher.Invoke(() => Messages.Add(view));
             if (msg.ToId == Me.Id)
                 _ = _chat.MarkAsSeenAsync(Me.Id, Mate.Id);

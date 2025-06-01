@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using GamePlatform.Shared.Data;
-using GamePlatform.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GamePlatform.Desktop.Services;
@@ -20,17 +19,10 @@ public sealed class ChatService : IChatService
     public event Action<ChatMessage>? MessageReceived;
     public event Action<Guid, bool>? PresenceChanged;
 
-    public async void Send(ChatMessage msg)
-    {
-        _db.ChatMessages.Add(msg);
-        await _db.SaveChangesAsync();
-        MessageReceived?.Invoke(msg);
-    }
-
     public async Task SendAsync(ChatMessage msg)
     {
         _db.ChatMessages.Add(msg);
-        await _db.SaveChangesAsync();          // już bez async void
+        await _db.SaveChangesAsync(); 
         MessageReceived?.Invoke(msg);
     }
 
@@ -45,9 +37,6 @@ public sealed class ChatService : IChatService
 
     public Task<IReadOnlyList<ChatMessage>> GetHistoryAsync(Guid a, Guid b, int take = 100)
       => GetHistoryAsyncInternal(a, b, take);
-
-    public IReadOnlyList<ChatMessage> GetHistory(Guid me, Guid mate, int top = 100)
-        => GetHistoryAsyncInternal(me, mate, top).Result;
 
 
     /* ——— presence ——— */

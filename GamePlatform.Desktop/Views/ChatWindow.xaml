@@ -15,67 +15,25 @@
         </Grid.RowDefinitions>
 
         <!-- ===== HISTORIA ===== -->
-        <ListBox ItemsSource="{Binding Messages}"
+        <ListBox x:Name="History"
+                 ItemsSource="{Binding Messages}"
                  Background="Transparent" BorderThickness="0"
                  HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
 
                 <DataTemplate DataType="{x:Type vm:ChatMessageView}">
-                    <Border Margin="0 2" Padding="6" CornerRadius="6">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Margin" Value="0 2"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ContinuePrev}" Value="True">
-                                        <Setter Property="Margin" Value="0"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <Border.Background>
-                            <MultiBinding Converter="{StaticResource MsgBg}">
-                                <Binding Path="FromId"/>
-                                <Binding Path="DataContext.Me.Id"
-                                         RelativeSource="{RelativeSource AncestorType=Window}"/>
-                            </MultiBinding>
-                        </Border.Background>
+                    <Border Padding="6" CornerRadius="6"
+                            Margin="{Binding ContinuePrev, Converter={StaticResource BoolToThickness}}"
+                            Background="{Binding IsMine, Converter={StaticResource BoolToBrush}}"
+                            HorizontalAlignment="{Binding IsMine, Converter={StaticResource BoolToAlign}}">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Foreground="White">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ContinuePrev}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                                <TextBlock.Text>
-                                    <MultiBinding Converter="{StaticResource MsgSender}">
-                                        <Binding Path="FromId"/>
-                                        <Binding Path="DataContext.Me.Id" RelativeSource="{RelativeSource AncestorType=Window}"/>
-                                        <Binding Path="DataContext.Me.Login" RelativeSource="{RelativeSource AncestorType=Window}"/>
-                                        <Binding Path="DataContext.Mate.Login" RelativeSource="{RelativeSource AncestorType=Window}"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                            <TextBlock FontWeight="SemiBold" Foreground="White"
+                                       Visibility="{Binding ContinuePrev, Converter={StaticResource BoolToVisibility}}"
+                                       Text="{Binding SenderLogin}"/>
                             <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Foreground="White" Margin="0,2,0,0"/>
-                            <TextBlock FontSize="11" Foreground="#aaa" HorizontalAlignment="Right">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ContinuePrev}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                                <TextBlock.Text>
-                                    <Binding Path="WhenUtc" StringFormat="{}{0:dd.MM HH\\:mm}"/>
-                                </TextBlock.Text>
-                            </TextBlock>
+                            <TextBlock FontSize="11" Foreground="#aaa" HorizontalAlignment="Right"
+                                       Visibility="{Binding ContinuePrev, Converter={StaticResource BoolToVisibility}}"
+                                       Text="{Binding WhenLocal, StringFormat={}{0:dd.MM HH\\:mm}}"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>
