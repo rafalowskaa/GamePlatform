@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace GamePlatform.Desktop.ViewModels;
 
-public partial class FriendListViewModel : ObservableObject
+public partial class FriendListViewModel : ObservableObject, IDisposable
 {
     private readonly IAuthService _auth;
     private readonly IFriendService _friends;
@@ -43,7 +43,7 @@ public partial class FriendListViewModel : ObservableObject
         _ = RefreshFriendsAsync();   // fire-and-forget przy starcie
     }
 
-    ~FriendListViewModel()
+    public void Dispose()
     {
         _chat.PresenceChanged -= OnPresenceChanged;
         _chat.MessageReceived -= OnMessageReceived;

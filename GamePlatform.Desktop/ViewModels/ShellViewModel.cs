@@ -82,6 +82,7 @@ public partial class ShellViewModel : ObservableObject
         if (id is not null)
             await _chat.SetOfflineAsync(id.Value);
 
+        _friendsVm.Dispose();
         await _auth.LogoutAsync();
         OnPropertyChanged(nameof(IsAdmin));
         System.Windows.Application.Current.MainWindow?.Close();
