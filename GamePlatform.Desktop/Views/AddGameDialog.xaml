@@ -59,6 +59,26 @@
         <DockPanel Margin="0 8 0 0">
             <TextBox Width="220"
                      DockPanel.Dock="Left"
+                     Text="{Binding CoverPath}"
+                     IsReadOnly="True"
+                     md:HintAssist.Hint="Obraz gry (opcjonalnie)"/>
+            <Button Content="…"
+                    Width="34"
+                    Margin="8 0 0 0"
+                    Background="Black"
+                    Foreground="White"
+                    BorderBrush="Black"
+                    Command="{Binding PickCoverCommand}"/>
+        </DockPanel>
+
+        <TextBlock Margin="0 4 0 0" Foreground="#999" TextWrapping="Wrap">
+            Archiwum ZIP powinno zawierać plik <Bold>index.html</Bold> lub plik
+            <Bold>.exe</Bold> w głównym folderze lub podfolderach.
+        </TextBlock>
+
+        <DockPanel Margin="0 8 0 0">
+            <TextBox Width="220"
+                     DockPanel.Dock="Left"
                      Text="{Binding ZipPath}"
                      IsReadOnly="True"
                      md:HintAssist.Hint="Plik ZIP"/>

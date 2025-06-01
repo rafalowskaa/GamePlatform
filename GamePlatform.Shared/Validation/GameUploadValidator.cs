@@ -26,6 +26,10 @@ namespace GamePlatform.Shared.Validation
             RuleFor(x => x.MaxPlayers)
                 .Must(p => p is null || p > 0)
                 .WithMessage("Max graczy musi być dodatnie");
+
+            RuleFor(x => x.CoverPath)
+                .Must(p => string.IsNullOrEmpty(p) || File.Exists(p))
+                .WithMessage("Plik z obrazem nie istnieje");
         }
     }
 }

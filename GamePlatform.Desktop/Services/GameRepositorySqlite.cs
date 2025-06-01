@@ -22,8 +22,11 @@ public sealed class GameRepositorySqlite : IGameRepository
         var folder = g.Versions.OrderByDescending(v => v.Number).FirstOrDefault()?.FolderPath;
         if (!string.IsNullOrEmpty(folder))
         {
-            var path = Path.Combine(folder, "cover.jpg");
-            if (File.Exists(path)) g.CoverPath = path;
+            foreach (var name in new[] { "cover.jpg", "cover.png" })
+            {
+                var path = Path.Combine(folder, name);
+                if (File.Exists(path)) { g.CoverPath = path; break; }
+            }
         }
     }
 
@@ -77,6 +80,13 @@ public sealed class GameRepositorySqlite : IGameRepository
         {
             Directory.CreateDirectory(extractDir);
             File.Copy(firstVersion.FolderPath, Path.Combine(extractDir, Path.GetFileName(firstVersion.FolderPath)), true);
+        }
+
+        if (!string.IsNullOrEmpty(game.CoverPath) && File.Exists(game.CoverPath))
+        {
+            string extImg = Path.GetExtension(game.CoverPath).ToLowerInvariant();
+            if (extImg is not (".jpg" or ".png")) extImg = ".jpg";
+            File.Copy(game.CoverPath, Path.Combine(extractDir, $"cover{extImg}"), true);
         }
 
         firstVersion.FolderPath = extractDir;

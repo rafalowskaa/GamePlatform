@@ -12,10 +12,14 @@ public sealed class CoverImageConverter : IValueConverter
     {
         if (value is string folder && Directory.Exists(folder))
         {
-            var path = Path.Combine(folder, "cover.jpg");
-            if (File.Exists(path))
+            string[] names = ["cover.jpg", "cover.png"];
+            foreach (var name in names)
             {
-                try { return new BitmapImage(new Uri(Path.GetFullPath(path))); } catch { }
+                var path = Path.Combine(folder, name);
+                if (File.Exists(path))
+                {
+                    try { return new BitmapImage(new Uri(Path.GetFullPath(path))); } catch { }
+                }
             }
         }
         return new BitmapImage(new Uri("pack://application:,,,/Resources/login_banner.png"));

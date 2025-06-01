@@ -10,4 +10,5 @@ public record GameUploadDto(
     GameMode Mode,
     int? MaxPlayers,
     bool IsLive,
-    string? Description);
+    string? Description,
+    string? CoverPath);

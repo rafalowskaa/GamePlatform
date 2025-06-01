@@ -9,10 +9,9 @@ namespace GamePlatform.Desktop.ViewModels
         public Uri Url { get; }
         public string Title { get; }
 
-        public PlayWindowViewModel(Game game)
+        public PlayWindowViewModel(Game game, string htmlPath)
         {
-            var latest = game.Versions.OrderByDescending(v => v.Number).First();
-            Url = new Uri(System.IO.Path.Combine(latest.FolderPath, "index.html"));
+            Url = new Uri(System.IO.Path.GetFullPath(htmlPath));
             Title = game.Title;
         }
     }

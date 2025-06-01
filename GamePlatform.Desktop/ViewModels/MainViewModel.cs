@@ -67,6 +67,7 @@ public partial class MainViewModel : ObservableObject
             Mode = vm.SelectedMode,
             MaxPlayers = vm.MaxPlayers,
             IsLive = vm.IsLive,
+            CoverPath = vm.CoverPath,
             SubmittedBy = me.Id,
             SubmittedAt = DateTime.UtcNow
         };
@@ -92,18 +93,18 @@ public partial class MainViewModel : ObservableObject
         var latest = g.Versions.OrderByDescending(v => v.Number).FirstOrDefault();
         if (latest is null) return;
 
-        string html = Path.Combine(latest.FolderPath, "index.html");
-        if (File.Exists(html))
+        string? html = Directory.GetFiles(latest.FolderPath, "index.html", SearchOption.AllDirectories).FirstOrDefault();
+        if (html is not null)
         {
             new PlayWindow
             {
-                DataContext = new PlayWindowViewModel(g),
+                DataContext = new PlayWindowViewModel(g, html),
                 Owner = Application.Current.MainWindow
             }.Show();
         }
         else
         {
-            string? exe = Directory.GetFiles(latest.FolderPath, "*.exe").FirstOrDefault();
+            string? exe = Directory.GetFiles(latest.FolderPath, "*.exe", SearchOption.AllDirectories).FirstOrDefault();
             if (exe is not null)
             {
                 try { Process.Start(new ProcessStartInfo(exe) { UseShellExecute = true }); }

@@ -15,6 +15,7 @@ public partial class AddGameDialogViewModel : ObservableObject
     [ObservableProperty] private string _title = "";
     [ObservableProperty] private string _version = "1.0.0";
     [ObservableProperty] private string _zipPath = "";
+    [ObservableProperty] private string? _coverPath;
     [ObservableProperty] private GameCategory _selectedCategory = GameCategory.Other;
     [ObservableProperty] private GameMode _selectedMode = GameMode.SinglePlayer;
     [ObservableProperty] private int? _maxPlayers;
@@ -29,10 +30,17 @@ public partial class AddGameDialogViewModel : ObservableObject
         if (dlg.ShowDialog() == true) ZipPath = dlg.FileName;
     }
 
+    [RelayCommand]
+    private void PickCover()
+    {
+        var dlg = new OpenFileDialog { Filter = "Image (*.jpg;*.png)|*.jpg;*.png" };
+        if (dlg.ShowDialog() == true) CoverPath = dlg.FileName;
+    }
+
     public bool Validate()
     {
         var dto = new GameUploadDto(Title, Version, ZipPath, SelectedCategory,
-                                    SelectedMode, MaxPlayers, IsLive, Description);
+                                    SelectedMode, MaxPlayers, IsLive, Description, CoverPath);
         var res = _validator.Validate(dto);
         if (!res.IsValid) { Error = res.ToString("• "); return false; }
         return true;
