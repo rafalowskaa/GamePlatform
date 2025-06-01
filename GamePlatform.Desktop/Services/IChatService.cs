@@ -10,6 +10,7 @@ public interface IChatService
 {
     event Action<ChatMessage>? MessageReceived;
     event Action<Guid, bool>? PresenceChanged;           // (userId, isOnline)
+    event Action<Guid>? ConversationFlashed;
 
     Task SendAsync(ChatMessage m);
     Task<IReadOnlyList<ChatMessage>> GetHistoryAsync(Guid a, Guid b, int take = 100);

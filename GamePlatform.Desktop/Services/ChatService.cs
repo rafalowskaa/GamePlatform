@@ -14,16 +14,23 @@ public sealed class ChatService : IChatService
 {
     private readonly AppDbContext _db;
     private readonly ConcurrentDictionary<Guid, bool> _online = new();
+
+
+    private Guid? _currentUserId;
+
     public ChatService(AppDbContext db) => _db = db;
 
     public event Action<ChatMessage>? MessageReceived;
     public event Action<Guid, bool>? PresenceChanged;
+    public event Action<Guid>? ConversationFlashed;
 
     public async Task SendAsync(ChatMessage msg)
     {
         _db.ChatMessages.Add(msg);
         await _db.SaveChangesAsync(); 
         MessageReceived?.Invoke(msg);
+        if (_currentUserId.HasValue && msg.ToId == _currentUserId.Value)
+            ConversationFlashed?.Invoke(msg.FromId);
     }
 
     private async Task<IReadOnlyList<ChatMessage>> GetHistoryAsyncInternal(Guid a, Guid b, int take)
@@ -44,6 +51,7 @@ public sealed class ChatService : IChatService
     {
         if (_online.TryGetValue(id, out var was) && was) return;
         _online[id] = true;
+        _currentUserId = id;
         PresenceChanged?.Invoke(id, true);
     }
     public Task SetOnlineAsync(Guid userId)
@@ -56,6 +64,8 @@ public sealed class ChatService : IChatService
     {
         if (_online.TryGetValue(id, out var was) && !was) return;
         _online[id] = false;
+        if (_currentUserId == id)
+            _currentUserId = null;
         PresenceChanged?.Invoke(id, false);
     }
 

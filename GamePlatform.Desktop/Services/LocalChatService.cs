@@ -12,9 +12,11 @@ public sealed class LocalChatService : IChatService
 {
     public event Action<ChatMessage>? MessageReceived;
     public event Action<Guid, bool>? PresenceChanged;
+    public event Action<Guid>? ConversationFlashed;
 
     private readonly ConcurrentDictionary<Guid, bool> _online = new();
     private readonly ConcurrentBag<ChatMessage> _log = new();
+    private Guid? _currentUserId;
 
     /* ---------------- API ---------------- */
 
@@ -22,6 +24,8 @@ public sealed class LocalChatService : IChatService
     {
         _log.Add(msg);
         MessageReceived?.Invoke(msg);
+        if (_currentUserId.HasValue && msg.ToId == _currentUserId.Value)
+            ConversationFlashed?.Invoke(msg.FromId);
     }
 
     public Task SendAsync(ChatMessage m)
@@ -39,6 +43,7 @@ public sealed class LocalChatService : IChatService
     public Task SetOnlineAsync(Guid userId)
     {
         SetOnline(userId);
+        _currentUserId = userId;
         return Task.CompletedTask;
     }
 
@@ -51,6 +56,8 @@ public sealed class LocalChatService : IChatService
     public Task SetOfflineAsync(Guid userId)
     {
         SetOffline(userId);
+        if (_currentUserId == userId)
+            _currentUserId = null;
         return Task.CompletedTask;
     }
 

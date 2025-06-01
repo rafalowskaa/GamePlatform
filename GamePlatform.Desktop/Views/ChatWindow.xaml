@@ -6,6 +6,12 @@
         Title="{Binding Mate.Login, StringFormat=Czat – {0}}"
         Width="420" Height="560"
         Style="{StaticResource MaterialDesignWindow}">
+    <Window.Resources>
+        <InputBindingCollection x:Key="SendOnEnterBindings">
+            <KeyBinding Key="Enter" Command="{Binding SendCommand}"/>
+            <KeyBinding Key="Enter" Modifiers="Alt" Command="{x:Static EditingCommands.InsertLineBreak}"/>
+        </InputBindingCollection>
+    </Window.Resources>
 
     <Grid Margin="16">
         <Grid.RowDefinitions>
@@ -55,7 +61,7 @@
                      Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                      Width="300" Height="32"
                      AcceptsReturn="True"
-                     KeyDown="TextBox_KeyDown"/>
+                     InputBindings="{StaticResource SendOnEnterBindings}"/>
             <Button Content="Wyślij" Width="80" Margin="8 0 0 0"
                     Background="Black" Foreground="White" BorderBrush="Black"
                     Command="{Binding SendCommand}"/>

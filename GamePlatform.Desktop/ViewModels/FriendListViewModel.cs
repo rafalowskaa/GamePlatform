@@ -39,6 +39,7 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
 
         _chat.PresenceChanged += OnPresenceChanged;
         _chat.MessageReceived += OnMessageReceived;
+        _chat.ConversationFlashed += OnConversationFlashed;
 
         _ = RefreshFriendsAsync();   // fire-and-forget przy starcie
     }
@@ -47,6 +48,7 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
     {
         _chat.PresenceChanged -= OnPresenceChanged;
         _chat.MessageReceived -= OnMessageReceived;
+        _chat.ConversationFlashed -= OnConversationFlashed;
     }
 
     /* =====  MODEL  ===== */
@@ -95,10 +97,13 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
     {
         if (mate is null) return;
         ChatWindow.Open(_auth.CurrentUser!, mate);
-        mate.HasUnread = false;
+        App.Current.Dispatcher.Invoke(() => mate.HasUnread = false);
+        _ = _chat.MarkAsSeenAsync(_auth.CurrentUser!.Id, mate.Id);
+
         _notifiedChats.Remove(mate.Id);
         if (!Chats.Any(c => c.Id == mate.Id))
-            Chats.Add(mate);
+
+            App.Current.Dispatcher.Invoke(() => Chats.Add(mate));
     }
 
     [RelayCommand]
@@ -298,10 +303,30 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
         {
             if (!chatUser.HasUnread)
             {
-                chatUser.HasUnread = true;
+                App.Current.Dispatcher.Invoke(() => chatUser.HasUnread = true);
                 if (_notifiedChats.Add(chatUser.Id))
                     _notify.Show($"Nowa wiadomość od {chatUser.Login}");
             }
+        }
+    }
+
+    private async void OnConversationFlashed(Guid mateId)
+    {
+        var chatUser = Chats.FirstOrDefault(u => u.Id == mateId);
+        if (chatUser is null)
+        {
+            var db = _sp.GetRequiredService<AppDbContext>();
+            chatUser = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == mateId);
+            if (chatUser is null) return;
+            chatUser.IsMyFriend = _friendIds.Contains(chatUser.Id);
+            chatUser.IsOnline = _chat.IsOnline(chatUser.Id);
+            App.Current.Dispatcher.Invoke(() => Chats.Add(chatUser));
+        }
+        if (!chatUser.HasUnread)
+        {
+            App.Current.Dispatcher.Invoke(() => chatUser.HasUnread = true);
+            if (_notifiedChats.Add(chatUser.Id))
+                _notify.Show($"Nowa wiadomość od {chatUser.Login}");
         }
     }
 
@@ -322,11 +347,11 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
                 if (usr is null) continue;
                 usr.IsMyFriend = _friendIds.Contains(usr.Id);
                 usr.IsOnline = _chat.IsOnline(usr.Id);
-                Chats.Add(usr);
+                App.Current.Dispatcher.Invoke(() => Chats.Add(usr));
             }
             if (!usr.HasUnread)
             {
-                usr.HasUnread = true;
+                App.Current.Dispatcher.Invoke(() => usr.HasUnread = true);
                 if (_notifiedChats.Add(usr.Id))
                     _notify.Show($"Nowa wiadomość od {usr.Login}");
             }

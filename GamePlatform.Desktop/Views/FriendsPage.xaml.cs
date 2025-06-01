@@ -43,7 +43,7 @@ public partial class FriendsPage : UserControl
 
         if (e.ChangedButton == MouseButton.Left)
         {
-            u.HasUnread = false;
+            System.Windows.Application.Current.Dispatcher.Invoke(() => u.HasUnread = false);
             vm.StartChatCommand.Execute(u);
             e.Handled = true;
             return;
@@ -69,7 +69,7 @@ public partial class FriendsPage : UserControl
 
         if (e.ChangedButton == MouseButton.Left)
         {
-            u.HasUnread = false;
+            System.Windows.Application.Current.Dispatcher.Invoke(() => u.HasUnread = false);
             vm.StartChatCommand.Execute(u);
             e.Handled = true;
             return;
@@ -106,7 +106,7 @@ public partial class FriendsPage : UserControl
         if (e.ChangedButton != MouseButton.Left) return;
         if (DataContext is FriendListViewModel vm && vm.SelectedFriend is User u)
         {
-            u.HasUnread = false;
+            System.Windows.Application.Current.Dispatcher.Invoke(() => u.HasUnread = false);
             vm.StartChatCommand.Execute(u);
         }
     }
