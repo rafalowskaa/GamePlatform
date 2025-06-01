@@ -22,13 +22,13 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <DataTrigger Binding="{Binding HasUnread}" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="#44A8D9FF"/>
+                                <Setter TargetName="Bd" Property="Background" Value="#77A8D9FF"/>
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard x:Name="UnreadBlinkStoryboard">
                                         <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                                            <DoubleAnimation Storyboard.TargetName="Bd"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             From="0.4" To="0" Duration="0:0:0.6"/>
+                                            <ColorAnimation Storyboard.TargetName="Bd"
+                                                           Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                           From="#77A8D9FF" To="Transparent" Duration="0:0:0.6"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>

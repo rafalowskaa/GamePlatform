@@ -29,7 +29,11 @@ public partial class ChatWindow : Window
     private void ChatWindow_Loaded(object sender, RoutedEventArgs e)
     {
         if (DataContext is ChatWindowViewModel vm)
+        {
             vm.Messages.CollectionChanged += Messages_CollectionChanged;
+            if (History.Items.Count > 0)
+                History.ScrollIntoView(History.Items[^1]);
+        }
     }
 
     private void Messages_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

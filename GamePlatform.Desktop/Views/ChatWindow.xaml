@@ -40,7 +40,7 @@
                             <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Foreground="White" Margin="0,2,0,0"/>
                             <TextBlock FontSize="11" Foreground="#aaa" HorizontalAlignment="Right"
                                        Visibility="{Binding ShowMeta, Converter={StaticResource BoolToVis}}"
-                                       Text="{Binding WhenLocal, StringFormat={}{0:dd.MM HH\\:mm}}"/>
+                                       Text="{Binding WhenLocal, StringFormat={}{0:dd.MM.yyyy HH\\:mm}}"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>
@@ -48,7 +48,8 @@
         </ListBox>
 
         <!-- ===== SEPARATOR ===== -->
-        <Separator Grid.Row="1" Margin="0,8"/>
+        <Separator Grid.Row="1" Margin="0,8" Height="2"
+                   Background="Black" BorderBrush="Black"/>
 
         <!-- ===== INPUT ===== -->
         <DockPanel Grid.Row="2" Margin="0 4 0 0">
