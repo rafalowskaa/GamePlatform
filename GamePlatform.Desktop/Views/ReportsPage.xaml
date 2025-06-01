@@ -85,7 +85,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Status" MinWidth="80" Width="Auto">
+                <DataGridTemplateColumn Header="Status" MinWidth="80" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock FontWeight="Bold">
