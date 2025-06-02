@@ -4,8 +4,12 @@
     <Color x:Key="TabBlueActive">#1F5FFF</Color>
     <Color x:Key="TabBlueAdmin">#061C3D</Color>
 
+    <SolidColorBrush x:Key="TabBlueBrush" Color="{StaticResource TabBlue}"/>
+    <SolidColorBrush x:Key="TabBlueActiveBrush" Color="{StaticResource TabBlueActive}"/>
+    <SolidColorBrush x:Key="TabBlueAdminBrush" Color="{StaticResource TabBlueAdmin}"/>
+
     <Style x:Key="MainTabItemStyle" TargetType="TabItem">
-        <Setter Property="Background" Value="{StaticResource TabBlue}"/>
+        <Setter Property="Background" Value="{StaticResource TabBlueBrush}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
@@ -29,7 +33,7 @@
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource TabBlueActive}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource TabBlueActiveBrush}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="False">
                             <Trigger.EnterActions>
@@ -47,7 +51,7 @@
     </Style>
     <!-- darker tabs used for admin only sections -->
     <Style x:Key="AdminTabItemStyle" TargetType="TabItem" BasedOn="{StaticResource MainTabItemStyle}">
-        <Setter Property="Background" Value="{StaticResource TabBlueAdmin}"/>
+        <Setter Property="Background" Value="{StaticResource TabBlueAdminBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -64,7 +68,7 @@
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource TabBlueActive}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource TabBlueActiveBrush}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="False">
                             <Trigger.EnterActions>
@@ -84,7 +88,7 @@
     <!-- navigation button styled like tabs (used for logout) -->
     <Style x:Key="NavBtn" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
         <Setter Property="Padding" Value="12 4"/>
-        <Setter Property="Background" Value="{StaticResource TabBlue}"/>
+        <Setter Property="Background" Value="{StaticResource TabBlueBrush}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Height" Value="36"/>
         <Setter Property="MinWidth" Value="100"/>
