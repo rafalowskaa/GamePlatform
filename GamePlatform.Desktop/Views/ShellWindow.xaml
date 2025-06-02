@@ -23,18 +23,66 @@
         <Grid>
             <DockPanel>
 
-                <!-- top black bar with avatar and welcome text -->
-                <Border DockPanel.Dock="Top" Background="Black" Padding="8 0">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="48" Height="48" CornerRadius="24" Background="#333" Margin="0 0 8 0" ClipToBounds="True">
-                            <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill"/>
-                        </Border>
-                        <TextBlock FontWeight="Bold" FontSize="16" VerticalAlignment="Center">
-                            <Run Text="Witaj " Foreground="White"/>
-                            <Run Text="{Binding CurrentLogin, Mode=OneWay}" Foreground="#1F5FFF"/>
-                            <Run Text=", w co dziś zagramy?" Foreground="White"/>
-                        </TextBlock>
-                    </StackPanel>
+                <!-- top black bar with avatar, welcome text and 3D animation -->
+                <Border DockPanel.Dock="Top" Background="Black" Height="144" Padding="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.65*"/>
+                            <ColumnDefinition Width="0.35*"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- left: avatar + welcome text -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="96" Height="96" CornerRadius="48" Background="#333" Margin="0 0 16 0" ClipToBounds="True">
+                                <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill"/>
+                            </Border>
+                            <TextBlock FontWeight="Bold" FontSize="18" VerticalAlignment="Center">
+                                <Run Text="Witaj " Foreground="White"/>
+                                <Run Text="{Binding CurrentLogin, Mode=OneWay}" Foreground="#1F5FFF"/>
+                                <Run Text=", w co dziś zagramy?" Foreground="White"/>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <!-- right: simple rotating 3D model -->
+                        <Viewport3D Grid.Column="1" ClipToBounds="True" Background="#222" RenderOptions.EdgeMode="Aliased">
+                            <Viewport3D.Camera>
+                                <PerspectiveCamera Position="0,0,3" LookDirection="0,0,-3" UpDirection="0,1,0" FieldOfView="45"/>
+                            </Viewport3D.Camera>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <Model3DGroup>
+                                        <AmbientLight Color="#444"/>
+                                        <DirectionalLight Color="White" Direction="-1,-1,-2"/>
+                                        <GeometryModel3D x:Name="logoModel">
+                                            <GeometryModel3D.Geometry>
+                                                <MeshGeometry3D Positions="-1,-1,1 1,-1,1 1,1,1 -1,1,1 -1,-1,-1 1,-1,-1 1,1,-1 -1,1,-1"
+                                                                TriangleIndices="0 1 2 0 2 3 1 5 6 1 6 2 5 4 7 5 7 6 4 0 3 4 3 7 3 2 6 3 6 7 4 5 1 4 1 0"
+                                                                />
+                                            </GeometryModel3D.Geometry>
+                                            <GeometryModel3D.Material>
+                                                <DiffuseMaterial Brush="{StaticResource TabBlueActiveBrush}"/>
+                                            </GeometryModel3D.Material>
+                                            <GeometryModel3D.Transform>
+                                                <RotateTransform3D>
+                                                    <RotateTransform3D.Rotation>
+                                                        <AxisAngleRotation3D x:Name="logoRotation" Axis="0,1,0" Angle="0"/>
+                                                    </RotateTransform3D.Rotation>
+                                                </RotateTransform3D>
+                                            </GeometryModel3D.Transform>
+                                        </GeometryModel3D>
+                                    </Model3DGroup>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <Viewport3D.Triggers>
+                                <EventTrigger RoutedEvent="Viewport3D.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimation Storyboard.TargetName="logoRotation" Storyboard.TargetProperty="Angle" From="0" To="360" Duration="0:0:8"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Viewport3D.Triggers>
+                        </Viewport3D>
+                    </Grid>
                 </Border>
 
                 <DockPanel DockPanel.Dock="Top" Margin="0">
