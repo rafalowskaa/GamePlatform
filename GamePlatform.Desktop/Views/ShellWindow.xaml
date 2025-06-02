@@ -31,7 +31,7 @@
                         </Border>
                         <TextBlock FontWeight="Bold" FontSize="16" VerticalAlignment="Center">
                             <Run Text="Witaj " Foreground="White"/>
-                            <Run Text="{Binding CurrentLogin}" Foreground="#1F5FFF"/>
+                            <Run Text="{Binding CurrentLogin, Mode=OneWay}" Foreground="#1F5FFF"/>
                             <Run Text=", w co dziś zagramy?" Foreground="White"/>
                         </TextBlock>
                     </StackPanel>
