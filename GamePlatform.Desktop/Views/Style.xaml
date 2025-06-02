@@ -38,7 +38,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="FontWeight" Value="Bold"/>
+                            
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource TabBlueActiveBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -119,11 +119,13 @@
                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Background="{StaticResource TabBlueBrush}">
                                     <Button Style="{StaticResource FlagBtn}"
                                             Command="{Binding DataContext.SetPolishCommand, RelativeSource={RelativeSource AncestorType=TabControl}}">
-                                        <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
+                                        <Image Width="32" Height="32" Stretch="Uniform"
+                                               Source="pack://application:,,,/Resources/flag_pl.png"/>
                                     </Button>
                                     <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0"
                                             Command="{Binding DataContext.SetEnglishCommand, RelativeSource={RelativeSource AncestorType=TabControl}}">
-                                        <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
+                                        <Image Width="32" Height="32" Stretch="Uniform"
+                                               Source="pack://application:,,,/Resources/flag_gb.png"/>
                                     </Button>
                                     <Button Content="{loc:Loc LOGOUT}" Style="{StaticResource NavBtn}"
                                             Command="{Binding DataContext.LogoutCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"/>

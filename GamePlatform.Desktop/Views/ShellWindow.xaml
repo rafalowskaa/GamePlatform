@@ -117,7 +117,7 @@
 
                     <!-- Flags + Logout (zawsze widoczne) -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Background="{StaticResource TabBlueBrush}">
-                        <Button Style="{StaticResource FlagBtn}" Margin="8 0 0 0" Command="{Binding SetPolishCommand}">
+                        <Button Style="{StaticResource FlagBtn}" Command="{Binding SetPolishCommand}">
                             <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
                         </Button>
                         <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
