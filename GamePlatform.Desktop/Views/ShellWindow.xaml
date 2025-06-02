@@ -15,7 +15,7 @@
         Style="{StaticResource MaterialDesignWindow}"
         DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ShellVM}">
 
-    <!--  Hot‑key: Win+L  -->
+    <!-- skrót klawiszowy: Win + L → zmiana języka -->
     <Window.InputBindings>
         <KeyBinding Key="L" Modifiers="Windows" Command="{Binding ToggleLanguageCommand}"/>
     </Window.InputBindings>
@@ -28,7 +28,7 @@
         <Grid>
             <DockPanel>
 
-                <!-- ░░  HEADER  ░░ -->
+                <!-- ░░░  HEADER  ░░░ -->
                 <Border DockPanel.Dock="Top" Background="Black" Height="160" Padding="20,16">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -36,7 +36,7 @@
                             <ColumnDefinition Width="0.37*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- avatar + welcome -->
+                        <!-- Avatar + welcome text -->
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Ellipse Width="110" Height="110" Margin="0,0,20,0">
                                 <Ellipse.Fill>
@@ -44,31 +44,34 @@
                                                 Stretch="UniformToFill"/>
                                 </Ellipse.Fill>
                             </Ellipse>
+
                             <TextBlock FontSize="24" FontWeight="Bold" VerticalAlignment="Center" Foreground="White">
-                                <Run Text="{Binding WelcomePrefix}"/>
-                                <Run Text="{Binding CurrentLogin}" Foreground="DodgerBlue"/>
-                                <Run Text="{Binding WelcomeSuffix}"/>
+                                <Run Text="{Binding WelcomePrefix, Mode=OneWay}"/>
+                                <Run Text="{Binding CurrentLogin, Mode=OneWay}" Foreground="DodgerBlue"/>
+                                <Run Text="{Binding WelcomeSuffix, Mode=OneWay}"/>
                             </TextBlock>
                         </StackPanel>
 
-                        <!-- anim logo -->
+                        <!-- rotating GP logo -->
                         <Border Grid.Column="1" Width="125" Height="125" CornerRadius="20" Background="Black"
                                 HorizontalAlignment="Right" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                             <Border.RenderTransform>
                                 <RotateTransform x:Name="LogoRot" Angle="0"/>
                             </Border.RenderTransform>
+
                             <Grid>
                                 <Border CornerRadius="60">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                             <GradientStop Color="#1133FF" Offset="0"/>
-                                            <GradientStop Color="Black"   Offset="1"/>
+                                            <GradientStop Color="Black" Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.Background>
                                 </Border>
                                 <TextBlock Text="GP" FontFamily="Chiller" FontSize="114" Foreground="White" FontWeight="Bold"
                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
+
                             <Border.Triggers>
                                 <EventTrigger RoutedEvent="Loaded">
                                     <BeginStoryboard>
@@ -83,18 +86,27 @@
                     </Grid>
                 </Border>
 
-                <!-- ░░  TAB STRIP + FLAGS + LOGOUT (jeden panel)  ░░ -->
+                <!-- ░░░  TAB STRIP + FLAGS + LOGOUT ░░░ -->
                 <Grid DockPanel.Dock="Top" Height="48">
-                    <TabControl Style="{StaticResource SingleRowTabControl}"
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <!-- tabs -->
+                        <ColumnDefinition Width="Auto"/>
+                        <!-- flags/logout -->
+                    </Grid.ColumnDefinitions>
+
+                    <!-- TabControl: tylko zakładki -->
+                    <TabControl Grid.Column="0"
+                                Style="{StaticResource SingleRowTabControl}"
                                 Background="{DynamicResource MaterialDesignPaper}"
                                 SelectedIndex="{Binding SelectedTabIndex}"
                                 SelectionChanged="OnTabChanged">
-                        <!-- user -->
+                        <!-- user tabs -->
                         <TabItem Header="{loc:Loc GAMES}"         Tag="Games"   Style="{StaticResource MainTabItemStyle}"/>
                         <TabItem Header="{loc:Loc PROFILE}"       Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
                         <TabItem Header="{loc:Loc STATS}"         Tag="Stats"   Style="{StaticResource MainTabItemStyle}"/>
                         <TabItem Header="{loc:Loc NOTIFICATIONS}" Tag="Notify"  Style="{StaticResource MainTabItemStyle}"/>
-                        <!-- admin -->
+                        <!-- admin tabs -->
                         <TabItem Header="{loc:Loc PENDING}"       Tag="Pending" Style="{StaticResource AdminTabItemStyle}"
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
                         <TabItem Header="{loc:Loc REPORTS}"       Tag="Reports" Style="{StaticResource AdminTabItemStyle}"
@@ -102,19 +114,29 @@
                         <TabItem Header="{loc:Loc USERS}"         Tag="Users"   Style="{StaticResource AdminTabItemStyle}"
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
                     </TabControl>
+
+                    <!-- Flags + Logout (zawsze widoczne) -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Background="{StaticResource TabBlueBrush}">
+                        <Button Style="{StaticResource FlagBtn}" Margin="8 0 0 0" Command="{Binding SetPolishCommand}">
+                            <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
+                        </Button>
+                        <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
+                            <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
+                        </Button>
+                        <Button Content="{loc:Loc LOGOUT}" Style="{StaticResource NavBtn}" Command="{Binding LogoutCommand}"/>
+                    </StackPanel>
                 </Grid>
 
-                <!-- page content -->
+                <!-- zawartość stron -->
                 <Frame Content="{Binding CurrentPage}" NavigationUIVisibility="Hidden"/>
 
                 <!-- snackbar -->
                 <md:Snackbar MessageQueue="{StaticResource GlobalMsgQueue}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0"/>
             </DockPanel>
 
-            <!-- drawer handle -->
+            <!-- uchwyt do wysuwanego panelu znajomych -->
             <Button Width="40" Height="100" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-16,0"
                     Background="Black" Command="{Binding ToggleDrawerCommand}"/>
         </Grid>
     </md:DrawerHost>
 </Window>
-
