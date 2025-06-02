@@ -56,12 +56,9 @@
 
                             <TextBlock FontSize="24"
                                        FontWeight="Bold"
-                                       VerticalAlignment="Center">
-                                <Run Text="Witaj "               Foreground="White"/>
-                                <Run Text="{Binding CurrentLogin, Mode=OneWay}"
-                                     Foreground="#1F5FFF"/>
-                                <Run Text=", w co dziś zagramy?" Foreground="White"/>
-                            </TextBlock>
+                                        VerticalAlignment="Center"
+                                       Foreground="White"
+                                       Text="{Binding WelcomeText}"/>
                         </StackPanel>
 
                         <!-- animowane logo GP -->
@@ -121,12 +118,12 @@
                             Command="{Binding LogoutCommand}"/>
 
                     <StackPanel DockPanel.Dock="Right" Orientation="Vertical" Margin="0 0 8 0">
-                        <Button Content="🇵🇱"
-                                Style="{StaticResource FlagBtn}"
-                                Command="{Binding SetPolishCommand}"/>
-                        <Button Content="🇬🇧" Margin="0 4 0 0"
-                                Style="{StaticResource FlagBtn}"
-                                Command="{Binding SetEnglishCommand}"/>
+                        <Button Style="{StaticResource FlagBtn}" Command="{Binding SetPolishCommand}">
+                            <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
+                        </Button>
+                        <Button Style="{StaticResource FlagBtn}" Margin="0 4 0 0" Command="{Binding SetEnglishCommand}">
+                            <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
+                        </Button>
                     </StackPanel>
 
                     <TabControl Background="{DynamicResource MaterialDesignPaper}"

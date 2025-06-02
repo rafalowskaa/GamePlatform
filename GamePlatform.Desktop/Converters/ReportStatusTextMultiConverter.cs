@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
+using Loc = GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop.Converters;
 
@@ -13,15 +14,15 @@ public sealed class ReportStatusTextMultiConverter : IMultiValueConverter
         if (values.Length >= 2 && values[0] is ReportStatus status)
         {
             string? notes = values[1] as string;
-            if (notes == "Blocked") return "Zablokowano";
-            if (notes == "Cancelled") return "Anulowano";
+            if (notes == "Blocked") return Loc.TRaw("STATUS_BLOCKED");
+            if (notes == "Cancelled") return Loc.TRaw("STATUS_CANCELLED");
 
             return status switch
             {
-                ReportStatus.Pending => "Niepodjęto akcji",
-                ReportStatus.Warned => "Wysłano ostrzeżenie",
-                ReportStatus.Closed => "Anulowano",
-                ReportStatus.InReview => "W trakcie",
+                ReportStatus.Pending => Loc.TRaw("STATUS_NO_ACTION"),
+                ReportStatus.Warned => Loc.TRaw("STATUS_WARNING_SENT"),
+                ReportStatus.Closed => Loc.TRaw("STATUS_CANCELLED"),
+                ReportStatus.InReview => Loc.TRaw("STATUS_IN_REVIEW"),
                 _ => status.ToString()
             };
         }

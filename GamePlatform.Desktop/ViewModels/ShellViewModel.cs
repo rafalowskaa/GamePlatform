@@ -43,7 +43,7 @@ public partial class ShellViewModel : ObservableObject
     [ObservableProperty] private bool _isDrawerOpen;
     [ObservableProperty] private int _selectedTabIndex;
 
-    public string WelcomeText => $"Witaj {_auth.CurrentLogin}, w co dziś zagramy?";
+    public string WelcomeText => string.Format(Loc.TRaw("WELCOME_PLAYER"), _auth.CurrentLogin);
     public string? AvatarPath => _auth.CurrentUser?.AvatarPath;
     public string? CurrentLogin => _auth.CurrentLogin;
 

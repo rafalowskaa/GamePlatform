@@ -2,6 +2,8 @@
 
   <ItemGroup>
     <None Remove="Resources\avatar_empty.png" />
+    <None Remove="Resources\flag_gb.png" />
+    <None Remove="Resources\flag_pl.png" />
     <None Remove="Resources\login_banner.png" />
 	  <None Remove="Resources\DefaultAvatar.png" />
   </ItemGroup>
@@ -46,6 +48,7 @@
     <Resource Include="Resources\login_banner.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+	 
   </ItemGroup>
 
   <ItemGroup>

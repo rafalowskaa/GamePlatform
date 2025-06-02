@@ -4,6 +4,9 @@ using GamePlatform.Desktop.Services;
 using GamePlatform.Shared.Validation;
 using System.Threading.Tasks;
 using System.IO;
+using GamePlatform.Desktop.Localization;
+
+using Loc = GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -124,4 +127,12 @@ public partial class LoginViewModel : ObservableObject
         }
         else FlashError("Login lub e-mail jest już zajęty.");
     }
+
+
+    /* ─────────  JĘZYK  ───────── */
+    [RelayCommand]
+    private void SetPolish() => Loc.Current = Lang.Polish;
+
+    [RelayCommand]
+    private void SetEnglish() => Loc.Current = Lang.English;
 }

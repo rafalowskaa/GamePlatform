@@ -25,9 +25,9 @@
                     Background="Black" Foreground="White" BorderBrush="Black"
                     Style="{StaticResource MaterialDesignRaisedButton}"
                     HorizontalAlignment="Right"
-                    Click="OnAddGameClick">
-                <TextBlock Text="Dodaj grę" TextWrapping="NoWrap"/>
-            </Button>
+                    Click="OnAddGameClick"
+                    Content="{loc:Loc ADD_GAME}"/>
+            
     </DockPanel>
 
     <Grid>

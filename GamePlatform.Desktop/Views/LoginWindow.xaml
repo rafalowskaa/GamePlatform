@@ -21,9 +21,22 @@
         <!-- ═════════════  LEWA KOLUMNA  ═════════════ -->
         <Border Background="{DynamicResource MaterialDesignPaper}" Padding="32">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource FlagBtn}" Command="{Binding SetPolishCommand}">
+                        <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
+                    </Button>
+                    <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
+                        <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
+                    </Button>
+                </StackPanel>
 
                 <!-- ■■■■■■■■■■■■■■■  PANEL LOGOWANIA  ■■■■■■■■■■■■■■■ -->
-                <StackPanel x:Name="LoginPanel">
+                <StackPanel x:Name="LoginPanel" Grid.Row="1">
                     <!-- widoczność / ukrycie -->
                     <StackPanel.Style>
                         <Style TargetType="StackPanel">
@@ -122,7 +135,7 @@
                 </StackPanel>
 
                 <!-- ■■■■■■■■■■■■■■■  PANEL REJESTRACJI  ■■■■■■■■■■■■■■■ -->
-                <StackPanel x:Name="RegisterPanel">
+                <StackPanel x:Name="RegisterPanel" Grid.Row="1">
                     <!-- widoczność / ukrycie -->
                     <StackPanel.Style>
                         <Style TargetType="StackPanel">

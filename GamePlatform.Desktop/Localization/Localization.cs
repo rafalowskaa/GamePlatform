@@ -117,6 +117,16 @@ public static class Localization
             ["ADD_FRIEND"] = "DODAJ ZN.",
             ["CONFIRM"] = "POTWIERDŹ",
             ["FAVORITE_GAMES"] = "ULUBIONE GRY",
+            ["WELCOME_PLAYER"] = "Witaj {0}, w co dziś zagramy?",
+
+            ["STATUS_PENDING"] = "Oczekuje",
+            ["STATUS_IN_REVIEW"] = "W trakcie",
+            ["STATUS_CLOSED"] = "Zamknięte",
+            ["STATUS_WARNED"] = "Ostrzeżono",
+            ["STATUS_BLOCKED"] = "Zablokowano",
+            ["STATUS_CANCELLED"] = "Anulowano",
+            ["STATUS_NO_ACTION"] = "Niepodjęto akcji",
+            ["STATUS_WARNING_SENT"] = "Wysłano ostrzeżenie",
 
             /* --- potwierdzenia / pytania --- */
             ["BLOCK_USER_ASK"] = "ZABLOKOWAĆ UŻYTKOWNIKA {0}?",
@@ -204,6 +214,16 @@ public static class Localization
             ["RECOVERY_EMAIL"] = "RECOVERY EMAIL",
             ["NEW_PASSWORD"] = "NEW PASSWORD",
             ["FAVORITE_GAMES"] = "FAVORITE GAMES",
+            ["WELCOME_PLAYER"] = "Welcome {0}, what shall we play today?",
+
+            ["STATUS_PENDING"] = "Pending",
+            ["STATUS_IN_REVIEW"] = "In Review",
+            ["STATUS_CLOSED"] = "Closed",
+            ["STATUS_WARNED"] = "Warned",
+            ["STATUS_BLOCKED"] = "Blocked",
+            ["STATUS_CANCELLED"] = "Cancelled",
+            ["STATUS_NO_ACTION"] = "No action taken",
+            ["STATUS_WARNING_SENT"] = "Warning sent",
             ["ERROR"] = "ERROR",
             ["CRITICAL_ERROR"] = "CRITICAL ERROR",
             ["ALL"] = "ALL",

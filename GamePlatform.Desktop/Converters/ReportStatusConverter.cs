@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using GamePlatform.Shared.Enums;
+using Loc = GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop.Converters;
 
@@ -13,10 +14,10 @@ public sealed class ReportStatusConverter : IValueConverter
         {
             return status switch
             {
-                ReportStatus.Pending => "Oczekuje",
-                ReportStatus.InReview => "W trakcie",
-                ReportStatus.Closed => "Zamknięte",
-                ReportStatus.Warned => "Ostrzeżono",
+                ReportStatus.Pending => Loc.TRaw("STATUS_PENDING"),
+                ReportStatus.InReview => Loc.TRaw("STATUS_IN_REVIEW"),
+                ReportStatus.Closed => Loc.TRaw("STATUS_CLOSED"),
+                ReportStatus.Warned => Loc.TRaw("STATUS_WARNED"),
                 _ => status.ToString()
             };
         }
