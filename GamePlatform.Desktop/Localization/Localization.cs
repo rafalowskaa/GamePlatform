@@ -59,6 +59,7 @@ public static class Localization
             ["CHOOSE_GAME"] = "WYBIERZ GRĘ",
             ["CLEAR"] = "WYCZYŚĆ",
             ["SEARCH"] = "SZUKAJ",
+            ["LOGIN_OR_EMAIL"] = "LOGIN LUB E-MAIL",
             ["REGISTER"] = "REJESTRACJA",
             ["LOGIN"] = "LOGIN",
             ["NEW_ACCOUNT"] = "NOWE KONTO",
@@ -114,6 +115,7 @@ public static class Localization
             ["INVITE"] = "ZAPROŚ",
             ["SEARCH_PLAYER"] = "SZUKAJ GRACZA",
             ["ADD_FRIEND"] = "DODAJ ZN.",
+            ["CONFIRM"] = "POTWIERDŹ",
             ["FAVORITE_GAMES"] = "ULUBIONE GRY",
 
             /* --- potwierdzenia / pytania --- */
@@ -244,13 +246,16 @@ public sealed class LocExtension : MarkupExtension
     [ConstructorArgument("Key")]
     public string Key { get; set; } = string.Empty;
 
-    public override object ProvideValue(IServiceProvider _)
-        => new Binding(nameof(Localization.Current))
+    public override object ProvideValue(IServiceProvider serviceProvider)
+    {
+        var binding = new Binding(nameof(Localization.Current))
         {
             Source = typeof(Localization),
             Converter = new LocConverter(),
             ConverterParameter = Key,
             Mode = BindingMode.OneWay
         };
+        return binding.ProvideValue(serviceProvider);
+    }
 }
 
