@@ -42,6 +42,8 @@
     <Resource Include="Resources\avatar_empty.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+	  <Resource Include="Resources\flag_pl.png" />
+	  <Resource Include="Resources\flag_gb.png" />
 	  <Resource Include="Resources\DefaultAvatar.png">
 		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>

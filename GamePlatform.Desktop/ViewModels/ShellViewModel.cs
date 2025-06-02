@@ -6,6 +6,7 @@ using GamePlatform.Desktop.Localization;
 using GamePlatform.Shared.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.ComponentModel;
 using System.Windows.Controls;
 using Loc = GamePlatform.Desktop.Localization.Localization;
 
@@ -26,6 +27,9 @@ public partial class ShellViewModel : ObservableObject
         _auth = auth;
         _chat = _sp.GetRequiredService<IChatService>();
         _notify = _sp.GetRequiredService<INotificationService>();
+
+        // update texts when language changes
+        Localization.PropertyChanged += OnLocalizationPropertyChanged;
 
 
         _friendsVm = _sp.GetRequiredService<FriendListViewModel>();
@@ -126,5 +130,11 @@ public partial class ShellViewModel : ObservableObject
         await _auth.LogoutAsync();
         OnPropertyChanged(nameof(IsAdmin));
         System.Windows.Application.Current.MainWindow?.Close();
+    }
+
+    private void OnLocalizationPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Localization.Current))
+            OnPropertyChanged(nameof(WelcomeText));
     }
 }

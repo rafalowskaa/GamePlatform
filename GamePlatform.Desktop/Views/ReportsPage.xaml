@@ -173,12 +173,14 @@
                                     <MultiBinding Converter="{StaticResource ReportStatusTextConv}">
                                         <Binding Path="Status"/>
                                         <Binding Path="StaffNotes"/>
+                                        <Binding Path="Current" Source="{x:Static loc:Localization}"/>
                                     </MultiBinding>
                                 </TextBlock.Text>
                                 <TextBlock.Foreground>
                                     <MultiBinding Converter="{StaticResource ReportStatusBrushConv}">
                                         <Binding Path="Status"/>
                                         <Binding Path="StaffNotes"/>
+                                        <Binding Path="Current" Source="{x:Static loc:Localization}"/>
                                     </MultiBinding>
                                 </TextBlock.Foreground>
                             </TextBlock>
