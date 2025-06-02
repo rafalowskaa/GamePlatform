@@ -72,10 +72,8 @@
                     Command="{Binding PickCoverCommand}"/>
         </DockPanel>
 
-        <TextBlock Margin="0 4 0 0" Foreground="#999" TextWrapping="Wrap">
-            Archiwum ZIP powinno zawierać plik <Bold>index.html</Bold> lub plik
-            <Bold>.exe</Bold> w głównym folderze lub podfolderach.
-        </TextBlock>
+        <TextBlock Margin="0 4 0 0" Foreground="#999" TextWrapping="Wrap"
+                   Text="{loc:Loc ZIP_INFO}"/>
 
         <DockPanel Margin="0 8 0 0">
             <TextBox Width="220"

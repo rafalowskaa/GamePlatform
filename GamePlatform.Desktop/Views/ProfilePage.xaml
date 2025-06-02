@@ -34,7 +34,7 @@
 
         <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap"/>
 
-        <Button Content="Zapisz" Background="Black" Foreground="White" BorderBrush="Black"
+        <Button Content="{loc:Loc SAVE}" Background="Black" Foreground="White" BorderBrush="Black"
                 Style="{StaticResource MaterialDesignRaisedButton}"
                 Command="{Binding SaveCommand}"
                 Margin="0 12 0 0"

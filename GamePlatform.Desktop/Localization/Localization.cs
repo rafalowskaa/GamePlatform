@@ -1,10 +1,11 @@
-﻿using System;
+﻿using GamePlatform.Desktop.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
-using GamePlatform.Desktop.Converters;
+using static GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop.Localization;
 
@@ -13,6 +14,20 @@ public enum Lang { Polish, English }
 
 public static class Localization
 {
+
+    public sealed class LocBindingProxy : INotifyPropertyChanged
+    {
+        public Lang Current => Localization.Current;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        internal LocBindingProxy()
+        {
+            Localization.LanguageChanged += (s, e) =>
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Current)));
+        }
+    }
+
+    public static readonly LocBindingProxy Proxy = new();
+
     /* -------- powiadamianie UI -------- */
     private static Lang _current = Lang.Polish;
     public static event EventHandler? LanguageChanged;
@@ -144,7 +159,9 @@ public static class Localization
             ["REASON"] = "POWÓD",
             ["BLOCK_REASON"] = "POWÓD BLOK.",
             ["SEARCH_IN_CHAT"] = "SZUKAJ W CZACIE",
-            ["CREATE_ACCOUNT"] = "UTWÓRZ KONTO"
+            ["CREATE_ACCOUNT"] = "UTWÓRZ KONTO",
+            ["ONLY_BLOCKED"] = "TYLKO Z BLOKADĄ",
+            ["ZIP_INFO"] = "Archiwum ZIP powinno zawierać plik index.html lub plik .exe w głównym folderze lub podfolderach."
         },
 
         /* =============  ENGLISH  ============= */
@@ -247,7 +264,9 @@ public static class Localization
             ["EDIT_USER"] = "EDIT USER",
             ["REASON"] = "REASON",
             ["BLOCK_REASON"] = "BLOCK REASON",
-            ["CREATE_ACCOUNT"] = "CREATE ACCOUNT"
+            ["CREATE_ACCOUNT"] = "CREATE ACCOUNT",
+            ["ONLY_BLOCKED"] = "ONLY BLOCKED",
+            ["ZIP_INFO"] = "ZIP archive should contain an index.html or .exe file in the root folder or its subfolders."
         }
     };
 
@@ -268,9 +287,9 @@ public sealed class LocExtension : MarkupExtension
 
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
-        var binding = new Binding(nameof(Localization.Current))
+        var binding = new Binding(nameof(LocBindingProxy.Current))
         {
-            Source = typeof(Localization),
+            Source = Localization.Proxy,
             Converter = new LocConverter(),
             ConverterParameter = Key,
             Mode = BindingMode.OneWay

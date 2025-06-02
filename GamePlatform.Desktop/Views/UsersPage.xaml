@@ -79,20 +79,23 @@
         <StackPanel Orientation="Horizontal" Margin="0 0 0 6" DockPanel.Dock="Top">
 
             <!-- Rola -->
-            <TextBlock Text="Rola:" Foreground="White"
-                       VerticalAlignment="Center" Margin="0 0 4 0"/>
+            <TextBlock Foreground="White" VerticalAlignment="Center" Margin="0 0 4 0">
+                <Run Text="{loc:Loc ROLE}"/><Run Text=":"/>
+            </TextBlock>
+                       
             <ComboBox ItemsSource="{Binding Roles}"
                       SelectedItem="{Binding SelectedRoleFilter}"
                       Width="120" Margin="0 0 12 0"/>
 
             <!-- Login -->
-            <TextBlock Text="Login:" Foreground="White"
-                       VerticalAlignment="Center" Margin="0 0 4 0"/>
+            <TextBlock Foreground="White" VerticalAlignment="Center" Margin="0 0 4 0">
+                <Run Text="{loc:Loc LOGIN}"/><Run Text=":"/>
+            </TextBlock>
             <TextBox Text="{Binding LoginFilter, UpdateSourceTrigger=PropertyChanged}"
                      Width="160" Margin="0 0 12 0"/>
 
             <!-- tylko z blokadą -->
-            <CheckBox Content="Tylko z blokadą"
+            <CheckBox Content="{loc:Loc ONLY_BLOCKED}"
                       IsChecked="{Binding OnlyBlocked}"
                       Foreground="White" Margin="0 0 12 0"/>
 
