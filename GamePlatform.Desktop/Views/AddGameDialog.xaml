@@ -12,10 +12,10 @@
     <StackPanel Margin="24" Width="340">
 
         <TextBox Text="{Binding TitlePl}"
-                 md:HintAssist.Hint="{loc:Loc TITLE} PL"/>
+                 md:HintAssist.Hint="{loc:Loc TITLE_PL}"/>
         <TextBox Margin="0 8 0 0"
                  Text="{Binding TitleEn}"
-                 md:HintAssist.Hint="{loc:Loc TITLE} EN"/>
+                 md:HintAssist.Hint="{loc:Loc TITLE_EN}"/>
 
         <TextBox Margin="0 8 0 0"
                  Text="{Binding Version}"
@@ -58,13 +58,13 @@
                  Text="{Binding DescriptionPl}"
                  Height="64"
                  AcceptsReturn="True"
-                 md:HintAssist.Hint="{loc:Loc DESCRIPTION} PL"/>
+                 md:HintAssist.Hint="{loc:Loc DESCRIPTION_PL}"/>
 
         <TextBox Margin="0 8 0 0"
                  Text="{Binding DescriptionEn}"
                  Height="64"
                  AcceptsReturn="True"
-                 md:HintAssist.Hint="{loc:Loc DESCRIPTION} EN"/>
+                  md:HintAssist.Hint="{loc:Loc DESCRIPTION_EN}"/>
 
         <DockPanel Margin="0 8 0 0">
             <TextBox Width="220"

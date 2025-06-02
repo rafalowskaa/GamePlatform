@@ -92,14 +92,14 @@
                   TextWrapping="WrapWithOverflow"
                   VerticalScrollBarVisibility="Auto"
                   Text="{Binding BlockReasonPl}"
-                  md:HintAssist.Hint="{loc:Loc BLOCK_REASON} PL" />
+                   md:HintAssist.Hint="{loc:Loc BLOCK_REASON_PL}" />
 
         <TextBox  Grid.Row="5" Grid.Column="1" Margin="8 6 0 0" MinHeight="70"
                   AcceptsReturn="True"
                   TextWrapping="WrapWithOverflow"
                   VerticalScrollBarVisibility="Auto"
                   Text="{Binding BlockReasonEn}"
-                  md:HintAssist.Hint="{loc:Loc BLOCK_REASON} EN" />
+                   md:HintAssist.Hint="{loc:Loc BLOCK_REASON_PL}" />
 
         <!-- PRZYCISKI -->
         <StackPanel Grid.Row="6" Grid.ColumnSpan="2"

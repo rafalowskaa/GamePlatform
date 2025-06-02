@@ -105,8 +105,8 @@ public partial class MainViewModel : ObservableObject
 
         var game = new Game
         {
-            Title = vm.Title,
-            Description = vm.Description,
+            Title = vm.TitlePl,
+            Description = vm.DescriptionPl,
             Category = vm.SelectedCategory,
             Mode = vm.SelectedMode,
             MaxPlayers = vm.MaxPlayers,
