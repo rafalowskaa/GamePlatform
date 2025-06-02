@@ -21,6 +21,10 @@ public partial class MainViewModel : ObservableObject
     private readonly IGameRepository _repo;
     private readonly IServiceProvider _sp;
 
+    public bool IsAdmin =>
+        _sp.GetRequiredService<IAuthService>().CurrentRole is UserRole.Admin or UserRole.Moderator;
+
+
     [ObservableProperty] private Game? _selectedGame;
 
     public MainViewModel(IGameRepository repo, IServiceProvider sp)

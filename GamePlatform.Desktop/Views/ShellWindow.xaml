@@ -13,13 +13,7 @@
         Style="{StaticResource MaterialDesignWindow}"
         DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ShellVM}">
 
-    <!--  VM wstrzykiwany w code-behind  -->
-    <Window.Resources>
-        <Style x:Key="NavBtn" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
-            <Setter Property="Padding"    Value="10 4"/>
-            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
-        </Style>
-    </Window.Resources>
+    
 
     <md:DrawerHost IsRightDrawerOpen="{Binding IsDrawerOpen}">
         <md:DrawerHost.RightDrawerContent>
@@ -29,23 +23,26 @@
         <Grid>
             <DockPanel>
 
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="8 8 0 8">
-                    <Border Width="48" Height="48" CornerRadius="24" Background="#333">
-                        <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill"/>
-                    </Border>
-                    <TextBlock Text="{Binding WelcomeText}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Margin="8 0 0 0"/>
-                </StackPanel>
+                <!-- top black bar with avatar and welcome text -->
+                <Border DockPanel.Dock="Top" Background="Black" Padding="8">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="48" Height="48" CornerRadius="24" Background="#333" Margin="0 0 8 0">
+                            <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill"/>
+                        </Border>
+                        <TextBlock Text="{Binding WelcomeText}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Foreground="White"/>
+                    </StackPanel>
+                </Border>
 
                 <DockPanel DockPanel.Dock="Top" Margin="0 8 0 0">
-                    <Button DockPanel.Dock="Right" Content="Wyloguj" Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding LogoutCommand}"/>
+                    <Button DockPanel.Dock="Right" Content="Wyloguj" Style="{StaticResource NavBtn}" Command="{Binding LogoutCommand}"/>
                     <TabControl SelectionChanged="OnTabChanged" Background="{DynamicResource MaterialDesignPaper}" SelectedIndex="{Binding SelectedTabIndex}">
                         <TabItem Header="Gry" Tag="Games" Style="{StaticResource MainTabItemStyle}"/>
                         <TabItem Header="Profil" Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
                         <TabItem Header="Statystyki" Tag="Stats" Style="{StaticResource MainTabItemStyle}"/>
                         <TabItem Header="Powiadomienia" Tag="Notify" Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="Do akceptacji" Tag="Pending" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="Zgłoszenia" Tag="Reports" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="Użytkownicy" Tag="Users" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        <TabItem Header="Do akceptacji" Tag="Pending" Style="{StaticResource AdminTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        <TabItem Header="Zgłoszenia" Tag="Reports" Style="{StaticResource AdminTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        <TabItem Header="Użytkownicy" Tag="Users" Style="{StaticResource AdminTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
                     </TabControl>
                 </DockPanel>
 

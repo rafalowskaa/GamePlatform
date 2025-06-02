@@ -40,4 +40,15 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!-- darker tabs used for admin only sections -->
+    <Style x:Key="AdminTabItemStyle" TargetType="TabItem" BasedOn="{StaticResource MainTabItemStyle}">
+        <Setter Property="Background" Value="#082554"/>
+    </Style>
+
+    <!-- navigation button styled like tabs (used for logout) -->
+    <Style x:Key="NavBtn" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+        <Setter Property="Padding" Value="12 4"/>
+        <Setter Property="Background" Value="#0d3a71"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
 </ResourceDictionary>

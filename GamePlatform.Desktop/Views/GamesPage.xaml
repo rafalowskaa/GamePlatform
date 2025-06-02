@@ -76,7 +76,10 @@
                                     <TextBlock Text="{Binding Mode}"/>
                                     <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0 8 0 8"/>
                                     <Button Content="Zagraj" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"
-                                            Style="{StaticResource MaterialDesignRaisedButton}" Background="Black" Foreground="White" MinWidth="160" HorizontalAlignment="Left"/>
+                                            Style="{StaticResource MaterialDesignRaisedButton}" Background="Black" BorderBrush="Black" Foreground="White" MinWidth="160" HorizontalAlignment="Left"/>
+                                    <Button Content="Usuń" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignRaisedButton}" Background="Red" BorderBrush="Red" Foreground="White" MinWidth="160" HorizontalAlignment="Left" Margin="0 8 0 0"
+                                            Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </md:TransitioningContent.ContentTemplate>
