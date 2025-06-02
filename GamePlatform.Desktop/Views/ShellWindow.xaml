@@ -15,7 +15,7 @@
         Style="{StaticResource MaterialDesignWindow}"
         DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ShellVM}">
 
-    <!-- ░░░  SKRÓTY KLAWISZOWE  ░░░ -->
+    <!--  Hot‑key: Win+L  -->
     <Window.InputBindings>
         <KeyBinding Key="L" Modifiers="Windows" Command="{Binding ToggleLanguageCommand}"/>
     </Window.InputBindings>
@@ -28,12 +28,8 @@
         <Grid>
             <DockPanel>
 
-                <!-- ░░░  HEADER  ░░░ -->
-                <Border DockPanel.Dock="Top"
-                        Background="Black"
-                        Height="160"
-                        Padding="20,16">
-
+                <!-- ░░  HEADER  ░░ -->
+                <Border DockPanel.Dock="Top" Background="Black" Height="160" Padding="20,16">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.63*"/>
@@ -41,41 +37,26 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- avatar + welcome -->
-                        <StackPanel Orientation="Horizontal"
-                                    VerticalAlignment="Center">
-
-                            <Ellipse Width="110"
-                                     Height="110"
-                                     Margin="0,0,20,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="110" Height="110" Margin="0,0,20,0">
                                 <Ellipse.Fill>
                                     <ImageBrush ImageSource="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}"
                                                 Stretch="UniformToFill"/>
                                 </Ellipse.Fill>
                             </Ellipse>
-
-                            <TextBlock FontSize="24"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center"
-                                       Foreground="White">
-                                <Run Text="{Binding WelcomePrefix, Mode=OneWay}"/>
-                                <Run Text="{Binding CurrentLogin, Mode=OneWay}" Foreground="DodgerBlue"/>
-                                <Run Text="{Binding WelcomeSuffix, Mode=OneWay}"/>
+                            <TextBlock FontSize="24" FontWeight="Bold" VerticalAlignment="Center" Foreground="White">
+                                <Run Text="{Binding WelcomePrefix}"/>
+                                <Run Text="{Binding CurrentLogin}" Foreground="DodgerBlue"/>
+                                <Run Text="{Binding WelcomeSuffix}"/>
                             </TextBlock>
                         </StackPanel>
 
-                        <!-- animowane logo GP -->
-                        <Border Grid.Column="1"
-                                Width="125"
-                                Height="125"
-                                CornerRadius="20"
-                                Background="Black"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                RenderTransformOrigin="0.5,0.5">
+                        <!-- anim logo -->
+                        <Border Grid.Column="1" Width="125" Height="125" CornerRadius="20" Background="Black"
+                                HorizontalAlignment="Right" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                             <Border.RenderTransform>
                                 <RotateTransform x:Name="LogoRot" Angle="0"/>
                             </Border.RenderTransform>
-
                             <Grid>
                                 <Border CornerRadius="60">
                                     <Border.Background>
@@ -85,25 +66,15 @@
                                         </LinearGradientBrush>
                                     </Border.Background>
                                 </Border>
-
-                                <TextBlock Text="GP"
-                                           FontFamily="Chiller"
-                                           FontSize="114"
-                                           Foreground="White"
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="GP" FontFamily="Chiller" FontSize="114" Foreground="White" FontWeight="Bold"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
-
-                            <!-- obroty -->
                             <Border.Triggers>
                                 <EventTrigger RoutedEvent="Loaded">
                                     <BeginStoryboard>
                                         <Storyboard RepeatBehavior="Forever">
-                                            <DoubleAnimation Storyboard.TargetName="LogoRot"
-                                                             Storyboard.TargetProperty="Angle"
-                                                             From="0" To="360"
-                                                             Duration="0:0:6"/>
+                                            <DoubleAnimation Storyboard.TargetName="LogoRot" Storyboard.TargetProperty="Angle"
+                                                             From="0" To="360" Duration="0:0:6"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
@@ -112,80 +83,38 @@
                     </Grid>
                 </Border>
 
-                <!-- ░░░  TABY  +  FLAGI  +  LOGOUT  ░░░ -->
+                <!-- ░░  TAB STRIP + FLAGS + LOGOUT (jeden panel)  ░░ -->
                 <Grid DockPanel.Dock="Top" Height="48">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- TABCONTROL -->
-                    <TabControl Grid.Column="0"
-                                Style="{StaticResource SingleRowTabControl}"
+                    <TabControl Style="{StaticResource SingleRowTabControl}"
                                 Background="{DynamicResource MaterialDesignPaper}"
                                 SelectedIndex="{Binding SelectedTabIndex}"
                                 SelectionChanged="OnTabChanged">
-                        <!-- user tabs -->
-                        <TabItem Header="{loc:Loc GAMES}"            Tag="Games"   Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="{loc:Loc PROFILE}"          Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="{loc:Loc STATS}"            Tag="Stats"   Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="{loc:Loc NOTIFICATIONS}"    Tag="Notify"  Style="{StaticResource MainTabItemStyle}"/>
-
-                        <!-- admin tabs -->
-                        <TabItem Header="{loc:Loc PENDING}"          Tag="Pending"
-                                 Style="{StaticResource AdminTabItemStyle}"
+                        <!-- user -->
+                        <TabItem Header="{loc:Loc GAMES}"         Tag="Games"   Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc PROFILE}"       Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc STATS}"         Tag="Stats"   Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc NOTIFICATIONS}" Tag="Notify"  Style="{StaticResource MainTabItemStyle}"/>
+                        <!-- admin -->
+                        <TabItem Header="{loc:Loc PENDING}"       Tag="Pending" Style="{StaticResource AdminTabItemStyle}"
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="{loc:Loc REPORTS}"          Tag="Reports"
-                                 Style="{StaticResource AdminTabItemStyle}"
+                        <TabItem Header="{loc:Loc REPORTS}"       Tag="Reports" Style="{StaticResource AdminTabItemStyle}"
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="{loc:Loc USERS}"            Tag="Users"
-                                 Style="{StaticResource AdminTabItemStyle}"
+                        <TabItem Header="{loc:Loc USERS}"         Tag="Users"   Style="{StaticResource AdminTabItemStyle}"
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
                     </TabControl>
-
-                    <!-- FLAGI -->
-                    <Border Grid.Column="1"
-                            Background="{StaticResource TabBlueBrush}"
-                            CornerRadius="4"
-                            Padding="2">
-                        <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource FlagBtn}"
-                                    Command="{Binding SetPolishCommand}">
-                                <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
-                            </Button>
-                            <Button Style="{StaticResource FlagBtn}"
-                                    Command="{Binding SetEnglishCommand}">
-                                <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
-                            </Button>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- LOGOUT -->
-                    <Button Grid.Column="2"
-                            Content="{loc:Loc LOGOUT}"
-                            Style="{StaticResource NavBtn}"
-                            Command="{Binding LogoutCommand}"/>
                 </Grid>
 
-                <!-- ░░░  ZAWARTOŚĆ  ░░░ -->
+                <!-- page content -->
                 <Frame Content="{Binding CurrentPage}" NavigationUIVisibility="Hidden"/>
 
-                <!-- ░░░  SNACKBAR  ░░░ -->
-                <md:Snackbar MessageQueue="{StaticResource GlobalMsgQueue}"
-                             HorizontalAlignment="Center"
-                             VerticalAlignment="Top"
-                             Margin="0,50,0,0"/>
+                <!-- snackbar -->
+                <md:Snackbar MessageQueue="{StaticResource GlobalMsgQueue}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0"/>
             </DockPanel>
 
-            <!-- ░░░  HANDLE DRAWERA  ░░░ -->
-            <Button Width="40"
-                    Height="100"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Margin="0,0,-16,0"
-                    Background="Black"
-                    Command="{Binding ToggleDrawerCommand}"/>
+            <!-- drawer handle -->
+            <Button Width="40" Height="100" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-16,0"
+                    Background="Black" Command="{Binding ToggleDrawerCommand}"/>
         </Grid>
     </md:DrawerHost>
 </Window>
+

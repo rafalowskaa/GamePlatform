@@ -1,13 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
                     xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters">
 
-    
-   
+    <!-- Converter for adaptive tab strip width -->
+    <conv:TabWidthConverter x:Key="TabWidthConverter"/>
 
-    <!--  KOLORY  -->
+    <!-- COLORS -->
     <Color x:Key="TabBlue">#0D3A71</Color>
     <Color x:Key="TabBlueActive">#1F5FFF</Color>
     <Color x:Key="TabBlueAdmin">#061C3D</Color>
@@ -16,17 +15,15 @@
     <SolidColorBrush x:Key="TabBlueActiveBrush" Color="{StaticResource TabBlueActive}"/>
     <SolidColorBrush x:Key="TabBlueAdminBrush"  Color="{StaticResource TabBlueAdmin}"/>
 
-    <!--  TABITEM – zwykły użytkownik  -->
+    <!-- MAIN TAB ITEM -->
     <Style x:Key="MainTabItemStyle" TargetType="TabItem">
-        <Setter Property="Background"      Value="{StaticResource TabBlueBrush}"/>
-        <Setter Property="Foreground"      Value="White"/>
-        <Setter Property="FontSize"        Value="14"/>
-        <Setter Property="FontWeight"      Value="SemiBold"/>
-        <!-- stała minimalna szerokość; pasuje do najdłuższych polskich etykiet -->
-        <Setter Property="MinWidth"        Value="120"/>
-        <Setter Property="Height"          Value="48"/>
+        <Setter Property="Background"  Value="{StaticResource TabBlueBrush}"/>
+        <Setter Property="Foreground"  Value="White"/>
+        <Setter Property="FontSize"    Value="14"/>
+        <Setter Property="FontWeight"  Value="SemiBold"/>
+        <Setter Property="MinWidth"    Value="135"/>
+        <Setter Property="Height"      Value="48"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding"         Value="12 4"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment"   Value="Center"/>
         <Setter Property="Template">
@@ -37,8 +34,7 @@
                             CornerRadius="4">
                         <ContentPresenter ContentSource="Header"
                                           HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Margin="{TemplateBinding Padding}"/>
+                                          VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
@@ -49,40 +45,51 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <!-- Per‑tab width tweaks -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Games">
+                <Setter Property="MinWidth" Value="110"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Profile">
+                <Setter Property="MinWidth" Value="110"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Stats">
+                <Setter Property="MinWidth" Value="125"/>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
-    <!--  TABITEM – admin  -->
+    <!-- ADMIN TAB ITEM -->
     <Style x:Key="AdminTabItemStyle"
            TargetType="TabItem"
            BasedOn="{StaticResource MainTabItemStyle}">
         <Setter Property="Background" Value="{StaticResource TabBlueAdminBrush}"/>
     </Style>
 
-    <!--  PRZYCISKI NAWIGACYJNE  -->
+    <!-- NAV BUTTON (Logout) -->
     <Style x:Key="NavBtn"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignFlatButton}">
         <Setter Property="Background" Value="{StaticResource TabBlueBrush}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Padding"   Value="12 4"/>
         <Setter Property="Height"    Value="48"/>
         <Setter Property="MinWidth"  Value="100"/>
     </Style>
 
-    <!--  FLAGI  -->
+    <!-- FLAG BUTTON -->
     <Style x:Key="FlagBtn"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignFlatButton}">
         <Setter Property="Background" Value="{StaticResource TabBlueBrush}"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Padding" Value="0"/>
         <Setter Property="Width" Value="32"/>
         <Setter Property="Height" Value="32"/>
         <Setter Property="FontSize" Value="16"/>
     </Style>
 
-    <!--  TABCONTROL  – zawsze jeden rząd; równe kolumny; brak "dziury"  -->
+    <!-- TABCONTROL  (single row) -->
     <Style x:Key="SingleRowTabControl" TargetType="TabControl">
         <Setter Property="Template">
             <Setter.Value>
@@ -93,25 +100,39 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <!--  Główka zakładek  -->
+                        <!-- Header strip -->
                         <ScrollViewer Grid.Row="0"
                                       HorizontalScrollBarVisibility="Auto"
                                       VerticalScrollBarVisibility="Disabled">
-                            <UniformGrid Rows="1" IsItemsHost="True">
-                                <!--  Szerokość równa Max(viewport, count × 120)  -->
-                                <UniformGrid.Width>
-                                    <MultiBinding Converter="{StaticResource TabWidthConverter}" ConverterParameter="120">
-                                        <Binding RelativeSource="{RelativeSource AncestorType=ScrollViewer}" Path="ViewportWidth"/>
-                                        <Binding RelativeSource="{RelativeSource AncestorType=TabControl}" Path="Items.Count"/>
-                                    </MultiBinding>
-                                </UniformGrid.Width>
-                            </UniformGrid>
+                            <DockPanel LastChildFill="False">
+                                <!-- Tabs -->
+                                <UniformGrid Rows="1" DockPanel.Dock="Left" IsItemsHost="True">
+                                    <UniformGrid.Width>
+                                        <MultiBinding Converter="{StaticResource TabWidthConverter}" ConverterParameter="135">
+                                            <Binding RelativeSource="{RelativeSource AncestorType=ScrollViewer}" Path="ViewportWidth"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=TabControl}" Path="Items.Count"/>
+                                        </MultiBinding>
+                                    </UniformGrid.Width>
+                                </UniformGrid>
+
+                                <!-- Flags + Logout (no padding) -->
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Background="{StaticResource TabBlueBrush}">
+                                    <Button Style="{StaticResource FlagBtn}"
+                                            Command="{Binding DataContext.SetPolishCommand, RelativeSource={RelativeSource AncestorType=TabControl}}">
+                                        <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
+                                    </Button>
+                                    <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0"
+                                            Command="{Binding DataContext.SetEnglishCommand, RelativeSource={RelativeSource AncestorType=TabControl}}">
+                                        <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
+                                    </Button>
+                                    <Button Content="{loc:Loc LOGOUT}" Style="{StaticResource NavBtn}"
+                                            Command="{Binding DataContext.LogoutCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"/>
+                                </StackPanel>
+                            </DockPanel>
                         </ScrollViewer>
 
-                        <!--  Zawartość  -->
-                        <ContentPresenter x:Name="PART_SelectedContentHost"
-                                          Grid.Row="1"
-                                          ContentSource="SelectedContent"/>
+                        <!-- Content -->
+                        <ContentPresenter x:Name="PART_SelectedContentHost" Grid.Row="1" ContentSource="SelectedContent"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

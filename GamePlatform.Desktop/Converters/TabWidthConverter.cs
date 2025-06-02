@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Windows.Data;
 
+namespace GamePlatform.Desktop.Converters;
+
 public class TabWidthConverter : IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType,
