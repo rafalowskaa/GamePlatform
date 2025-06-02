@@ -58,9 +58,9 @@
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
                                        Foreground="White">
-                                <Run Text="{Binding WelcomePrefix}"/>
-                                <Run Text="{Binding CurrentLogin}" Foreground="DodgerBlue"/>
-                                <Run Text="{Binding WelcomeSuffix}"/>
+                                <Run Text="{Binding WelcomePrefix, Mode=OneWay}"/>
+                                <Run Text="{Binding CurrentLogin, Mode=OneWay}" Foreground="DodgerBlue"/>
+                                <Run Text="{Binding WelcomeSuffix, Mode=OneWay}"/>
                             </TextBlock>
                         </StackPanel>
 
