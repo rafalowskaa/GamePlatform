@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:enums="clr-namespace:GamePlatform.Shared.Enums;assembly=GamePlatform.Shared"
-        Title="Dodaj grę"
+        xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
+        Title="{loc:Loc ADD_GAME}"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner"
         Style="{StaticResource MaterialDesignWindow}">
@@ -98,9 +99,9 @@
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0 12 0 0">
-            <Button Content="Anuluj" IsCancel="True"
+            <Button Content="{loc:Loc CANCEL}" IsCancel="True"
                     Background="Black" Foreground="White" BorderBrush="Black"/>
-            <Button Content="Zapisz"
+            <Button Content="{loc:Loc SAVE}"
                     Margin="12 0 0 0"
                     Style="{StaticResource MaterialDesignRaisedButton}"
                     Background="Black" Foreground="White" BorderBrush="Black"

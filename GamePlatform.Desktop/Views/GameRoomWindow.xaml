@@ -1,7 +1,8 @@
 ﻿<Window x:Class="GamePlatform.Desktop.Views.GameRoomWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Pokój gry" Width="400" Height="300"
+        xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
+        Title="{loc:Loc GAME_ROOM}" Width="400" Height="300"
         WindowStartupLocation="CenterOwner"
         Style="{StaticResource MaterialDesignWindow}">
 
@@ -21,7 +22,7 @@
                      Margin="0 0 8 0"
                      Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
                      KeyDown="OnKeyDown"/>
-            <Button Content="Wyślij" Background="Black" Foreground="White" BorderBrush="Black"
+            <Button Content="{loc:Loc SEND}" Background="Black" Foreground="White" BorderBrush="Black"
                 Command="{Binding SendCommand}" />
         </DockPanel>
     </Grid>

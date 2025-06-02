@@ -2,8 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-            xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared"
-            xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
              Background="Transparent"
              Width="300">
 
@@ -203,7 +204,7 @@
             <StackPanel>
 
                 <!-- ROZMOWY -->
-                <TextBlock Text="Rozmowy" Style="{StaticResource SectionHeader}"/>
+                <TextBlock Text="{loc:Loc CONVERSATIONS}" Style="{StaticResource SectionHeader}"/>
                 <ListView ItemsSource="{Binding Chats}"
                           ItemTemplate="{StaticResource ChatItemTemplate}">
                     <ListView.ItemContainerStyle>
@@ -220,20 +221,20 @@
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <Separator/>
-                                        <MenuItem Header="Napisz wiadomość"
+                                        <MenuItem Header="{loc:Loc WRITE_MSG}"
                                                   Command="{Binding StartChatCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                                        <MenuItem Header="Pokaż profil"
+                                        <MenuItem Header="{loc:Loc SHOW_PROFILE}"
                                                   Command="{Binding ShowProfileCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <Separator/>
-                                        <MenuItem Header="Zablokuj"
+                                        <MenuItem Header="{loc:Loc BLOCK}"
                                                   Command="{Binding BlockCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                                        <MenuItem Header="Zgłoś"
+                                        <MenuItem Header="{loc:Loc REPORT}"
                                                   Command="{Binding ReportCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
@@ -245,7 +246,7 @@
                 </ListView>
 
                 <!-- ZNAJOMI -->
-                <TextBlock Text="Znajomi" Style="{StaticResource SectionHeader}" Margin="0 8 0 0"/>
+                <TextBlock Text="{loc:Loc FRIENDS}" Style="{StaticResource SectionHeader}" Margin="0 8 0 0"/>
                 <ListView ItemsSource="{Binding Friends}"
                           ItemTemplate="{StaticResource FriendItemTemplate}">
                     <ListView.ItemContainerStyle>
@@ -255,25 +256,25 @@
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
                                     <ContextMenu>
-                                        <MenuItem Header="Usuń ze znajomych"
+                                        <MenuItem Header="{loc:Loc REMOVE_FRIEND}"
                                                   Command="{Binding ToggleForCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <Separator/>
-                                        <MenuItem Header="Napisz wiadomość"
+                                        <MenuItem Header="{loc:Loc WRITE_MSG}"
                                                   Command="{Binding StartChatCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                                        <MenuItem Header="Pokaż profil"
+                                        <MenuItem Header="{loc:Loc SHOW_PROFILE}"
                                                   Command="{Binding ShowProfileCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <Separator/>
-                                        <MenuItem Header="Zablokuj"
+                                        <MenuItem Header="{loc:Loc BLOCK}"
                                                   Command="{Binding BlockCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                                        <MenuItem Header="Zgłoś"
+                                        <MenuItem Header="{loc:Loc REPORT}"
                                                   Command="{Binding ReportCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
@@ -285,7 +286,7 @@
                 </ListView>
 
                 <!-- ZABLOKOWANI -->
-                <TextBlock Text="Zablokowani" Style="{StaticResource SectionHeader}" Margin="0 8 0 0"/>
+                <TextBlock Text="{loc:Loc BLOCKED}" Style="{StaticResource SectionHeader}" Margin="0 8 0 0"/>
                 <ListView ItemsSource="{Binding Blocked}"
                           ItemTemplate="{StaticResource BlockedItemTemplate}">
                     <ListView.ItemContainerStyle>
@@ -295,7 +296,7 @@
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
                                     <ContextMenu>
-                                        <MenuItem Header="Odblokuj"
+                                        <MenuItem Header="{loc:Loc UNBLOCK}"
                                                   Command="{Binding UnblockCommand}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                                             RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
