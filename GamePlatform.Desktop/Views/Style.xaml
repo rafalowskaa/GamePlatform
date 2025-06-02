@@ -1,8 +1,13 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization">
+                    xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
+                    xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters">
 
     
+   
+
+    <!--  KOLORY  -->
     <Color x:Key="TabBlue">#0D3A71</Color>
     <Color x:Key="TabBlueActive">#1F5FFF</Color>
     <Color x:Key="TabBlueAdmin">#061C3D</Color>
@@ -11,46 +16,19 @@
     <SolidColorBrush x:Key="TabBlueActiveBrush" Color="{StaticResource TabBlueActive}"/>
     <SolidColorBrush x:Key="TabBlueAdminBrush"  Color="{StaticResource TabBlueAdmin}"/>
 
-    
+    <!--  TABITEM – zwykły użytkownik  -->
     <Style x:Key="MainTabItemStyle" TargetType="TabItem">
-        <Setter Property="Background"      Value="{StaticResource TabBlueBrush}" />
-        <Setter Property="Foreground"      Value="White" />
-        <Setter Property="FontSize"        Value="14" />
-        <Setter Property="FontWeight"      Value="SemiBold" />
-        <Setter Property="MinWidth"        Value="100" />
-        <Setter Property="Height"          Value="48" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding"         Value="12 4" />
+        <Setter Property="Background"      Value="{StaticResource TabBlueBrush}"/>
+        <Setter Property="Foreground"      Value="White"/>
+        <Setter Property="FontSize"        Value="14"/>
+        <Setter Property="FontWeight"      Value="SemiBold"/>
+        <!-- stała minimalna szerokość; pasuje do najdłuższych polskich etykiet -->
+        <Setter Property="MinWidth"        Value="120"/>
+        <Setter Property="Height"          Value="48"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding"         Value="12 4"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment"   Value="Center"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="TabItem">
-                    <Border x:Name="Bd"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="4">
-                        <ContentPresenter ContentSource="Header"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Margin="{TemplateBinding Padding}" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter TargetName="Bd" Property="Background"
-                                    Value="{StaticResource TabBlueActiveBrush}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    
-    <Style x:Key="AdminTabItemStyle"
-           TargetType="TabItem"
-           BasedOn="{StaticResource MainTabItemStyle}">
-        <Setter Property="Background" Value="{StaticResource TabBlueAdminBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -65,8 +43,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter TargetName="Bd" Property="Background"
-                                    Value="{StaticResource TabBlueActiveBrush}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource TabBlueActiveBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -74,26 +51,71 @@
         </Setter>
     </Style>
 
-    
+    <!--  TABITEM – admin  -->
+    <Style x:Key="AdminTabItemStyle"
+           TargetType="TabItem"
+           BasedOn="{StaticResource MainTabItemStyle}">
+        <Setter Property="Background" Value="{StaticResource TabBlueAdminBrush}"/>
+    </Style>
+
+    <!--  PRZYCISKI NAWIGACYJNE  -->
     <Style x:Key="NavBtn"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignFlatButton}">
-        <Setter Property="Background" Value="{StaticResource TabBlueBrush}" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="{StaticResource TabBlueBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Padding"   Value="12 4"/>
         <Setter Property="Height"    Value="48"/>
         <Setter Property="MinWidth"  Value="100"/>
     </Style>
 
+    <!--  FLAGI  -->
     <Style x:Key="FlagBtn"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignFlatButton}">
-        <Setter Property="Background" Value="{StaticResource TabBlueBrush}" />
-        <Setter Property="Foreground" Value="White" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Width" Value="32" />
-        <Setter Property="Height" Value="32" />
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Background" Value="{StaticResource TabBlueBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="FontSize" Value="16"/>
     </Style>
+
+    <!--  TABCONTROL  – zawsze jeden rząd; równe kolumny; brak "dziury"  -->
+    <Style x:Key="SingleRowTabControl" TargetType="TabControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!--  Główka zakładek  -->
+                        <ScrollViewer Grid.Row="0"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Disabled">
+                            <UniformGrid Rows="1" IsItemsHost="True">
+                                <!--  Szerokość równa Max(viewport, count × 120)  -->
+                                <UniformGrid.Width>
+                                    <MultiBinding Converter="{StaticResource TabWidthConverter}" ConverterParameter="120">
+                                        <Binding RelativeSource="{RelativeSource AncestorType=ScrollViewer}" Path="ViewportWidth"/>
+                                        <Binding RelativeSource="{RelativeSource AncestorType=TabControl}" Path="Items.Count"/>
+                                    </MultiBinding>
+                                </UniformGrid.Width>
+                            </UniformGrid>
+                        </ScrollViewer>
+
+                        <!--  Zawartość  -->
+                        <ContentPresenter x:Name="PART_SelectedContentHost"
+                                          Grid.Row="1"
+                                          ContentSource="SelectedContent"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

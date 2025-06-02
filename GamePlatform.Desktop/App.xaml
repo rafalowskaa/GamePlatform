@@ -20,6 +20,7 @@
             <conv:BoolToVisibilityConverter x:Key="BoolToVisibility" Invert="True"/>
             <conv:BoolToHAlignmentConverter x:Key="BoolToAlign"/>
             <conv:NullToVisibilityConverter x:Key="NullToVis"/>
+            <conv:TabWidthConverter x:Key="TabWidthConverter"/>
 
             <!-- globalny Snackbar -->
             <md:SnackbarMessageQueue x:Key="GlobalMsgQueue" DiscardDuplicates="True"/>

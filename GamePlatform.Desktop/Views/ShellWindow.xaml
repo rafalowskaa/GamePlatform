@@ -15,11 +15,11 @@
         Style="{StaticResource MaterialDesignWindow}"
         DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ShellVM}">
 
-
+    <!-- ░░░  SKRÓTY KLAWISZOWE  ░░░ -->
     <Window.InputBindings>
         <KeyBinding Key="L" Modifiers="Windows" Command="{Binding ToggleLanguageCommand}"/>
     </Window.InputBindings>
-    
+
     <md:DrawerHost IsRightDrawerOpen="{Binding IsDrawerOpen}">
         <md:DrawerHost.RightDrawerContent>
             <views:FriendsPage DataContext="{Binding FriendsVm}"/>
@@ -48,9 +48,8 @@
                                      Height="110"
                                      Margin="0,0,20,0">
                                 <Ellipse.Fill>
-                                    <ImageBrush ImageSource="{Binding AvatarPath,
-                                                        Converter={StaticResource AvatarConverter}}"
-                                        Stretch="UniformToFill"/>
+                                    <ImageBrush ImageSource="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}"
+                                                Stretch="UniformToFill"/>
                                 </Ellipse.Fill>
                             </Ellipse>
 
@@ -82,7 +81,7 @@
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                             <GradientStop Color="#1133FF" Offset="0"/>
-                                            <GradientStop Color="Black" Offset="1"/>
+                                            <GradientStop Color="Black"   Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.Background>
                                 </Border>
@@ -113,56 +112,73 @@
                     </Grid>
                 </Border>
 
-                <!-- ░░░  TABs + WYLOGUJ  ░░░ -->
-                <DockPanel DockPanel.Dock="Top">
-                    <Button DockPanel.Dock="Right"
-                            Content="{loc:Loc LOGOUT}"
-                            Style="{StaticResource NavBtn}"
-                            Command="{Binding LogoutCommand}"/>
+                <!-- ░░░  TABY  +  FLAGI  +  LOGOUT  ░░░ -->
+                <Grid DockPanel.Dock="Top" Height="48">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                    <Border DockPanel.Dock="Right" Background="{StaticResource TabBlueBrush}" CornerRadius="4" Padding="2" Margin="0 0 8 0">
+                    <!-- TABCONTROL -->
+                    <TabControl Grid.Column="0"
+                                Style="{StaticResource SingleRowTabControl}"
+                                Background="{DynamicResource MaterialDesignPaper}"
+                                SelectedIndex="{Binding SelectedTabIndex}"
+                                SelectionChanged="OnTabChanged">
+                        <!-- user tabs -->
+                        <TabItem Header="{loc:Loc GAMES}"            Tag="Games"   Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc PROFILE}"          Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc STATS}"            Tag="Stats"   Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc NOTIFICATIONS}"    Tag="Notify"  Style="{StaticResource MainTabItemStyle}"/>
+
+                        <!-- admin tabs -->
+                        <TabItem Header="{loc:Loc PENDING}"          Tag="Pending"
+                                 Style="{StaticResource AdminTabItemStyle}"
+                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        <TabItem Header="{loc:Loc REPORTS}"          Tag="Reports"
+                                 Style="{StaticResource AdminTabItemStyle}"
+                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        <TabItem Header="{loc:Loc USERS}"            Tag="Users"
+                                 Style="{StaticResource AdminTabItemStyle}"
+                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                    </TabControl>
+
+                    <!-- FLAGI -->
+                    <Border Grid.Column="1"
+                            Background="{StaticResource TabBlueBrush}"
+                            CornerRadius="4"
+                            Padding="2">
                         <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource FlagBtn}" Command="{Binding SetPolishCommand}">
+                            <Button Style="{StaticResource FlagBtn}"
+                                    Command="{Binding SetPolishCommand}">
                                 <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
                             </Button>
-                            <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
+                            <Button Style="{StaticResource FlagBtn}"
+                                    Command="{Binding SetEnglishCommand}">
                                 <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
                             </Button>
                         </StackPanel>
                     </Border>
 
-                    <TabControl Background="{DynamicResource MaterialDesignPaper}"
-                                SelectedIndex="{Binding SelectedTabIndex}"
-                                SelectionChanged="OnTabChanged">
+                    <!-- LOGOUT -->
+                    <Button Grid.Column="2"
+                            Content="{loc:Loc LOGOUT}"
+                            Style="{StaticResource NavBtn}"
+                            Command="{Binding LogoutCommand}"/>
+                </Grid>
 
-                        <TabItem Header="{loc:Loc GAMES}"    Tag="Games"   Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="{loc:Loc PROFILE}"  Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="{loc:Loc STATS}"     Tag="Stats"   Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="{loc:Loc NOTIFICATIONS}" Tag="Notify"  Style="{StaticResource MainTabItemStyle}"/>
-
-                        <TabItem Header="{loc:Loc PENDING}" Tag="Pending"
-                                 Style="{StaticResource AdminTabItemStyle}"
-                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="{loc:Loc REPORTS}"    Tag="Reports"
-                                 Style="{StaticResource AdminTabItemStyle}"
-                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="{loc:Loc USERS}"   Tag="Users"
-                                 Style="{StaticResource AdminTabItemStyle}"
-                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                    </TabControl>
-                </DockPanel>
-
-                <!-- zawartość -->
+                <!-- ░░░  ZAWARTOŚĆ  ░░░ -->
                 <Frame Content="{Binding CurrentPage}" NavigationUIVisibility="Hidden"/>
 
-                <!-- snackbar -->
+                <!-- ░░░  SNACKBAR  ░░░ -->
                 <md:Snackbar MessageQueue="{StaticResource GlobalMsgQueue}"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Top"
                              Margin="0,50,0,0"/>
             </DockPanel>
 
-            <!-- drawer handle -->
+            <!-- ░░░  HANDLE DRAWERA  ░░░ -->
             <Button Width="40"
                     Height="100"
                     HorizontalAlignment="Right"
