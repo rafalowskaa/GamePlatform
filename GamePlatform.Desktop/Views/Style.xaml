@@ -42,7 +42,7 @@
     </Style>
     <!-- darker tabs used for admin only sections -->
     <Style x:Key="AdminTabItemStyle" TargetType="TabItem" BasedOn="{StaticResource MainTabItemStyle}">
-        <Setter Property="Background" Value="#082554"/>
+        <Setter Property="Background" Value="#061c3d"/>
     </Style>
 
     <!-- navigation button styled like tabs (used for logout) -->
@@ -50,5 +50,7 @@
         <Setter Property="Padding" Value="12 4"/>
         <Setter Property="Background" Value="#0d3a71"/>
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="MinWidth" Value="100"/>
     </Style>
 </ResourceDictionary>

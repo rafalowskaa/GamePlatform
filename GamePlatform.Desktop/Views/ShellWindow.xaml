@@ -26,14 +26,14 @@
                 <!-- top black bar with avatar and welcome text -->
                 <Border DockPanel.Dock="Top" Background="Black" Padding="8">
                     <StackPanel Orientation="Horizontal">
-                        <Border Width="48" Height="48" CornerRadius="24" Background="#333" Margin="0 0 8 0">
+                        <Border Width="48" Height="48" CornerRadius="24" Background="#333" Margin="0 0 8 0" ClipToBounds="True">
                             <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill"/>
                         </Border>
-                        <TextBlock Text="{Binding WelcomeText}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Foreground="White"/>
+                        <TextBlock Text="{Binding WelcomeText}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Foreground="#1F5FFF"/>
                     </StackPanel>
                 </Border>
 
-                <DockPanel DockPanel.Dock="Top" Margin="0 8 0 0">
+                <DockPanel DockPanel.Dock="Top" Margin="0">
                     <Button DockPanel.Dock="Right" Content="Wyloguj" Style="{StaticResource NavBtn}" Command="{Binding LogoutCommand}"/>
                     <TabControl SelectionChanged="OnTabChanged" Background="{DynamicResource MaterialDesignPaper}" SelectedIndex="{Binding SelectedTabIndex}">
                         <TabItem Header="Gry" Tag="Games" Style="{StaticResource MainTabItemStyle}"/>
