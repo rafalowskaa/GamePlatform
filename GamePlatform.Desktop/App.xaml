@@ -29,14 +29,14 @@
                 <ResourceDictionary Source="pack://application:,,,/Resources/IconPack.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Resources/TextStyles.xaml"/>
 
-                <ResourceDictionary Source="Views/Style.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml"/>
 
                 <md:BundledTheme BaseTheme="Dark"
                                  PrimaryColor="Indigo"
                                  SecondaryColor="Lime"/>
 
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml"/>
+                <ResourceDictionary Source="Views/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
