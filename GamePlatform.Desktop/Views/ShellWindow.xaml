@@ -14,7 +14,8 @@
         Style="{StaticResource MaterialDesignWindow}"
         DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ShellVM}">
 
-    <md:DrawerHost IsRightDrawerOpen="{Binding IsRightDrawerOpen}">
+    <md:DrawerHost IsRightDrawerOpen="{Binding IsDrawerOpen}"
+                   RightDrawerOpenMode="Modal">
         <md:DrawerHost.RightDrawerContent>
             <views:FriendsPage DataContext="{Binding FriendsVm}"/>
         </md:DrawerHost.RightDrawerContent>
@@ -38,16 +39,15 @@
                         <StackPanel Orientation="Horizontal"
                                     VerticalAlignment="Center">
 
-                            <Border Width="110"
-                                    Height="110"
-                                    CornerRadius="70"
-                                    Background="#333"
-                                    Margin="0,0,20,0"
-                                    ClipToBounds="True">
-                                <Image Source="{Binding AvatarPath,
+                            <Ellipse Width="110"
+                                     Height="110"
+                                     Margin="0,0,20,0">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{Binding AvatarPath,
                                                         Converter={StaticResource AvatarConverter}}"
-                                       Stretch="UniformToFill"/>
-                            </Border>
+                                        Stretch="UniformToFill"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
 
                             <TextBlock FontSize="24"
                                        FontWeight="Bold"
