@@ -8,7 +8,8 @@ namespace GamePlatform.Shared.Validation
     {
         public GameUploadValidator()
         {
-            RuleFor(x => x.Title).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.TitlePl).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.TitleEn).NotEmpty().MaximumLength(100);
             RuleFor(x => x.Version).NotEmpty();
 
             RuleFor(x => x.ZipPath)
@@ -22,6 +23,9 @@ namespace GamePlatform.Shared.Validation
                 .WithMessage("Obsługiwane są tylko pliki .zip lub .exe")
                 .Must(p => new FileInfo(p).Length <= 300 * 1024 * 1024)
                 .WithMessage("Maksymalny rozmiar to 300 MB");
+
+            RuleFor(x => x.DescriptionPl).NotEmpty();
+            RuleFor(x => x.DescriptionEn).NotEmpty();
 
             RuleFor(x => x.MaxPlayers)
                 .Must(p => p is null || p > 0)

@@ -48,6 +48,26 @@ public partial class ShellViewModel : ObservableObject
     [ObservableProperty] private int _selectedTabIndex;
 
     public string WelcomeText => string.Format(Loc.TRaw("WELCOME_PLAYER"), _auth.CurrentLogin);
+
+    public string WelcomePrefix
+    {
+        get
+        {
+            var fmt = Loc.TRaw("WELCOME_PLAYER");
+            var parts = fmt.Split("{0}", StringSplitOptions.None);
+            return parts.Length > 0 ? parts[0] : fmt;
+        }
+    }
+
+    public string WelcomeSuffix
+    {
+        get
+        {
+            var fmt = Loc.TRaw("WELCOME_PLAYER");
+            var parts = fmt.Split("{0}", StringSplitOptions.None);
+            return parts.Length > 1 ? parts[1] : string.Empty;
+        }
+    }
     public string? AvatarPath => _auth.CurrentUser?.AvatarPath;
     public string? CurrentLogin => _auth.CurrentLogin;
 
@@ -135,6 +155,10 @@ public partial class ShellViewModel : ObservableObject
     private void OnLocalizationPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Loc.Current))
+        {
             OnPropertyChanged(nameof(WelcomeText));
+            OnPropertyChanged(nameof(WelcomePrefix));
+            OnPropertyChanged(nameof(WelcomeSuffix));
+        }
     }
 }

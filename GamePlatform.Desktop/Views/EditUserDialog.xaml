@@ -26,6 +26,8 @@
             <RowDefinition Height="*"/>
             <!-- Powód -->
             <RowDefinition Height="Auto"/>
+            <!-- Powód EN -->
+            <RowDefinition Height="Auto"/>
             <!-- Przyciski -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -87,13 +89,20 @@
         </TextBlock>
         <TextBox  Grid.Row="4" Grid.Column="1" Margin="8 0 0 0" MinHeight="70" 
                   AcceptsReturn="True"
-                  TextWrapping="WrapWithOverflow"                   
-            VerticalScrollBarVisibility="Auto"
-                  Text="{Binding BlockReason}"
-                  md:HintAssist.Hint="{loc:Loc BLOCK_REASON}" />
+                  TextWrapping="WrapWithOverflow"
+                  VerticalScrollBarVisibility="Auto"
+                  Text="{Binding BlockReasonPl}"
+                  md:HintAssist.Hint="{loc:Loc BLOCK_REASON} PL" />
 
-            <!-- PRZYCISKI -->
-            <StackPanel Grid.Row="5" Grid.ColumnSpan="2"
+        <TextBox  Grid.Row="5" Grid.Column="1" Margin="8 6 0 0" MinHeight="70"
+                  AcceptsReturn="True"
+                  TextWrapping="WrapWithOverflow"
+                  VerticalScrollBarVisibility="Auto"
+                  Text="{Binding BlockReasonEn}"
+                  md:HintAssist.Hint="{loc:Loc BLOCK_REASON} EN" />
+
+        <!-- PRZYCISKI -->
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right" Margin="0 16 0 0">
             <Button Content="{loc:Loc CANCEL}" Width="80" IsCancel="True"

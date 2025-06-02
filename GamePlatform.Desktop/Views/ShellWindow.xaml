@@ -56,9 +56,12 @@
 
                             <TextBlock FontSize="24"
                                        FontWeight="Bold"
-                                        VerticalAlignment="Center"
-                                       Foreground="White"
-                                       Text="{Binding WelcomeText}"/>
+                                       VerticalAlignment="Center"
+                                       Foreground="White">
+                                <Run Text="{Binding WelcomePrefix}"/>
+                                <Run Text="{Binding CurrentLogin}" Foreground="DodgerBlue"/>
+                                <Run Text="{Binding WelcomeSuffix}"/>
+                            </TextBlock>
                         </StackPanel>
 
                         <!-- animowane logo GP -->

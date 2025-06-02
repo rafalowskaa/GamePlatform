@@ -38,7 +38,8 @@ public partial class EditUserViewModel : ObservableObject
     [ObservableProperty] private string _email = "";
     [ObservableProperty] private UserRole _role;
     [ObservableProperty] private DateTime? _blockedUntilUtc;
-    [ObservableProperty] private string? _blockReason;
+    [ObservableProperty] private string? _blockReasonPl;
+    [ObservableProperty] private string? _blockReasonEn;
 
     /* ----------  INICJALIZACJA  ---------- */
     public void Init(User src)
@@ -48,7 +49,8 @@ public partial class EditUserViewModel : ObservableObject
         Email = src.Email;
         Role = src.Role;
         BlockedUntilUtc = src.BlockedUntilUtc;
-        BlockReason = src.BlockReason;
+        BlockReasonPl = src.BlockReason;
+        BlockReasonEn = src.BlockReason;
     }
 
     /* ----------  KOMENDY  ---------- */
@@ -71,7 +73,7 @@ public partial class EditUserViewModel : ObservableObject
         u.Email = Email;
         u.Role = Role;
         u.BlockedUntilUtc = BlockedUntilUtc;
-        u.BlockReason = BlockReason;
+        u.BlockReason = BlockReasonPl;
 
         await _db.SaveChangesAsync();
         win.DialogResult = true;    // zamyka okno z rezultatem OK

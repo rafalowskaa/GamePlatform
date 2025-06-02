@@ -12,7 +12,8 @@ public partial class AddGameDialogViewModel : ObservableObject
     private readonly GameUploadValidator _validator;
     public AddGameDialogViewModel(GameUploadValidator validator) => _validator = validator;
 
-    [ObservableProperty] private string _title = "";
+    [ObservableProperty] private string _titlePl = "";
+    [ObservableProperty] private string _titleEn = "";
     [ObservableProperty] private string _version = "1.0.0";
     [ObservableProperty] private string _zipPath = "";
     private string? _coverPath;
@@ -31,7 +32,8 @@ public partial class AddGameDialogViewModel : ObservableObject
     [ObservableProperty] private GameMode _selectedMode = GameMode.SinglePlayer;
     [ObservableProperty] private int? _maxPlayers;
     [ObservableProperty] private bool _isLive;
-    [ObservableProperty] private string? _description;
+    [ObservableProperty] private string? _descriptionPl;
+    [ObservableProperty] private string? _descriptionEn;
     [ObservableProperty] private string? _error;
 
     [RelayCommand]
@@ -50,8 +52,8 @@ public partial class AddGameDialogViewModel : ObservableObject
 
     public bool Validate()
     {
-        var dto = new GameUploadDto(Title, Version, ZipPath, SelectedCategory,
-                                    SelectedMode, MaxPlayers, IsLive, Description, CoverPath);
+        var dto = new GameUploadDto(TitlePl, TitleEn, Version, ZipPath, SelectedCategory,
+                                    SelectedMode, MaxPlayers, IsLive, DescriptionPl, DescriptionEn, CoverPath);
         var res = _validator.Validate(dto);
         if (!res.IsValid) { Error = res.ToString("• "); return false; }
         return true;

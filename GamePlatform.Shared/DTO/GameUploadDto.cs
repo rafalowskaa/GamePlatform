@@ -3,12 +3,14 @@
 namespace GamePlatform.Shared.DTO;
 
 public record GameUploadDto(
-    string Title,
+    string TitlePl,
+    string TitleEn,
     string Version,
     string ZipPath,
     GameCategory Category,
     GameMode Mode,
     int? MaxPlayers,
     bool IsLive,
-    string? Description,
+    string? DescriptionPl,
+    string? DescriptionEn,
     string? CoverPath);
