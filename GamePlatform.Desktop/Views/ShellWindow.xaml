@@ -14,8 +14,7 @@
         Style="{StaticResource MaterialDesignWindow}"
         DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ShellVM}">
 
-    <md:DrawerHost IsRightDrawerOpen="{Binding IsDrawerOpen}"
-                   RightDrawerOpenMode="Modal">
+    <md:DrawerHost IsRightDrawerOpen="{Binding IsDrawerOpen}">
         <md:DrawerHost.RightDrawerContent>
             <views:FriendsPage DataContext="{Binding FriendsVm}"/>
         </md:DrawerHost.RightDrawerContent>
