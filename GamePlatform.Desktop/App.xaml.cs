@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using GamePlatform.Desktop.Localization;
 
 namespace GamePlatform.Desktop;
 
@@ -33,6 +34,8 @@ public partial class App : Application
                             MessageBoxButton.OK, MessageBoxImage.Error);
             a.Handled = true;
         };
+
+        Localization.Current = Lang.English;
 
         /* —— DI + EF —— */
         var sc = new ServiceCollection();

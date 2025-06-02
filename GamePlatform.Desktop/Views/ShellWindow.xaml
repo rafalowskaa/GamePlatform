@@ -5,6 +5,7 @@
         xmlns:views="clr-namespace:GamePlatform.Desktop.Views"
         xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Launcher"
@@ -110,7 +111,7 @@
                 <!-- ░░░  TABs + WYLOGUJ  ░░░ -->
                 <DockPanel DockPanel.Dock="Top">
                     <Button DockPanel.Dock="Right"
-                            Content="Wyloguj"
+                            Content="{loc:Loc LOGOUT}"
                             Style="{StaticResource NavBtn}"
                             Command="{Binding LogoutCommand}"/>
 
@@ -118,18 +119,18 @@
                                 SelectedIndex="{Binding SelectedTabIndex}"
                                 SelectionChanged="OnTabChanged">
 
-                        <TabItem Header="Gry"           Tag="Games"   Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="Profil"        Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="Statystyki"    Tag="Stats"   Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="Powiadomienia" Tag="Notify"  Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc GAMES}"    Tag="Games"   Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc PROFILE}"  Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc STATS}"     Tag="Stats"   Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="{loc:Loc NOTIFICATIONS}" Tag="Notify"  Style="{StaticResource MainTabItemStyle}"/>
 
-                        <TabItem Header="Do akceptacji" Tag="Pending"
+                        <TabItem Header="{loc:Loc PENDING}" Tag="Pending"
                                  Style="{StaticResource AdminTabItemStyle}"
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="Zgłoszenia"    Tag="Reports"
+                        <TabItem Header="{loc:Loc REPORTS}"    Tag="Reports"
                                  Style="{StaticResource AdminTabItemStyle}"
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="Użytkownicy"   Tag="Users"
+                        <TabItem Header="{loc:Loc USERS}"   Tag="Users"
                                  Style="{StaticResource AdminTabItemStyle}"
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
                     </TabControl>
