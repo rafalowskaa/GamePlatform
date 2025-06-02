@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="Logowanie"
+        Title="{loc:Loc LOGIN}"
         Width="720" Height="440"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -41,7 +41,7 @@
                     <!-- LOGIN -->
                     <TextBox TabIndex="0"
                          Text="{Binding Login}"
-                         md:HintAssist.Hint="Login lub e-mail"
+                         md:HintAssist.Hint="{loc:Loc LOGIN_OR_EMAIL}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
                     <!-- HASŁO (ukryte / jawne) -->
@@ -55,7 +55,7 @@
                         <PasswordBox x:Name="PwdHidden"
                                  Grid.Column="0" TabIndex="1"
                                  PasswordChanged="PwdChanged"
-                                 md:HintAssist.Hint="Hasło">
+                                 md:HintAssist.Hint="{loc:Loc PASSWORD}">
                             <PasswordBox.Style>
                                 <Style TargetType="PasswordBox"
                                    BasedOn="{StaticResource MaterialDesignFloatingHintPasswordBox}">
@@ -74,7 +74,7 @@
                              Grid.Column="0" TabIndex="1"
                              Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                              TextChanged="PwdVisibleChanged"
-                             md:HintAssist.Hint="Hasło">
+                              md:HintAssist.Hint="{loc:Loc PASSWORD}">
                             <TextBox.Style>
                                 <Style TargetType="TextBox"
                                    BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -98,7 +98,7 @@
                     </Grid>
 
                     <CheckBox TabIndex="2"
-                          Content="Zapamiętaj mnie"
+                           Content="{loc:Loc REMEMBER_ME}"
                           IsChecked="{Binding RememberMe}"
                           Margin="0 4 0 0"/>
 
@@ -109,9 +109,9 @@
                     <!-- PRZYCISKI -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                             Margin="0 16 0 0">
-                        <Button Content="Rejestracja" Background="Black" Foreground="White" BorderBrush="Black"
+                        <Button Content="{loc:Loc REGISTER}" Background="Black" Foreground="White" BorderBrush="Black"
                             Click="ShowRegisterClick" TabIndex="3"/>
-                        <Button Content="Zaloguj" Margin="12 0 0 0" TabIndex="4" Background="Black" Foreground="White" BorderBrush="Black"
+                        <Button Content="{loc:Loc LOGIN}" Margin="12 0 0 0" TabIndex="4" Background="Black" Foreground="White" BorderBrush="Black"
                             Style="{StaticResource MaterialDesignRaisedButton}"
                             
                             Command="{Binding SubmitLoginCommand}"
@@ -134,20 +134,20 @@
                         </Style>
                     </StackPanel.Style>
 
-                    <TextBlock Text="Nowe konto"
+                    <TextBlock Text="{loc:Loc NEW_ACCOUNT}"
                            FontSize="24" FontWeight="Bold" Margin="0 0 0 24"/>
 
                     <!-- LOGIN -->
                     <TextBox TabIndex="0"
                          Text="{Binding NewLogin}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                         md:HintAssist.Hint="Login"/>
+                         md:HintAssist.Hint="{loc:Loc LOGIN}"/>
 
                     <!-- E-MAIL -->
                     <TextBox TabIndex="1" Margin="0 8 0 0"
                          Text="{Binding Email}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                         md:HintAssist.Hint="E-mail"/>
+                         md:HintAssist.Hint="{loc:Loc EMAIL}"/>
 
                     <!-- HASŁO 1 -->
                     <Grid Margin="0 8 0 0">
@@ -160,7 +160,7 @@
                         <PasswordBox x:Name="RegPwdHidden"
                                  Grid.Column="0" TabIndex="2"
                                  PasswordChanged="PwdChangedRegister"
-                                 md:HintAssist.Hint="Hasło">
+                                  md:HintAssist.Hint="{loc:Loc PASSWORD}">
                             <PasswordBox.Style>
                                 <Style TargetType="PasswordBox"
                                    BasedOn="{StaticResource MaterialDesignFloatingHintPasswordBox}">
@@ -179,7 +179,7 @@
                              Grid.Column="0" TabIndex="2"
                              Text="{Binding RegPassword, UpdateSourceTrigger=PropertyChanged}"
                              TextChanged="RegPwdVisibleChanged"
-                             md:HintAssist.Hint="Hasło">
+                             md:HintAssist.Hint="{loc:Loc PASSWORD}">
                             <TextBox.Style>
                                 <Style TargetType="TextBox"
                                    BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -204,7 +204,7 @@
                     <!-- HASŁO 2 -->
                     <PasswordBox Margin="0 8 0 0" TabIndex="3"
                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
-                            md:HintAssist.Hint="Powtórz hasło"
+                            md:HintAssist.Hint="{loc:Loc CONFIRM_PASSWORD}"
                             PasswordChanged="PwdChangedRepeat"
                             HorizontalAlignment="Stretch"/>
 
@@ -215,9 +215,9 @@
                     <!-- PRZYCISKI -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                             Margin="0 16 0 0">
-                        <Button Content="↩︎ Logowanie" Click="ShowLoginClick" Background="Black" Foreground="White" BorderBrush="Black"
+                        <Button Content="{loc:Loc BACK_TO_LOGIN}" Click="ShowLoginClick" Background="Black" Foreground="White" BorderBrush="Black"
                             TabIndex="4"/>
-                        <Button Content="Utwórz konto" Margin="12 0 0 0" Background="Black" Foreground="White" BorderBrush="Black"
+                        <Button Content="{loc:Loc CREATE_ACCOUNT}" Margin="12 0 0 0" Background="Black" Foreground="White" BorderBrush="Black"
                             TabIndex="5"
                             Style="{StaticResource MaterialDesignRaisedButton}"
                             Command="{Binding SubmitRegisterCommand}"

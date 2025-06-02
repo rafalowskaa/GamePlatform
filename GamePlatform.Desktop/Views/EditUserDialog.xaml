@@ -4,7 +4,7 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
-        Title="Edytuj użytkownika"
+        Title="{loc:Loc EDIT_USER}"
         Width="340"
         Height="340"
         SizeToContent="Manual"
@@ -34,18 +34,24 @@
         </Grid.ColumnDefinitions>
 
         <!-- LOGIN -->
-        <TextBlock Text="Login:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+        <TextBlock FontWeight="SemiBold" VerticalAlignment="Center">
+            <Run Text="{loc:Loc LOGIN}"/><Run Text=":"/>
+        </TextBlock>
         <TextBlock Grid.Column="1" Margin="8 0" Text="{Binding Login}" />
 
         <!-- E-MAIL -->
-        <TextBlock Grid.Row="1" Text="E-mail:" FontWeight="SemiBold"
-                   VerticalAlignment="Center" Margin="0 6 0 0"/>
+        <TextBlock Grid.Row="1" FontWeight="SemiBold"
+                   VerticalAlignment="Center" Margin="0 6 0 0">
+            <Run Text="{loc:Loc EMAIL}"/><Run Text=":"/>
+        </TextBlock>
         <TextBox  Grid.Row="1" Grid.Column="1" Margin="8 6 0 0"
                   Text="{Binding Email}" />
 
         <!-- ROLA -->
-        <TextBlock Grid.Row="2" Text="Rola:" FontWeight="SemiBold"
-                   VerticalAlignment="Center" Margin="0 6 0 0"/>
+        <TextBlock Grid.Row="2" FontWeight="SemiBold"
+                   VerticalAlignment="Center" Margin="0 6 0 0">
+            <Run Text="{loc:Loc ROLE}"/><Run Text=":"/>
+        </TextBlock>
         <ComboBox Grid.Row="2" Grid.Column="1"
                   HorizontalAlignment="Stretch"
                   Margin="8 6 0 0"
@@ -54,8 +60,10 @@
                   SelectedItem="{Binding Role}" />
 
         <!-- BLOKADA + przycisk ✕ -->
-        <TextBlock Grid.Row="3" Text="Blokada do:" FontWeight="SemiBold"
-           VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="3" FontWeight="SemiBold"
+                   VerticalAlignment="Center">
+            <Run Text="{loc:Loc BLOCK_UNTIL}"/><Run Text=":"/>
+        </TextBlock>
         <DockPanel Grid.Row="3" Grid.Column="1" Margin="8 0 0 0">
 
             <DatePicker DockPanel.Dock="Left"
@@ -73,14 +81,16 @@
         </DockPanel>
 
         <!-- POWÓD -->
-        <TextBlock Grid.Row="4" Text="Powód:" FontWeight="SemiBold"
-                   VerticalAlignment="Top" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="4" FontWeight="SemiBold"
+                   VerticalAlignment="Top" TextWrapping="Wrap">
+            <Run Text="{loc:Loc REASON}"/><Run Text=":"/>
+        </TextBlock>
         <TextBox  Grid.Row="4" Grid.Column="1" Margin="8 0 0 0" MinHeight="70" 
                   AcceptsReturn="True"
                   TextWrapping="WrapWithOverflow"                   
             VerticalScrollBarVisibility="Auto"
                   Text="{Binding BlockReason}"
-                  md:HintAssist.Hint="Powód blokady" />
+                  md:HintAssist.Hint="{loc:Loc BLOCK_REASON}" />
 
             <!-- PRZYCISKI -->
             <StackPanel Grid.Row="5" Grid.ColumnSpan="2"

@@ -48,6 +48,12 @@
     </Resource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Localization\Localization.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>

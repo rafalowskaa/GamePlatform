@@ -160,7 +160,7 @@
                        Margin="4 0 0 0"/>
             <TextBox Width="260" Height="30"
                      Padding="28 0 4 0"
-                     md:HintAssist.Hint="Szukaj w czacie"
+                     md:HintAssist.Hint="{loc:Loc SEARCH_IN_CHAT}"
                      Background="#222" Foreground="White" BorderBrush="#444"/>
         </DockPanel>
 
@@ -169,7 +169,7 @@
             <TextBox Width="240"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      KeyDown="OnSearchEnter"
-                     md:HintAssist.Hint="Wyszukaj gracza"
+                     md:HintAssist.Hint="{loc:Loc SEARCH_PLAYER}"
                      Background="#222" Foreground="White" BorderBrush="#444"/>
 
             <ListBox ItemsSource="{Binding Suggestions}"

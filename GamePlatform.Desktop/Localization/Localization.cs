@@ -107,7 +107,18 @@ namespace GamePlatform.Desktop.Localization
                 ["FILE_INVALID"] = "PLIK MUSI BYĆ JPG/PNG I MNIEJSZY NIŻ 1MB",
                 ["EMPTY_PASSWORD"] = "HASŁO NIE MOŻE BYĆ PUSTE.",
                 ["CONFIRM_PASSWORD"] = "POTWIERDŹ HASŁO",
-                ["ENTER_PASSWORD_PROMPT"] = "ABY POTWIERDZIĆ OPERACJĘ, WPISZ SWOJE HASŁO:"
+                ["ENTER_PASSWORD_PROMPT"] = "ABY POTWIERDZIĆ OPERACJĘ, WPISZ SWOJE HASŁO:",
+                ["PASSWORD"] = "HASŁO",
+                ["REMEMBER_ME"] = "ZAPAMIĘTAJ MNIE",
+                ["REGISTER"] = "REJESTRACJA",
+                ["NEW_ACCOUNT"] = "NOWE KONTO",
+                ["BACK_TO_LOGIN"] = "LOGOWANIE",
+                ["CREATE_ACCOUNT"] = "UTWÓRZ KONTO",
+                ["SEARCH_IN_CHAT"] = "SZUKAJ W CZACIE",
+                ["SEARCH_PLAYER"] = "WYSZUKAJ GRACZA",
+                ["EDIT_USER"] = "EDYTUJ UŻYTKOWNIKA",
+                ["REASON"] = "POWÓD",
+                ["BLOCK_REASON"] = "POWÓD BLOKADY",
             },
             [Lang.English] = new(StringComparer.OrdinalIgnoreCase)
             {
@@ -187,7 +198,18 @@ namespace GamePlatform.Desktop.Localization
                 ["FILE_INVALID"] = "FILE MUST BE JPG/PNG AND SMALLER THAN 1MB",
                 ["EMPTY_PASSWORD"] = "PASSWORD CANNOT BE EMPTY.",
                 ["CONFIRM_PASSWORD"] = "CONFIRM PASSWORD",
-                ["ENTER_PASSWORD_PROMPT"] = "TO CONFIRM THE ACTION, ENTER YOUR PASSWORD:"
+                ["ENTER_PASSWORD_PROMPT"] = "TO CONFIRM THE ACTION, ENTER YOUR PASSWORD:",
+                ["PASSWORD"] = "PASSWORD",
+                ["REMEMBER_ME"] = "REMEMBER ME",
+                ["REGISTER"] = "REGISTER",
+                ["NEW_ACCOUNT"] = "NEW ACCOUNT",
+                ["BACK_TO_LOGIN"] = "BACK TO LOGIN",
+                ["CREATE_ACCOUNT"] = "CREATE ACCOUNT",
+                ["SEARCH_IN_CHAT"] = "SEARCH CHAT",
+                ["SEARCH_PLAYER"] = "SEARCH PLAYER",
+                ["EDIT_USER"] = "EDIT USER",
+                ["REASON"] = "REASON",
+                ["BLOCK_REASON"] = "BLOCK REASON",
             }
         };
 
