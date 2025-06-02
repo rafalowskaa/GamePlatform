@@ -167,14 +167,14 @@
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Center">
                                 <Button Style="{StaticResource BlackBtn}"
-                                        Content="Edytuj"
+                                        Content="EDYTUJ"
                                         Command="{Binding DataContext.EditCommand,
                                                   RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
 
                                 <Button Style="{StaticResource BlackBtn}"
                                         Margin="8 0 0 0"
-                                        Content="Usuń użytkownika"
+                                        Content="USUŃ UŻYTKOWNIKA"
                                         Command="{Binding DataContext.DeleteCommand,
                                                   RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
