@@ -28,7 +28,7 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{StaticResource TabBlueActive}" Duration="0:0:0.12"/>
+                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" To="{StaticResource TabBlueActive}" Duration="0:0:0.12"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -39,7 +39,7 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{StaticResource TabBlue}" Duration="0:0:0.12"/>
+                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" To="{StaticResource TabBlue}" Duration="0:0:0.12"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -63,7 +63,7 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{StaticResource TabBlueActive}" Duration="0:0:0.12"/>
+                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" To="{StaticResource TabBlueActive}" Duration="0:0:0.12"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -74,7 +74,7 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="{StaticResource TabBlueAdmin}" Duration="0:0:0.12"/>
+                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" To="{StaticResource TabBlueAdmin}" Duration="0:0:0.12"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
