@@ -29,7 +29,7 @@ public partial class ShellViewModel : ObservableObject
         _notify = _sp.GetRequiredService<INotificationService>();
 
         // update texts when language changes
-        Localization.LanguagePropertyChanged += OnLocalizationPropertyChanged;
+        Loc.LanguagePropertyChanged += OnLocalizationPropertyChanged;
 
 
         _friendsVm = _sp.GetRequiredService<FriendListViewModel>();
@@ -134,7 +134,7 @@ public partial class ShellViewModel : ObservableObject
 
     private void OnLocalizationPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(Localization.Current))
+        if (e.PropertyName == nameof(Loc.Current))
             OnPropertyChanged(nameof(WelcomeText));
     }
 }
