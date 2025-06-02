@@ -94,7 +94,20 @@ namespace GamePlatform.Desktop.Localization
                 ["EMAIL"] = "E-MAIL",
                 ["RECOVERY_EMAIL"] = "E-MAIL ODZYSKU",
                 ["NEW_PASSWORD"] = "NOWE HASŁO",
-                ["FAVORITE_GAMES"] = "ULUBIONE GRY"
+                ["FAVORITE_GAMES"] = "ULUBIONE GRY",
+                ["ERROR"] = "BŁĄD",
+                ["CRITICAL_ERROR"] = "BŁĄD KRYTYCZNY",
+                ["ALL"] = "WSZYSCY",
+                ["ADD_FRIEND"] = "DODAJ ZNAJOMEGO",
+                ["CONFIRM"] = "POTWIERDŹ",
+                ["INVALID_PASSWORD"] = "NIEPRAWIDŁOWE HASŁO.",
+                ["BLOCK_USER_ASK"] = "CZY NA PEWNO ZABLOKOWAĆ UŻYTKOWNIKA {0}?",
+                ["DELETE_USER_ASK"] = "CZY NA PEWNO CHCESZ USUNĄĆ UŻYTKOWNIKA „{0}”?",
+                ["NO_USER_CONTEXT"] = "BRAK KONTEKSTU ZALOGOWANEGO UŻYTKOWNIKA.",
+                ["FILE_INVALID"] = "PLIK MUSI BYĆ JPG/PNG I MNIEJSZY NIŻ 1MB",
+                ["EMPTY_PASSWORD"] = "HASŁO NIE MOŻE BYĆ PUSTE.",
+                ["CONFIRM_PASSWORD"] = "POTWIERDŹ HASŁO",
+                ["ENTER_PASSWORD_PROMPT"] = "ABY POTWIERDZIĆ OPERACJĘ, WPISZ SWOJE HASŁO:"
             },
             [Lang.English] = new(StringComparer.OrdinalIgnoreCase)
             {
@@ -161,7 +174,20 @@ namespace GamePlatform.Desktop.Localization
                 ["EMAIL"] = "E-MAIL",
                 ["RECOVERY_EMAIL"] = "RECOVERY EMAIL",
                 ["NEW_PASSWORD"] = "NEW PASSWORD",
-                ["FAVORITE_GAMES"] = "FAVORITE GAMES"
+                ["FAVORITE_GAMES"] = "FAVORITE GAMES",
+                ["ERROR"] = "ERROR",
+                ["CRITICAL_ERROR"] = "CRITICAL ERROR",
+                ["ALL"] = "ALL",
+                ["ADD_FRIEND"] = "ADD FRIEND",
+                ["CONFIRM"] = "CONFIRM",
+                ["INVALID_PASSWORD"] = "INVALID PASSWORD.",
+                ["BLOCK_USER_ASK"] = "ARE YOU SURE YOU WANT TO BLOCK USER {0}?",
+                ["DELETE_USER_ASK"] = "ARE YOU SURE YOU WANT TO DELETE USER \"{0}\"?",
+                ["NO_USER_CONTEXT"] = "NO LOGGED USER CONTEXT.",
+                ["FILE_INVALID"] = "FILE MUST BE JPG/PNG AND SMALLER THAN 1MB",
+                ["EMPTY_PASSWORD"] = "PASSWORD CANNOT BE EMPTY.",
+                ["CONFIRM_PASSWORD"] = "CONFIRM PASSWORD",
+                ["ENTER_PASSWORD_PROMPT"] = "TO CONFIRM THE ACTION, ENTER YOUR PASSWORD:"
             }
         };
 
@@ -170,6 +196,13 @@ namespace GamePlatform.Desktop.Localization
             if (_dict.TryGetValue(Current, out var lang) && lang.TryGetValue(key.ToUpperInvariant(), out var value))
                 return value.ToUpperInvariant();
             return key.ToUpperInvariant();
+        }
+
+        public static string TRaw(string key)
+        {
+            if (_dict.TryGetValue(Current, out var lang) && lang.TryGetValue(key.ToUpperInvariant(), out var value))
+                return value;
+            return key;
         }
 
     }

@@ -30,7 +30,7 @@ public partial class App : Application
         /* globalny catcher */
         DispatcherUnhandledException += (_, a) =>
         {
-            MessageBox.Show(a.Exception.ToString(), "Błąd krytyczny",
+            MessageBox.Show(a.Exception.ToString(), Localization.TRaw("CRITICAL_ERROR"),
                             MessageBoxButton.OK, MessageBoxImage.Error);
             a.Handled = true;
         };

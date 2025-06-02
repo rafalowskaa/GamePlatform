@@ -120,6 +120,15 @@
                             Style="{StaticResource NavBtn}"
                             Command="{Binding LogoutCommand}"/>
 
+                    <StackPanel DockPanel.Dock="Right" Orientation="Vertical" Margin="0 0 8 0">
+                        <Button Content="🇵🇱"
+                                Style="{StaticResource FlagBtn}"
+                                Command="{Binding SetPolishCommand}"/>
+                        <Button Content="🇬🇧" Margin="0 4 0 0"
+                                Style="{StaticResource FlagBtn}"
+                                Command="{Binding SetEnglishCommand}"/>
+                    </StackPanel>
+
                     <TabControl Background="{DynamicResource MaterialDesignPaper}"
                                 SelectedIndex="{Binding SelectedTabIndex}"
                                 SelectionChanged="OnTabChanged">

@@ -104,6 +104,15 @@ public partial class ShellViewModel : ObservableObject
         Localization.Current = Localization.Current == Lang.Polish ? Lang.English : Lang.Polish;
     }
 
+    [RelayCommand]
+    private void SetPolish()
+        => Localization.Current = Lang.Polish;
+
+    [RelayCommand]
+    private void SetEnglish()
+        => Localization.Current = Lang.English;
+
+
     /* ==========  LOGOUT  ========== */
     [RelayCommand]
     private async void Logout()

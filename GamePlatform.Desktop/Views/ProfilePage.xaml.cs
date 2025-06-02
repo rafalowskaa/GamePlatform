@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using GamePlatform.Desktop.ViewModels;
+using GamePlatform.Desktop.Localization;
 
 namespace GamePlatform.Desktop.Views;
 public partial class ProfilePage : Page
@@ -28,7 +29,8 @@ public partial class ProfilePage : Page
 
         if (fi.Length > 1_000_000 || (ext != ".jpg" && ext != ".png"))
         {
-            MessageBox.Show("Plik musi być JPG/PNG i mniejszy niż 1MB", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Localization.TRaw("FILE_INVALID"), Localization.TRaw("ERROR"),
+                            MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 

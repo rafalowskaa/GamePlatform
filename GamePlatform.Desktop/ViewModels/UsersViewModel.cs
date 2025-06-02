@@ -8,6 +8,7 @@ using GamePlatform.Shared.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using GamePlatform.Desktop.Localization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +16,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;              // ICollectionView
+using System.Windows.Data;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -34,7 +35,7 @@ public partial class UsersViewModel : ObservableObject
         /* -------  lista opcji do ComboBoxa  ------- */
         Roles = new List<string>
         {
-            "Wszyscy",
+            Localization.TRaw("ALL"),
             nameof(UserRole.Admin),
             nameof(UserRole.Moderator),
             nameof(UserRole.User)
@@ -58,7 +59,7 @@ public partial class UsersViewModel : ObservableObject
 
     /* --------------------  STAN UI  -------------------- */
     [ObservableProperty] private bool _isBusy;
-    [ObservableProperty] private string? _selectedRoleFilter = "Wszyscy";
+    [ObservableProperty] private string? _selectedRoleFilter = Localization.TRaw("ALL");
     [ObservableProperty] private string? _loginFilter;
     [ObservableProperty] private bool _onlyBlocked;
 
@@ -83,7 +84,7 @@ public partial class UsersViewModel : ObservableObject
 
         /*  Rola  */
         if (!string.IsNullOrWhiteSpace(SelectedRoleFilter) &&
-            SelectedRoleFilter != "Wszyscy" &&
+            SelectedRoleFilter != Localization.TRaw("ALL") &&
             !u.Role.ToString().Equals(SelectedRoleFilter, StringComparison.OrdinalIgnoreCase))
             return false;
 
@@ -114,7 +115,7 @@ public partial class UsersViewModel : ObservableObject
     [RelayCommand]
     private void ClearFilters()
     {
-        SelectedRoleFilter = "Wszyscy";
+        SelectedRoleFilter = Localization.TRaw("ALL");
         LoginFilter = null;
         OnlyBlocked = false;
 
@@ -133,8 +134,8 @@ public partial class UsersViewModel : ObservableObject
         if (_auth.CurrentUser?.Id == victim.Id) return;
 
         if (MessageBox.Show(
-                $"Czy na pewno chcesz usunąć użytkownika „{victim.Login}”?",
-                "Potwierdź", MessageBoxButton.YesNo, MessageBoxImage.Warning)
+                string.Format(Localization.TRaw("DELETE_USER_ASK"), victim.Login),
+                Localization.TRaw("CONFIRM"), MessageBoxButton.YesNo, MessageBoxImage.Warning)
             != MessageBoxResult.Yes)
             return;
 
@@ -145,8 +146,8 @@ public partial class UsersViewModel : ObservableObject
         var me = _auth.CurrentUser;
         if (me is null)
         {
-            MessageBox.Show("Brak kontekstu zalogowanego użytkownika.",
-                            "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Localization.TRaw("NO_USER_CONTEXT"),
+                           Localization.TRaw("ERROR"), MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 
@@ -154,8 +155,8 @@ public partial class UsersViewModel : ObservableObject
         if (hasher.VerifyHashedPassword(me, me.PasswordHash, pwdDlg.Password)
             == PasswordVerificationResult.Failed)
         {
-            MessageBox.Show("Nieprawidłowe hasło.",
-                            "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Localization.TRaw("INVALID_PASSWORD"),
+                           Localization.TRaw("ERROR"), MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 

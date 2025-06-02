@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GamePlatform.Desktop.Localization;
 
 namespace GamePlatform.Desktop.Views;
 
@@ -12,8 +13,8 @@ public partial class PasswordPromptWindow : Window
     {
         if (string.IsNullOrWhiteSpace(Password))
         {
-            MessageBox.Show("Hasło nie może być puste.",
-                            "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(Localization.TRaw("EMPTY_PASSWORD"),
+                            Localization.TRaw("ERROR"), MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         DialogResult = true;
