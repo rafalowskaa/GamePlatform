@@ -24,12 +24,16 @@
             <DockPanel>
 
                 <!-- top black bar with avatar and welcome text -->
-                <Border DockPanel.Dock="Top" Background="Black" Padding="8">
+                <Border DockPanel.Dock="Top" Background="Black" Padding="8 0">
                     <StackPanel Orientation="Horizontal">
                         <Border Width="48" Height="48" CornerRadius="24" Background="#333" Margin="0 0 8 0" ClipToBounds="True">
                             <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill"/>
                         </Border>
-                        <TextBlock Text="{Binding WelcomeText}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Foreground="#1F5FFF"/>
+                        <TextBlock FontWeight="Bold" FontSize="16" VerticalAlignment="Center">
+                            <Run Text="Witaj " Foreground="White"/>
+                            <Run Text="{Binding CurrentLogin}" Foreground="#1F5FFF"/>
+                            <Run Text=", w co dziś zagramy?" Foreground="White"/>
+                        </TextBlock>
                     </StackPanel>
                 </Border>
 

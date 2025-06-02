@@ -43,6 +43,7 @@ public partial class ShellViewModel : ObservableObject
 
     public string WelcomeText => $"Witaj {_auth.CurrentLogin}, w co dziś zagramy?";
     public string? AvatarPath => _auth.CurrentUser?.AvatarPath;
+    public string? CurrentLogin => _auth.CurrentLogin;
 
 
 
