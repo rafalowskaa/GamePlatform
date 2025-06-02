@@ -41,6 +41,11 @@ public partial class ShellViewModel : ObservableObject
     [ObservableProperty] private bool _isDrawerOpen;
     [ObservableProperty] private int _selectedTabIndex;
 
+    public string WelcomeText => $"Witaj {_auth.CurrentLogin}, w co dziś zagramy?";
+    public string? AvatarPath => _auth.CurrentUser?.AvatarPath;
+
+
+
 
     public bool IsAdmin => _auth.CurrentRole is UserRole.Admin or UserRole.Moderator;
 

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:views="clr-namespace:GamePlatform.Desktop.Views"
+        xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
@@ -28,7 +29,14 @@
         <Grid>
             <DockPanel>
 
-                <DockPanel DockPanel.Dock="Top">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="8 8 0 8">
+                    <Border Width="48" Height="48" CornerRadius="24" Background="#333">
+                        <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill"/>
+                    </Border>
+                    <TextBlock Text="{Binding WelcomeText}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Margin="8 0 0 0"/>
+                </StackPanel>
+
+                <DockPanel DockPanel.Dock="Top" Margin="0 8 0 0">
                     <Button DockPanel.Dock="Right" Content="Wyloguj" Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding LogoutCommand}"/>
                     <TabControl SelectionChanged="OnTabChanged" Background="{DynamicResource MaterialDesignPaper}" SelectedIndex="{Binding SelectedTabIndex}">
                         <TabItem Header="Gry" Tag="Games" Style="{StaticResource MainTabItemStyle}"/>

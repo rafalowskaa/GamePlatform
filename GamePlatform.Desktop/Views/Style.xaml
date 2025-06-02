@@ -5,6 +5,7 @@
         <Setter Property="Background" Value="#0d3a71"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="Height" Value="36"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding" Value="12 4"/>
         <Setter Property="Template">
