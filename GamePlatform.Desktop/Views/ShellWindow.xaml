@@ -28,17 +28,18 @@
         <Grid>
             <DockPanel>
 
-                <TabControl DockPanel.Dock="Top" SelectionChanged="OnTabChanged" Background="{DynamicResource MaterialDesignPaper}" SelectedIndex="{Binding SelectedTabIndex}">
-                    <TabItem Header="Gry" Tag="Games" Style="{StaticResource MainTabItemStyle}"/>
-                    <TabItem Header="Profil" Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
-                    <TabItem Header="Statystyki" Tag="Stats" Style="{StaticResource MainTabItemStyle}"/>
-                    <TabItem Header="Powiadomienia" Tag="Notify" Style="{StaticResource MainTabItemStyle}"/>
-                    <TabItem Header="Do akceptacji" Tag="Pending" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                    <TabItem Header="Zgłoszenia" Tag="Reports" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                    <TabItem Header="Użytkownicy" Tag="Users" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                </TabControl>
-
-                <Button DockPanel.Dock="Top" Content="Wyloguj" Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding LogoutCommand}"/>
+                <DockPanel DockPanel.Dock="Top">
+                    <Button DockPanel.Dock="Right" Content="Wyloguj" Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding LogoutCommand}"/>
+                    <TabControl SelectionChanged="OnTabChanged" Background="{DynamicResource MaterialDesignPaper}" SelectedIndex="{Binding SelectedTabIndex}">
+                        <TabItem Header="Gry" Tag="Games" Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="Profil" Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="Statystyki" Tag="Stats" Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="Powiadomienia" Tag="Notify" Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="Do akceptacji" Tag="Pending" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        <TabItem Header="Zgłoszenia" Tag="Reports" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        <TabItem Header="Użytkownicy" Tag="Users" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                    </TabControl>
+                </DockPanel>
 
                 <!--  zawartość  -->
                 <Frame Content="{Binding CurrentPage}"

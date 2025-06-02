@@ -152,9 +152,10 @@ public sealed class GameRepositorySqlite : IGameRepository
     {
         var list = await _db.FavoriteGames
                             .Where(f => f.UserId == userId)
-                            .Select(f => f.Game!)
-                            .Include(g => g.Versions)
+                            .Include(f => f.Game!)
+                                .ThenInclude(g => g.Versions)
                             .AsNoTracking()
+                            .Select(f => f.Game!)
                             .ToListAsync();
         foreach (var g in list) SetCover(g);
         return list;

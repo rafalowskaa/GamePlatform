@@ -2,8 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style x:Key="MainTabItemStyle" TargetType="TabItem">
-        <Setter Property="Background" Value="#114477"/>
+        <Setter Property="Background" Value="#0d3a71"/>
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="MinWidth" Value="100"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding" Value="12 4"/>
         <Setter Property="Template">
@@ -28,7 +29,7 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#114477" Duration="0:0:0.12"/>
+                                        <ColorAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#0d3a71" Duration="0:0:0.12"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
