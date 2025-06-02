@@ -23,4 +23,8 @@ public class Game
 
     public ICollection<GameVersion> Versions { get; set; } = [];
     public ICollection<Score> Scores { get; set; } = [];
+    public ICollection<FavoriteGame> FavoritedBy { get; set; } = [];
+
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public bool IsFavorite { get; set; }
 }

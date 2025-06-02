@@ -28,120 +28,17 @@
         <Grid>
             <DockPanel>
 
-            <!-- ======= GÓRNY PASEK NAWIGACJI ======= -->
-            <ToolBar DockPanel.Dock="Top" Background="{DynamicResource MaterialDesignPaper}">
+                <TabControl DockPanel.Dock="Top" SelectionChanged="OnTabChanged" Background="{DynamicResource MaterialDesignPaper}" SelectedIndex="{Binding SelectedTabIndex}">
+                    <TabItem Header="Gry" Tag="Games" Style="{StaticResource MainTabItemStyle}"/>
+                    <TabItem Header="Profil" Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
+                    <TabItem Header="Statystyki" Tag="Stats" Style="{StaticResource MainTabItemStyle}"/>
+                    <TabItem Header="Powiadomienia" Tag="Notify" Style="{StaticResource MainTabItemStyle}"/>
+                    <TabItem Header="Do akceptacji" Tag="Pending" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                    <TabItem Header="Zgłoszenia" Tag="Reports" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                    <TabItem Header="Użytkownicy" Tag="Users" Style="{StaticResource MainTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                </TabControl>
 
-                <!-- każda pozycja: Games / Profile / Friends / Stats / Users -->
-                <Button Content="Gry" Command="{Binding ShowGamesCommand}">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding CurrentTag}" Value="Games">
-                                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                                    <Setter Property="Foreground" Value="White"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-
-                <Button Content="Profil" Command="{Binding ShowProfileCommand}">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding CurrentTag}" Value="Profile">
-                                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                                    <Setter Property="Foreground" Value="White"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-
-                
-
-                <Button Content="Statystyki" Command="{Binding ShowStatsCommand}">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding CurrentTag}" Value="Stats">
-                                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                                    <Setter Property="Foreground" Value="White"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-
-                    <Button Content="Powiadomienia" Command="{Binding ShowNotificationsCommand}">
-                        <Button.Style>
-                            <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CurrentTag}" Value="Notify">
-                                        <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-
-                    <Button Content="Do akceptacji"
-                        Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
-                        Command="{Binding ShowPendingCommand}">
-                        <Button.Style>
-                            <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
-                                <Setter Property="Background" Value="Yellow"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CurrentTag}" Value="Pending">
-                                        <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-
-                    <Button Content="Zgłoszenia"
-                        Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
-                        Command="{Binding ShowReportsCommand}">
-                        <Button.Style>
-                            <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
-                                <Setter Property="Background" Value="Yellow"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding CurrentTag}" Value="Reports">
-                                        <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-
-                    <Button Content="Użytkownicy"
-                    Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
-                   
-                    Command="{Binding ShowUsersCommand}">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource NavBtn}">
-                                <Setter Property="Background" Value="Yellow"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Style.Triggers>
-                                <DataTrigger Binding="{Binding CurrentTag}" Value="Users">
-                                    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                                    <Setter Property="Foreground" Value="White"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-
-                <Separator/>
-
-                <Button Content="Wyloguj" Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding LogoutCommand}"/>
-            </ToolBar>
+                <Button DockPanel.Dock="Top" Content="Wyloguj" Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding LogoutCommand}"/>
 
                 <!--  zawartość  -->
                 <Frame Content="{Binding CurrentPage}"

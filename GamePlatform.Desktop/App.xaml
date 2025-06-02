@@ -19,6 +19,7 @@
             <conv:BoolToThicknessConverter x:Key="BoolToThickness"/>
             <conv:BoolToVisibilityConverter x:Key="BoolToVisibility" Invert="True"/>
             <conv:BoolToHAlignmentConverter x:Key="BoolToAlign"/>
+            <conv:NullToVisibilityConverter x:Key="NullToVis"/>
 
             <!-- globalny Snackbar -->
             <md:SnackbarMessageQueue x:Key="GlobalMsgQueue" DiscardDuplicates="True"/>
@@ -27,6 +28,8 @@
                 <ResourceDictionary Source="pack://application:,,,/Resources/MaterialColors.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Resources/IconPack.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Resources/TextStyles.xaml"/>
+
+                <ResourceDictionary Source="Views/Style.xaml"/>
 
                 <md:BundledTheme BaseTheme="Dark"
                                  PrimaryColor="Indigo"

@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace GamePlatform.Shared.Enums;
 
-public enum GameCategory { Arcade, Puzzle, FPS, RPG, Sport, Other }
+public enum GameCategory { Arcade, Puzzle, FPS, RPG, Sport, Quiz, Strategy, Other }

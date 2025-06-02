@@ -18,7 +18,8 @@
             <TextBox Width="260" DockPanel.Dock="Left"
                      Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
                      md:HintAssist.Hint="Szukaj…"/>
-            <Button Content="Dodaj grę" DockPanel.Dock="Right" Width="90"
+            <Button Content="Dodaj grę" DockPanel.Dock="Right"
+                    MinWidth="110" Padding="12 4" TextWrapping="NoWrap"
                     Background="Black" Foreground="White" BorderBrush="Black"
                     Style="{StaticResource MaterialDesignRaisedButton}"
                     HorizontalAlignment="Right"
@@ -42,44 +43,44 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Width="200" Height="260" Margin="4" BorderBrush="Gray" BorderThickness="1">
-                                <StackPanel MouseLeftButtonUp="OnTileClick">
-                                    <Image Height="220" Width="200" Stretch="UniformToFill"
-                                           Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
-                                    <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
-                                </StackPanel>
+                                <Grid>
+                                    <Button Content="❤" Command="{Binding DataContext.ToggleFavoriteCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"
+                                            Background="Transparent" BorderThickness="0" Foreground="Red" HorizontalAlignment="Right"/>
+                                    <StackPanel MouseLeftButtonUp="OnTileClick">
+                                        <Image Height="220" Width="200" Stretch="UniformToFill"
+                                               Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
+                                        <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-
-            <!-- szczegóły -->
-            <md:TransitioningContent Grid.Column="1" Content="{Binding SelectedGame}">
-                <md:TransitioningContent.ContentTemplate>
-                    <DataTemplate DataType="{x:Type models:Game}">
-                        <StackPanel Margin="12">
-                            <Image Height="220" Width="300" Stretch="Uniform"
-                                   Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
-                            <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="Bold" Margin="0 8 0 0"/>
-                            <TextBlock Text="{Binding Category}"/>
-                            <TextBlock Text="{Binding Mode}"/>
-                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0 8 0 8"/>
-                            <Button Content="Zagraj" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsApproved}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                        </StackPanel>
-                    </DataTemplate>
-                </md:TransitioningContent.ContentTemplate>
-            </md:TransitioningContent>
+        
+            <!-- overlay szczegółów -->
+            <Grid Grid.ColumnSpan="2" Background="#80000000"
+                  Visibility="{Binding SelectedGame, Converter={StaticResource NullToVis}}"
+                  MouseDown="OnOverlayClick">
+                <Border Background="{DynamicResource MaterialDesignPaper}" Padding="12" CornerRadius="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <md:TransitioningContent Content="{Binding SelectedGame}">
+                        <md:TransitioningContent.ContentTemplate>
+                            <DataTemplate DataType="{x:Type models:Game}">
+                                <StackPanel Margin="12">
+                                    <Image Height="220" Width="300" Stretch="Uniform"
+                                           Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
+                                    <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="Bold" Margin="0 8 0 0"/>
+                                    <TextBlock Text="{Binding Category}"/>
+                                    <TextBlock Text="{Binding Mode}"/>
+                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0 8 0 8"/>
+                                    <Button Content="Zagraj" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignRaisedButton}" Background="Black" Foreground="White" MinWidth="160" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </md:TransitioningContent.ContentTemplate>
+                    </md:TransitioningContent>
+                </Border>
+            </Grid>
         </Grid>
     </DockPanel>
 </Page>

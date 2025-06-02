@@ -44,6 +44,8 @@ public class User
     public ICollection<Friend> FriendsInitiated { get; set; } = [];
     public ICollection<Friend> FriendsAccepted { get; set; } = [];
 
+    public ICollection<FavoriteGame> Favorites { get; set; } = [];
+
     /* —— blokady —— */
     public ICollection<BlockedUser> BlockedUsers { get; set; } = []; // ja blokuję
     public ICollection<BlockedUser> BlockedBy { get; set; } = []; // ktoś blokuje mnie

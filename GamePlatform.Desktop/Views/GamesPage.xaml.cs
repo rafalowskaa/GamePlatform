@@ -27,4 +27,11 @@ public partial class GamesPage : Page
         if (DataContext is MainViewModel vm && sender is FrameworkElement fe && fe.DataContext is Game g)
             vm.SelectedGame = g;
     }
+
+
+    private void OnOverlayClick(object sender, MouseButtonEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+            vm.SelectedGame = null;
+    }
 }

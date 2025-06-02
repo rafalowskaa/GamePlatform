@@ -39,8 +39,9 @@ public partial class ShellViewModel : ObservableObject
     [ObservableProperty] private object _currentPage = null!;
     [ObservableProperty] private string _currentTag = "";
     [ObservableProperty] private bool _isDrawerOpen;
+    [ObservableProperty] private int _selectedTabIndex;
 
- 
+
     public bool IsAdmin => _auth.CurrentRole is UserRole.Admin or UserRole.Moderator;
 
     /* ==========  NAWIGACJA  ========== */
@@ -48,6 +49,17 @@ public partial class ShellViewModel : ObservableObject
     {
         CurrentPage = page;
         CurrentTag = tag;
+        SelectedTabIndex = tag switch
+        {
+            "Games" => 0,
+            "Profile" => 1,
+            "Stats" => 2,
+            "Notify" => 3,
+            "Pending" => 4,
+            "Reports" => 5,
+            "Users" => 6,
+            _ => SelectedTabIndex
+        };
     }
 
     [RelayCommand] private void ShowGames() => Navigate(new GamesPage { DataContext = _sp.GetRequiredService<MainViewModel>() }, "Games");

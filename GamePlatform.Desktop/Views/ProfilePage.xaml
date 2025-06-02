@@ -1,7 +1,13 @@
 ﻿<Page x:Class="GamePlatform.Desktop.Views.ProfilePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
+      xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
+      xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared">
+
+    <Page.Resources>
+        <conv:CoverImageConverter x:Key="CoverConv"/>
+    </Page.Resources>
 
     <StackPanel Margin="24" Width="360"
                 HorizontalAlignment="Center"
@@ -32,5 +38,25 @@
                 Command="{Binding SaveCommand}"
                 Margin="0 12 0 0"
                 IsDefault="True"/>
+
+        <TextBlock Text="Ulubione gry" FontWeight="Bold" Margin="0 20 0 4"/>
+        <ItemsControl ItemsSource="{Binding Favorites}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:Game}">
+                    <Border Width="200" Height="260" Margin="4" BorderBrush="Gray" BorderThickness="1">
+                        <StackPanel>
+                            <Image Height="220" Width="200" Stretch="UniformToFill"
+                                   Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
+                            <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </StackPanel>
 </Page>

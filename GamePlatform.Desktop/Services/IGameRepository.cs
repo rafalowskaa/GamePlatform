@@ -16,6 +16,10 @@ public interface IGameRepository
     Task<IReadOnlyList<Game>> GetPendingAsync();
     Task DeleteAsync(Guid id);
 
+    Task ToggleFavoriteAsync(Guid userId, Guid gameId);
+    Task<IReadOnlyList<Game>> GetFavoritesAsync(Guid userId);
+
+
     /* ---- wyniki gier ---- */
     Task AddScoreAsync(Guid gameId, Score score);
 

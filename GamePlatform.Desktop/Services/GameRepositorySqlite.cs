@@ -36,6 +36,7 @@ public sealed class GameRepositorySqlite : IGameRepository
     {
         IQueryable<Game> q = _db.Games.Include(g => g.Versions)
                                       .Include(g => g.SubmittedByUser)
+                                      .Where(g => g.IsApproved)
                                       .AsNoTracking();
         if (!string.IsNullOrWhiteSpace(filter))
             q = q.Where(g => g.Title.Contains(filter));
@@ -136,4 +137,26 @@ public sealed class GameRepositorySqlite : IGameRepository
                         .Take(limit)
                         .AsNoTracking()
                         .ToListAsync();
+
+    public async Task ToggleFavoriteAsync(Guid userId, Guid gameId)
+    {
+        var fav = await _db.FavoriteGames.FindAsync(userId, gameId);
+        if (fav is null)
+            _db.FavoriteGames.Add(new FavoriteGame { UserId = userId, GameId = gameId });
+        else
+            _db.FavoriteGames.Remove(fav);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<IReadOnlyList<Game>> GetFavoritesAsync(Guid userId)
+    {
+        var list = await _db.FavoriteGames
+                            .Where(f => f.UserId == userId)
+                            .Select(f => f.Game!)
+                            .Include(g => g.Versions)
+                            .AsNoTracking()
+                            .ToListAsync();
+        foreach (var g in list) SetCover(g);
+        return list;
+    }
 }

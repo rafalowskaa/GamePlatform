@@ -27,6 +27,7 @@ public class AppDbContext : DbContext
     public DbSet<BlockedUser> BlockedUsers => Set<BlockedUser>();
     public DbSet<UserReport> UserReports => Set<UserReport>();
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
+    public DbSet<FavoriteGame> FavoriteGames => Set<FavoriteGame>();
 
     /* ─────────── Config ─────────── */
     protected override void OnConfiguring(DbContextOptionsBuilder b)
@@ -90,6 +91,22 @@ public class AppDbContext : DbContext
         {
             cfg.HasKey(m => m.Id);
             cfg.HasIndex(m => new { m.FromId, m.ToId });
+        });
+
+        /* —— FavoriteGame —— */
+        b.Entity<FavoriteGame>(cfg =>
+        {
+            cfg.HasKey(f => new { f.UserId, f.GameId });
+
+            cfg.HasOne(f => f.User)
+               .WithMany()
+               .HasForeignKey(f => f.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            cfg.HasOne(f => f.Game)
+               .WithMany()
+               .HasForeignKey(f => f.GameId)
+               .OnDelete(DeleteBehavior.Cascade);
         });
     }
 

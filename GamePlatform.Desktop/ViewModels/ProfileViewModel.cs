@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
+using GamePlatform.Shared.Models;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -13,11 +15,13 @@ public partial class ProfileViewModel : ObservableObject
 {
     private readonly IAuthService _auth;
     private readonly IProfileService _profileSvc;
+    private readonly IGameRepository _games;
 
-    public ProfileViewModel(IAuthService auth, IProfileService profileSvc)
+    public ProfileViewModel(IAuthService auth, IProfileService profileSvc, IGameRepository games)
     {
         _auth = auth;
         _profileSvc = profileSvc;
+        _games = games;
 
         var u = _auth.CurrentUser!;
         NewLogin = u.Login;
@@ -26,6 +30,7 @@ public partial class ProfileViewModel : ObservableObject
         AvatarPath = u.AvatarPath;
         if (File.Exists(AvatarPath))
             Avatar = new BitmapImage(new System.Uri(Path.GetFullPath(AvatarPath)));
+        _ = LoadFavoritesAsync();
     }
 
     /* -------- pola edycyjne -------- */
@@ -68,6 +73,12 @@ public partial class ProfileViewModel : ObservableObject
 
         if (!ok) Error = "Nie udało się zapisać profilu (duplikat loginu/e-maila).";
         else NewPassword = "";
+    }
+
+    private async Task LoadFavoritesAsync()
+    {
+        var list = await _games.GetFavoritesAsync(_auth.CurrentUser!.Id);
+        Favorites = new ObservableCollection<Game>(list);
     }
 
 }

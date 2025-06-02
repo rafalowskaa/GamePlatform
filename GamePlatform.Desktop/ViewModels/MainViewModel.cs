@@ -1,16 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
+using GamePlatform.Desktop.Views;
+using GamePlatform.Shared.Enums;
 using GamePlatform.Shared.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows;
-using GamePlatform.Shared.Enums;
-using GamePlatform.Desktop.Views;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -37,6 +38,19 @@ public partial class MainViewModel : ObservableObject
     partial void OnFilterTextChanged(string? _unused)   // param nieużywany
         => _ = RefreshAsync();
 
+    [ObservableProperty] private GameMode? _selectedMode;
+    partial void OnSelectedModeChanged(GameMode? _) => _ = RefreshAsync();
+
+    [ObservableProperty] private GameCategory? _selectedCategory;
+    partial void OnSelectedCategoryChanged(GameCategory? _) => _ = RefreshAsync();
+
+    public IEnumerable<GameMode> ModeValues => EnumExtensions.ModeValues;
+    public IEnumerable<GameCategory> CategoryValues => EnumExtensions.CategoryValues;
+
+    public IEnumerable<string> SortOptions { get; } = new[] { "Tytuł", "Data" };
+    [ObservableProperty] private string? _selectedSort;
+    partial void OnSelectedSortChanged(string? _) => _ = RefreshAsync();
+
     [ObservableProperty] private bool _isBusy;
 
     /* ---------------- commands (Toolkit) -------------- */
@@ -46,7 +60,22 @@ public partial class MainViewModel : ObservableObject
     {
         IsBusy = true;
         var list = await _repo.GetAllAsync(FilterText);
-        Games = new ObservableCollection<Game>(list);
+        var favs = await _repo.GetFavoritesAsync(_sp.GetRequiredService<IAuthService>().CurrentUser!.Id);
+        var favIds = favs.Select(f => f.Id).ToHashSet();
+        foreach (var g in list) g.IsFavorite = favIds.Contains(g.Id);
+
+        IEnumerable<Game> query = list;
+        if (SelectedMode is GameMode m)
+            query = query.Where(g => g.Mode == m);
+        if (SelectedCategory is GameCategory c)
+            query = query.Where(g => g.Category == c);
+        query = SelectedSort switch
+        {
+            "Tytuł" => query.OrderBy(g => g.Title),
+            "Data" => query.OrderByDescending(g => g.SubmittedAt),
+            _ => query
+        };
+        Games = new ObservableCollection<Game>(query);
         IsBusy = false;
     }
 
@@ -82,6 +111,16 @@ public partial class MainViewModel : ObservableObject
     {
         if (g is null) return;
         await _repo.DeleteAsync(g.Id);
+        await RefreshAsync();
+    }
+
+    [RelayCommand]
+    private async Task ToggleFavoriteAsync(Game? g)
+    {
+        g ??= SelectedGame;
+        if (g is null) return;
+        var userId = _sp.GetRequiredService<IAuthService>().CurrentUser!.Id;
+        await _repo.ToggleFavoriteAsync(userId, g.Id);
         await RefreshAsync();
     }
 
