@@ -30,6 +30,18 @@ public sealed class GameRepositorySqlite : IGameRepository
         }
     }
 
+    private static void CopyDirectory(string sourceDir, string destDir)
+    {
+        Directory.CreateDirectory(destDir);
+        foreach (var file in Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories))
+        {
+            string rel = Path.GetRelativePath(sourceDir, file);
+            string dest = Path.Combine(destDir, rel);
+            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
+            File.Copy(file, dest, true);
+        }
+    }
+
     /* ------------ QUERY ------------ */
 
     public async Task<IReadOnlyList<Game>> GetAllAsync(string? filter = null)
@@ -79,8 +91,8 @@ public sealed class GameRepositorySqlite : IGameRepository
         }
         else if (ext == ".exe")
         {
-            Directory.CreateDirectory(extractDir);
-            File.Copy(firstVersion.FolderPath, Path.Combine(extractDir, Path.GetFileName(firstVersion.FolderPath)), true);
+            string sourceDir = Path.GetDirectoryName(firstVersion.FolderPath)!;
+            CopyDirectory(sourceDir, extractDir);
         }
 
         if (!string.IsNullOrEmpty(game.CoverPath) && File.Exists(game.CoverPath))
