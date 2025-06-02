@@ -120,14 +120,16 @@
                             Style="{StaticResource NavBtn}"
                             Command="{Binding LogoutCommand}"/>
 
-                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="0 0 8 0">
-                        <Button Style="{StaticResource FlagBtn}" Command="{Binding SetPolishCommand}">
-                            <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
-                        </Button>
-                        <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
-                            <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
-                        </Button>
-                    </StackPanel>
+                    <Border DockPanel.Dock="Right" Background="{StaticResource TabBlueBrush}" CornerRadius="4" Padding="2" Margin="0 0 8 0">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource FlagBtn}" Command="{Binding SetPolishCommand}">
+                                <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
+                            </Button>
+                            <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
+                                <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
+                            </Button>
+                        </StackPanel>
+                    </Border>
 
                     <TabControl Background="{DynamicResource MaterialDesignPaper}"
                                 SelectedIndex="{Binding SelectedTabIndex}"
