@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using GamePlatform.Desktop.Localization;
+using Loc = GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop.Views;
 
@@ -13,8 +14,8 @@ public partial class PasswordPromptWindow : Window
     {
         if (string.IsNullOrWhiteSpace(Password))
         {
-            MessageBox.Show(Localization.TRaw("EMPTY_PASSWORD"),
-                            Localization.TRaw("ERROR"), MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(Loc.TRaw("EMPTY_PASSWORD"),
+                            Loc.TRaw("ERROR"), MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         DialogResult = true;

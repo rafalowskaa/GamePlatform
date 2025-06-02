@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.AspNetCore.Identity;
 using GamePlatform.Desktop.Localization;
+using Loc = GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -87,7 +88,7 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
             Owner = System.Windows.Application.Current.MainWindow,
             Width = 400,
             Height = 500,
-            Title = Localization.TRaw("ADD_FRIEND")
+            Title = Loc.TRaw("ADD_FRIEND")
         };
         win.ShowDialog();
         _ = RefreshFriendsAsync();
@@ -136,7 +137,7 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
     {
         if (target is null) return;
 
-        if (!await _notify.ConfirmAsync(string.Format(Localization.TRaw("BLOCK_USER_ASK"), target.Login), 0))
+        if (!await _notify.ConfirmAsync(string.Format(Loc.TRaw("BLOCK_USER_ASK"), target.Login), 0))
             return;
 
         var pwdDlg = new PasswordPromptWindow { Owner = Application.Current.MainWindow };
@@ -149,8 +150,8 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
         if (hasher.VerifyHashedPassword(me, me.PasswordHash, pwdDlg.Password)
             == Microsoft.AspNetCore.Identity.PasswordVerificationResult.Failed)
         {
-            MessageBox.Show(Localization.TRaw("INVALID_PASSWORD"), Localization.TRaw("ERROR"),
-                            MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Loc.TRaw("INVALID_PASSWORD"), Loc.TRaw("ERROR"),
+                             MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 

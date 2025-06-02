@@ -7,6 +7,7 @@ using GamePlatform.Shared.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows.Controls;
+using Loc = GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -101,16 +102,16 @@ public partial class ShellViewModel : ObservableObject
     [RelayCommand]
     private void ToggleLanguage()
     {
-        Localization.Current = Localization.Current == Lang.Polish ? Lang.English : Lang.Polish;
+        Loc.Current = Loc.Current == Lang.Polish ? Lang.English : Lang.Polish;
     }
 
     [RelayCommand]
     private void SetPolish()
-        => Localization.Current = Lang.Polish;
+        => Loc.Current = Lang.Polish;
 
     [RelayCommand]
     private void SetEnglish()
-        => Localization.Current = Lang.English;
+       => Loc.Current = Lang.English;
 
 
     /* ==========  LOGOUT  ========== */

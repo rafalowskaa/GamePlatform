@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using GamePlatform.Desktop.Localization;
+using Loc = GamePlatform.Desktop.Localization.Localization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,7 +36,7 @@ public partial class UsersViewModel : ObservableObject
         /* -------  lista opcji do ComboBoxa  ------- */
         Roles = new List<string>
         {
-            Localization.TRaw("ALL"),
+             Loc.TRaw("ALL"),
             nameof(UserRole.Admin),
             nameof(UserRole.Moderator),
             nameof(UserRole.User)
@@ -59,7 +60,7 @@ public partial class UsersViewModel : ObservableObject
 
     /* --------------------  STAN UI  -------------------- */
     [ObservableProperty] private bool _isBusy;
-    [ObservableProperty] private string? _selectedRoleFilter = Localization.TRaw("ALL");
+    [ObservableProperty] private string? _selectedRoleFilter = Loc.TRaw("ALL");
     [ObservableProperty] private string? _loginFilter;
     [ObservableProperty] private bool _onlyBlocked;
 
@@ -84,7 +85,7 @@ public partial class UsersViewModel : ObservableObject
 
         /*  Rola  */
         if (!string.IsNullOrWhiteSpace(SelectedRoleFilter) &&
-            SelectedRoleFilter != Localization.TRaw("ALL") &&
+            SelectedRoleFilter != Loc.TRaw("ALL") &&
             !u.Role.ToString().Equals(SelectedRoleFilter, StringComparison.OrdinalIgnoreCase))
             return false;
 
@@ -115,7 +116,7 @@ public partial class UsersViewModel : ObservableObject
     [RelayCommand]
     private void ClearFilters()
     {
-        SelectedRoleFilter = Localization.TRaw("ALL");
+        SelectedRoleFilter = Loc.TRaw("ALL");
         LoginFilter = null;
         OnlyBlocked = false;
 
@@ -134,8 +135,8 @@ public partial class UsersViewModel : ObservableObject
         if (_auth.CurrentUser?.Id == victim.Id) return;
 
         if (MessageBox.Show(
-                string.Format(Localization.TRaw("DELETE_USER_ASK"), victim.Login),
-                Localization.TRaw("CONFIRM"), MessageBoxButton.YesNo, MessageBoxImage.Warning)
+                string.Format(Loc.TRaw("DELETE_USER_ASK"), victim.Login),
+                Loc.TRaw("CONFIRM"), MessageBoxButton.YesNo, MessageBoxImage.Warning)
             != MessageBoxResult.Yes)
             return;
 
@@ -146,8 +147,8 @@ public partial class UsersViewModel : ObservableObject
         var me = _auth.CurrentUser;
         if (me is null)
         {
-            MessageBox.Show(Localization.TRaw("NO_USER_CONTEXT"),
-                           Localization.TRaw("ERROR"), MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Loc.TRaw("NO_USER_CONTEXT"),
+                           Loc.TRaw("ERROR"), MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 
@@ -155,8 +156,8 @@ public partial class UsersViewModel : ObservableObject
         if (hasher.VerifyHashedPassword(me, me.PasswordHash, pwdDlg.Password)
             == PasswordVerificationResult.Failed)
         {
-            MessageBox.Show(Localization.TRaw("INVALID_PASSWORD"),
-                           Localization.TRaw("ERROR"), MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(Loc.TRaw("INVALID_PASSWORD"),
+                           Loc.TRaw("ERROR"), MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 

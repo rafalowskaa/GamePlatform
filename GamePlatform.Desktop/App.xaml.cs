@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using GamePlatform.Desktop.Localization;
+using Loc = GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop;
 
@@ -30,12 +31,12 @@ public partial class App : Application
         /* globalny catcher */
         DispatcherUnhandledException += (_, a) =>
         {
-            MessageBox.Show(a.Exception.ToString(), Localization.TRaw("CRITICAL_ERROR"),
-                            MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(a.Exception.ToString(), Loc.TRaw("CRITICAL_ERROR"),
+                           MessageBoxButton.OK, MessageBoxImage.Error);
             a.Handled = true;
         };
 
-        Localization.Current = Lang.English;
+        Loc.Current = Lang.English;
 
         /* —— DI + EF —— */
         var sc = new ServiceCollection();

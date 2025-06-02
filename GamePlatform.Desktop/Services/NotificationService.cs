@@ -5,6 +5,7 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using System.IO;
 using GamePlatform.Desktop.Localization;
+using Loc = GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop.Services;
 
@@ -60,7 +61,7 @@ public sealed class NotificationService : INotificationService
 
     public Task<bool> ConfirmAsync(string message, int _)  // ms ignorujemy – MessageBox blokuje
     {
-        var res = MessageBox.Show(message, Localization.TRaw("CONFIRM"), MessageBoxButton.YesNo,
+        var res = MessageBox.Show(message, Loc.TRaw("CONFIRM"), MessageBoxButton.YesNo,
                                    MessageBoxImage.Question);
         return Task.FromResult(res == MessageBoxResult.Yes);
     }

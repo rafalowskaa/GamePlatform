@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GamePlatform.Desktop.ViewModels;
 using GamePlatform.Desktop.Localization;
+using Loc = GamePlatform.Desktop.Localization.Localization;
 
 namespace GamePlatform.Desktop.Views;
 public partial class ProfilePage : Page
@@ -29,7 +30,7 @@ public partial class ProfilePage : Page
 
         if (fi.Length > 1_000_000 || (ext != ".jpg" && ext != ".png"))
         {
-            MessageBox.Show(Localization.TRaw("FILE_INVALID"), Localization.TRaw("ERROR"),
+            MessageBox.Show(Loc.TRaw("FILE_INVALID"), Loc.TRaw("ERROR"),
                             MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }

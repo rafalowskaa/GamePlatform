@@ -1,8 +1,8 @@
 ﻿<Page x:Class="GamePlatform.Desktop.Views.PendingRequestsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-       xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
-       Title="Oczekujące zaproszenia">
+      xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
+      Title="Oczekujące zaproszenia">
 
     <DockPanel Margin="24">
 
