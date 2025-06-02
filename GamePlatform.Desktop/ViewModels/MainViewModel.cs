@@ -35,19 +35,19 @@ public partial class MainViewModel : ObservableObject
     private ObservableCollection<Game> _games = new();
 
     [ObservableProperty] private string _filterText = "";
-    partial void OnFilterTextChanged(string? _, string? __)
+    partial void OnFilterTextChanged(string? oldValue, string? newValue)
     {
         _ = RefreshAsync();
     }
 
     [ObservableProperty] private GameMode? _selectedMode;
-    partial void OnSelectedModeChanged(GameMode? _, GameMode? __)
+    partial void OnSelectedModeChanged(GameMode? oldValue, GameMode? newValue)
     {
         _ = RefreshAsync();
     }
 
     [ObservableProperty] private GameCategory? _selectedCategory;
-    partial void OnSelectedCategoryChanged(GameCategory? _, GameCategory? __)
+    partial void OnSelectedCategoryChanged(GameCategory? oldValue, GameCategory? newValue)
     {
         _ = RefreshAsync();
     }
@@ -57,7 +57,7 @@ public partial class MainViewModel : ObservableObject
 
     public IEnumerable<string> SortOptions { get; } = new[] { "Tytuł", "Data" };
     [ObservableProperty] private string? _selectedSort;
-    partial void OnSelectedSortChanged(string? _, string? __)
+    partial void OnSelectedSortChanged(string? oldValue, string? newValue)
     {
         _ = RefreshAsync();
     }

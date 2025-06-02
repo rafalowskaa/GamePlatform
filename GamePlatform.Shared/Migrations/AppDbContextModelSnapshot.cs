@@ -64,6 +64,31 @@ namespace GamePlatform.Shared.Migrations
                     b.ToTable("ChatMessages");
                 });
 
+            modelBuilder.Entity("GamePlatform.Shared.Models.FavoriteGame", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("GameId1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "GameId");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("GameId1");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("FavoriteGames");
+                });
+
             modelBuilder.Entity("GamePlatform.Shared.Models.Friend", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -315,6 +340,33 @@ namespace GamePlatform.Shared.Migrations
                     b.Navigation("Blocker");
                 });
 
+            modelBuilder.Entity("GamePlatform.Shared.Models.FavoriteGame", b =>
+                {
+                    b.HasOne("GamePlatform.Shared.Models.Game", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GamePlatform.Shared.Models.Game", null)
+                        .WithMany("FavoritedBy")
+                        .HasForeignKey("GameId1");
+
+                    b.HasOne("GamePlatform.Shared.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GamePlatform.Shared.Models.User", null)
+                        .WithMany("Favorites")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("Game");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GamePlatform.Shared.Models.Friend", b =>
                 {
                     b.HasOne("GamePlatform.Shared.Models.User", "Mate")
@@ -405,6 +457,8 @@ namespace GamePlatform.Shared.Migrations
 
             modelBuilder.Entity("GamePlatform.Shared.Models.Game", b =>
                 {
+                    b.Navigation("FavoritedBy");
+
                     b.Navigation("Scores");
 
                     b.Navigation("Versions");
@@ -415,6 +469,8 @@ namespace GamePlatform.Shared.Migrations
                     b.Navigation("BlockedBy");
 
                     b.Navigation("BlockedUsers");
+
+                    b.Navigation("Favorites");
 
                     b.Navigation("FriendsAccepted");
 

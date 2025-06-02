@@ -65,7 +65,7 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
     [ObservableProperty] private bool _blockedExpanded = false;
 
     /* ========== REAKCJA NA WPISYWANY TEKST ========== */
-    partial void OnSearchTextChanged(string? newValue)
+    partial void OnSearchTextChanged(string? oldValue, string? newValue)
     {
         _ = RefreshSuggestionsAsync();
     }
