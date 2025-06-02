@@ -16,7 +16,7 @@ public static class Localization
     /* -------- powiadamianie UI -------- */
     private static Lang _current = Lang.Polish;
     public static event EventHandler? LanguageChanged;
-    public static event PropertyChangedEventHandler? PropertyChanged;
+    public static event PropertyChangedEventHandler? LanguagePropertyChanged;
 
     public static Lang Current
     {
@@ -26,7 +26,7 @@ public static class Localization
             if (_current == value) return;
             _current = value;
             LanguageChanged?.Invoke(null, EventArgs.Empty);
-            PropertyChanged?.Invoke(null, new(nameof(Current)));
+            LanguagePropertyChanged?.Invoke(null, new(nameof(Current)));
         }
     }
 
