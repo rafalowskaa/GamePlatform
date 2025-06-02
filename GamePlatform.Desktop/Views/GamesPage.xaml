@@ -18,12 +18,14 @@
             <TextBox Width="260" DockPanel.Dock="Left"
                      Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
                      md:HintAssist.Hint="Szukaj…"/>
-            <Button Content="Dodaj grę" DockPanel.Dock="Right"
-                    MinWidth="110" Padding="12 4" TextWrapping="NoWrap"
+            <Button DockPanel.Dock="Right"
+                    MinWidth="110" Padding="12 4"
                     Background="Black" Foreground="White" BorderBrush="Black"
                     Style="{StaticResource MaterialDesignRaisedButton}"
                     HorizontalAlignment="Right"
-                    Click="OnAddGameClick"/>
+                    Click="OnAddGameClick">
+                <TextBlock Text="Dodaj grę" TextWrapping="NoWrap"/>
+            </Button>
     </DockPanel>
 
     <Grid>

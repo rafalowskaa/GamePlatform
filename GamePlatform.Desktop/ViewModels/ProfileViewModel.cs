@@ -42,6 +42,8 @@ public partial class ProfileViewModel : ObservableObject
     [ObservableProperty] private BitmapImage? _avatar;
     [ObservableProperty] private string? _error;
 
+    [ObservableProperty] private ObservableCollection<Game> _favorites = new();
+
     /* -------- Pick avatar ---------- */
     [RelayCommand]
     private void PickAvatar()

@@ -35,21 +35,21 @@ public partial class MainViewModel : ObservableObject
     private ObservableCollection<Game> _games = new();
 
     [ObservableProperty] private string _filterText = "";
-    partial void OnFilterTextChanged(string? _unused)   // param nieużywany
+    partial void OnFilterTextChanged(string? _, string? __)
         => _ = RefreshAsync();
 
     [ObservableProperty] private GameMode? _selectedMode;
-    partial void OnSelectedModeChanged(GameMode? _) => _ = RefreshAsync();
+    partial void OnSelectedModeChanged(GameMode? _, GameMode? __) => _ = RefreshAsync();
 
     [ObservableProperty] private GameCategory? _selectedCategory;
-    partial void OnSelectedCategoryChanged(GameCategory? _) => _ = RefreshAsync();
+    partial void OnSelectedCategoryChanged(GameCategory? _, GameCategory? __) => _ = RefreshAsync();
 
     public IEnumerable<GameMode> ModeValues => EnumExtensions.ModeValues;
     public IEnumerable<GameCategory> CategoryValues => EnumExtensions.CategoryValues;
 
     public IEnumerable<string> SortOptions { get; } = new[] { "Tytuł", "Data" };
     [ObservableProperty] private string? _selectedSort;
-    partial void OnSelectedSortChanged(string? _) => _ = RefreshAsync();
+    partial void OnSelectedSortChanged(string? _, string? __) => _ = RefreshAsync();
 
     [ObservableProperty] private bool _isBusy;
 
