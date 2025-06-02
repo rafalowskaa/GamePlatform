@@ -3,7 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
-      xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared">
+      xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared"
+      xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization">
 
     <Page.Resources>
         <conv:CoverImageConverter x:Key="CoverConv"/>
@@ -18,16 +19,16 @@
             <Image Source="{Binding Avatar}" Stretch="UniformToFill" ClipToBounds="True"/>
         </Border>
 
-        <Button Content="Zmień zdjęcie" Background="Black" Foreground="White" BorderBrush="Black"
+        <Button Content="{loc:Loc CHANGE_PICTURE}" Background="Black" Foreground="White" BorderBrush="Black"
                 HorizontalAlignment="Center"
                 Margin="0 8 0 12"
                 Command="{Binding PickAvatarCommand}"/>
 
-        <TextBox Text="{Binding NewLogin}"        md:HintAssist.Hint="Login"/>
-        <TextBox Text="{Binding NewEmail}"        md:HintAssist.Hint="E-mail"        Margin="0 8 0 0"/>
-        <TextBox Text="{Binding RecoveryMail}"    md:HintAssist.Hint="E-mail odzysku" Margin="0 8 0 0"/>
+        <TextBox Text="{Binding NewLogin}"        md:HintAssist.Hint="{loc:Loc LOGIN}"/>
+        <TextBox Text="{Binding NewEmail}"        md:HintAssist.Hint="{loc:Loc EMAIL}"        Margin="0 8 0 0"/>
+        <TextBox Text="{Binding RecoveryMail}"    md:HintAssist.Hint="{loc:Loc RECOVERY_EMAIL}" Margin="0 8 0 0"/>
 
-        <PasswordBox md:HintAssist.Hint="Nowe hasło"
+        <PasswordBox md:HintAssist.Hint="{loc:Loc NEW_PASSWORD}"
                      Margin="0 8 0 0"
                      PasswordChanged="PwdChanged"/>
 
@@ -39,7 +40,7 @@
                 Margin="0 12 0 0"
                 IsDefault="True"/>
 
-        <TextBlock Text="Ulubione gry" FontWeight="Bold" Margin="0 20 0 4"/>
+        <TextBlock Text="{loc:Loc FAVORITE_GAMES}" FontWeight="Bold" Margin="0 20 0 4"/>
         <ItemsControl ItemsSource="{Binding Favorites}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

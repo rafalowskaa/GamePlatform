@@ -3,7 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
       xmlns:pack="http://materialdesigninxaml.net/winfx/xaml/controls"
-      Title="Zgłoszenia">
+      xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
+      Title="{loc:Loc REPORTS}">
 
     <!-- ==========  Z A S O B Y  ========== -->
     <Page.Resources>
@@ -103,7 +104,7 @@
     <!-- ==========  UI  ========== -->
     <DockPanel Margin="12">
         <Button DockPanel.Dock="Top"
-                Content="Odśwież"
+                Content="{loc:Loc REFRESH}"
                 Width="100"
                 Command="{Binding RefreshCommand}"
                 Background="Black"
@@ -120,31 +121,31 @@
 
             <DataGrid.Columns>
                 <!-- Data -->
-                <DataGridTextColumn Header="Data"
+                <DataGridTextColumn Header="{loc:Loc DATE}"
                                     Width="162"
                                     Binding="{Binding CreatedUtc}"
                                     ElementStyle="{StaticResource CenterTextStyle}"/>
 
                 <!-- Zgłaszający -->
-                <DataGridTextColumn Header="Zgłaszający"
+                <DataGridTextColumn Header="{loc:Loc REPORTER}"
                                     Width="*"
                                     Binding="{Binding Reporter.Login}"
                                     ElementStyle="{StaticResource CenterTextStyle}"/>
 
                 <!-- Oskarżony -->
-                <DataGridTextColumn Header="Oskarżony"
+                <DataGridTextColumn Header="{loc:Loc ACCUSED}"
                                     Width="*"
                                     Binding="{Binding ReportedUser.Login}"
                                     ElementStyle="{StaticResource CenterTextStyle}"/>
 
                 <!-- Kategoria -->
-                <DataGridTextColumn Header="Kategoria"
+                <DataGridTextColumn Header="{loc:Loc CATEGORY}"
                                     Width="*"
                                     Binding="{Binding Category}"
                                     ElementStyle="{StaticResource CenterTextStyle}"/>
 
                 <!-- Opis -->
-                <DataGridTemplateColumn Header="Opis" Width="50">
+                <DataGridTemplateColumn Header="{loc:Loc DESCRIPTION}" Width="50">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="☁"
@@ -162,7 +163,7 @@
                 </DataGridTemplateColumn>
 
                 <!-- Status -->
-                <DataGridTemplateColumn Header="Status" MinWidth="80" Width="150">
+                <DataGridTemplateColumn Header="{loc:Loc STATUS}" MinWidth="80" Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock FontWeight="Bold"
@@ -186,7 +187,7 @@
                 </DataGridTemplateColumn>
 
                 <!-- Akcje -->
-                <DataGridTemplateColumn Header="AKCJE" MinWidth="200" Width="Auto">
+                <DataGridTemplateColumn Header="{loc:Loc ACTIONS}" MinWidth="200" Width="Auto">
                     <DataGridTemplateColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader"
                                BasedOn="{StaticResource GridHeaderStyle}">
@@ -202,21 +203,21 @@
 
                                 <!-- Ostrzeż -->
                                 <Button Style="{StaticResource BlackBtn}"
-                                        Content="OSTRZEŻ"
+                                        Content="{loc:Loc WARN}"
                                         Command="{Binding DataContext.WarnCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
 
                                 <!-- Anuluj -->
                                 <Button Style="{StaticResource BlackBtn}"
                                         Margin="8 0 0 0"
-                                        Content="ANULUJ"
+                                        Content="{loc:Loc CANCEL}"
                                         Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
 
                                 <!-- Zablokuj -->
                                 <Button Style="{StaticResource BlackBtn}"
                                         Margin="8 0 0 0"
-                                        Content="ZABLOKUJ"
+                                        Content="{loc:Loc BLOCK}"
                                         Command="{Binding DataContext.BlockUserCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
 
@@ -227,7 +228,7 @@
                                         Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}">
                                     <Button.ToolTip>
-                                        <ToolTip Style="{StaticResource DarkToolTip}" Content="Usuń"/>
+                                        <ToolTip Style="{StaticResource DarkToolTip}" Content="{loc:Loc DELETE}"/>
                                     </Button.ToolTip>
                                 </Button>
                             </StackPanel>

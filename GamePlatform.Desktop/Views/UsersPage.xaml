@@ -1,7 +1,8 @@
 ﻿<Page x:Class="GamePlatform.Desktop.Views.UsersPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:sys="clr-namespace:System;assembly=mscorlib">
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization">
 
     <!-- ==========  ZASOBY  ========== -->
     <Page.Resources>
@@ -96,7 +97,7 @@
                       Foreground="White" Margin="0 0 12 0"/>
 
             <!-- wyczyść -->
-            <Button Content="Wyczyść"
+            <Button Content="{loc:Loc CLEAR}"
                     Style="{StaticResource BlackBtn}"
                     Command="{Binding ClearFiltersCommand}"/>
         </StackPanel>
@@ -117,19 +118,19 @@
             <DataGrid.Columns>
 
                 <!-- LOGIN -->
-                <DataGridTextColumn Header="LOGIN" Width="*"
+                <DataGridTextColumn Header="{loc:Loc LOGIN}" Width="*"
                                     SortMemberPath="Login"
                                     Binding="{Binding Login}"
                                     ElementStyle="{StaticResource CenterTxt}"/>
 
                 <!-- ROLA -->
-                <DataGridTextColumn Header="ROLA" Width="110"
+                <DataGridTextColumn Header="{loc:Loc ROLE}" Width="110"
                                     SortMemberPath="Role"
                                     Binding="{Binding Role}"
                                     ElementStyle="{StaticResource CenterTxt}"/>
 
                 <!-- BLOKADA + ☁ -->
-                <DataGridTemplateColumn Header="BLOKADA" Width="220"
+                <DataGridTemplateColumn Header="{loc:Loc BLOCK_UNTIL}" Width="220"
                                         SortMemberPath="BlockedUntilUtc">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -155,26 +156,26 @@
                 </DataGridTemplateColumn>
 
                 <!-- OSTATNIE LOG. -->
-                <DataGridTextColumn Header="OSTATNIE LOGOWANIE" Width="180"
+                <DataGridTextColumn Header="{loc:Loc LAST_LOGIN}" Width="180"
                                     SortMemberPath="LastLoginUtc"
                                     Binding="{Binding LastLoginUtc}"
                                     ElementStyle="{StaticResource CenterTxt}"/>
 
                 <!-- AKCJE -->
-                <DataGridTemplateColumn Header="AKCJE" Width="320">
+                <DataGridTemplateColumn Header="{loc:Loc ACTIONS}" Width="320">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Center">
                                 <Button Style="{StaticResource BlackBtn}"
-                                        Content="EDYTUJ"
+                                        Content="{loc:Loc EDIT}"
                                         Command="{Binding DataContext.EditCommand,
                                                   RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>
 
                                 <Button Style="{StaticResource BlackBtn}"
                                         Margin="8 0 0 0"
-                                        Content="USUŃ UŻYTKOWNIKA"
+                                        Content="{loc:Loc DELETE_USER}"
                                         Command="{Binding DataContext.DeleteCommand,
                                                   RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"/>

@@ -3,8 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
-      xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared">
+      xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared"
+      xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization">
 
+    
     <Page.Resources>
     <conv:CoverImageConverter x:Key="CoverConv"/>
     </Page.Resources>
@@ -17,7 +19,7 @@
                      <DockPanel DockPanel.Dock="Top" Margin="0 0 0 8">
             <TextBox Width="260" DockPanel.Dock="Left"
                      Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
-                     md:HintAssist.Hint="Szukaj…"/>
+                     md:HintAssist.Hint="{loc:Loc SEARCH}"/>
             <Button DockPanel.Dock="Right"
                     MinWidth="110" Padding="12 4"
                     Background="Black" Foreground="White" BorderBrush="Black"
@@ -75,9 +77,9 @@
                                     <TextBlock Text="{Binding Category}"/>
                                     <TextBlock Text="{Binding Mode}"/>
                                     <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0 8 0 8"/>
-                                    <Button Content="Zagraj" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"
+                                    <Button Content="{loc:Loc PLAY}" Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"
                                             Style="{StaticResource MaterialDesignRaisedButton}" Background="Black" BorderBrush="Black" Foreground="White" MinWidth="160" HorizontalAlignment="Left"/>
-                                    <Button Content="Usuń" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"
+                                    <Button Content="{loc:Loc DELETE}" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"
                                             Style="{StaticResource MaterialDesignRaisedButton}" Background="Red" BorderBrush="Red" Foreground="White" MinWidth="160" HorizontalAlignment="Left" Margin="0 8 0 0"
                                             Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"/>
                                 </StackPanel>

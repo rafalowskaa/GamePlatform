@@ -12,26 +12,26 @@
     <StackPanel Margin="24" Width="340">
 
         <TextBox Text="{Binding Title}"
-                 md:HintAssist.Hint="Tytuł"/>
+                 md:HintAssist.Hint="{loc:Loc TITLE}"/>
 
         <TextBox Margin="0 8 0 0"
                  Text="{Binding Version}"
-                 md:HintAssist.Hint="Wersja"/>
+                 md:HintAssist.Hint="{loc:Loc VERSION}"/>
 
         <ComboBox Margin="0 8 0 0"
                   ItemsSource="{x:Static enums:EnumExtensions.CategoryValues}"
                   SelectedItem="{Binding SelectedCategory}"
-                  md:HintAssist.Hint="Kategoria"/>
+                  md:HintAssist.Hint="{loc:Loc CATEGORY}"/>
 
         <ComboBox ItemsSource="{x:Static enums:EnumExtensions.ModeValues}"
                   SelectedItem="{Binding SelectedMode}"
-                  md:HintAssist.Hint="Tryb gry"/>
+                  md:HintAssist.Hint="{loc:Loc GAME_MODE}"/>
 
         <!-- MaxPlayers tylko dla MultiPlayer -->
         <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
             <TextBox Width="120"
                      Text="{Binding MaxPlayers}"
-                     md:HintAssist.Hint="Max graczy">
+                     md:HintAssist.Hint="{loc:Loc MAX_PLAYERS}">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -46,7 +46,7 @@
             </TextBox>
 
             <CheckBox Margin="12 0 0 0"
-                      Content="Na żywo"
+                      Content="{loc:Loc LIVE}"
                       IsChecked="{Binding IsLive}"
                       VerticalAlignment="Center"/>
         </StackPanel>
@@ -55,14 +55,14 @@
                  Text="{Binding Description}"
                  Height="64"
                  AcceptsReturn="True"
-                 md:HintAssist.Hint="Opis"/>
+                 md:HintAssist.Hint="{loc:Loc DESCRIPTION}"/>
 
         <DockPanel Margin="0 8 0 0">
             <TextBox Width="220"
                      DockPanel.Dock="Left"
                      Text="{Binding CoverPath}"
                      IsReadOnly="True"
-                     md:HintAssist.Hint="Obraz gry (opcjonalnie)"/>
+                     md:HintAssist.Hint="{loc:Loc GAME_IMAGE_OPT}"/>
             <Button Content="…"
                     Width="34"
                     Margin="8 0 0 0"
@@ -82,7 +82,7 @@
                      DockPanel.Dock="Left"
                      Text="{Binding ZipPath}"
                      IsReadOnly="True"
-                     md:HintAssist.Hint="Plik ZIP"/>
+                     md:HintAssist.Hint="{loc:Loc ZIP_FILE}"/>
             <Button Content="…"
                     Width="34"
                     Margin="8 0 0 0"

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using GamePlatform.Desktop.Services;
 using GamePlatform.Desktop.Views;
+using GamePlatform.Desktop.Localization;
 using GamePlatform.Shared.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -97,6 +98,11 @@ public partial class ShellViewModel : ObservableObject
     private void ShowNotifications()
        => Navigate(new NotificationCenterPage { DataContext = _notify }, "Notify");
 
+    [RelayCommand]
+    private void ToggleLanguage()
+    {
+        Localization.Current = Localization.Current == Lang.Polish ? Lang.English : Lang.Polish;
+    }
 
     /* ==========  LOGOUT  ========== */
     [RelayCommand]

@@ -15,6 +15,11 @@
         Style="{StaticResource MaterialDesignWindow}"
         DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ShellVM}">
 
+
+    <Window.InputBindings>
+        <KeyBinding Key="L" Modifiers="Windows" Command="{Binding ToggleLanguageCommand}"/>
+    </Window.InputBindings>
+    
     <md:DrawerHost IsRightDrawerOpen="{Binding IsDrawerOpen}">
         <md:DrawerHost.RightDrawerContent>
             <views:FriendsPage DataContext="{Binding FriendsVm}"/>
