@@ -8,14 +8,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Launcher"
-        Width="1100" Height="800"
+        Width="1100"
+        Height="800"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource MaterialDesignWindow}"
         DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ShellVM}">
 
-
-
-    <md:DrawerHost IsRightDrawerOpen="{Binding IsDrawerOpen}">
+    <md:DrawerHost IsRightDrawerOpen="{Binding IsRightDrawerOpen}">
         <md:DrawerHost.RightDrawerContent>
             <views:FriendsPage DataContext="{Binding FriendsVm}"/>
         </md:DrawerHost.RightDrawerContent>
@@ -23,101 +22,138 @@
         <Grid>
             <DockPanel>
 
-                <!-- top black bar with avatar, welcome text and 3D animation -->
-                <Border DockPanel.Dock="Top" Background="Black" Height="144" Padding="16">
+                <!-- ░░░  HEADER  ░░░ -->
+                <Border DockPanel.Dock="Top"
+                        Background="Black"
+                        Height="160"
+                        Padding="20,16">
+
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.65*"/>
-                            <ColumnDefinition Width="0.35*"/>
+                            <ColumnDefinition Width="0.63*"/>
+                            <ColumnDefinition Width="0.37*"/>
                         </Grid.ColumnDefinitions>
-                        <!-- left: avatar + welcome text -->
-                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Border Width="96" Height="96" CornerRadius="48" Background="#333" Margin="0 0 16 0" ClipToBounds="True">
-                                <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}" Stretch="UniformToFill"/>
+
+                        <!-- avatar + welcome -->
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+
+                            <Border Width="110"
+                                    Height="110"
+                                    CornerRadius="70"
+                                    Background="#333"
+                                    Margin="0,0,20,0"
+                                    ClipToBounds="True">
+                                <Image Source="{Binding AvatarPath,
+                                                        Converter={StaticResource AvatarConverter}}"
+                                       Stretch="UniformToFill"/>
                             </Border>
-                            <TextBlock FontWeight="Bold" FontSize="18" VerticalAlignment="Center">
-                                <Run Text="Witaj " Foreground="White"/>
-                                <Run Text="{Binding CurrentLogin, Mode=OneWay}" Foreground="#1F5FFF"/>
+
+                            <TextBlock FontSize="24"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center">
+                                <Run Text="Witaj "               Foreground="White"/>
+                                <Run Text="{Binding CurrentLogin, Mode=OneWay}"
+                                     Foreground="#1F5FFF"/>
                                 <Run Text=", w co dziś zagramy?" Foreground="White"/>
                             </TextBlock>
                         </StackPanel>
 
-                        <!-- right: simple rotating 3D model -->
-                        <Viewport3D Grid.Column="1" ClipToBounds="True" Background="#222" RenderOptions.EdgeMode="Aliased">
-                            <Viewport3D.Camera>
-                                <PerspectiveCamera Position="0,0,3" LookDirection="0,0,-3" UpDirection="0,1,0" FieldOfView="45"/>
-                            </Viewport3D.Camera>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <Model3DGroup>
-                                        <AmbientLight Color="#444"/>
-                                        <DirectionalLight Color="White" Direction="-1,-1,-2"/>
-                                        <GeometryModel3D x:Name="logoModel">
-                                            <GeometryModel3D.Geometry>
-                                                <MeshGeometry3D Positions="-1,-1,1 1,-1,1 1,1,1 -1,1,1 -1,-1,-1 1,-1,-1 1,1,-1 -1,1,-1"
-                                                                TriangleIndices="0 1 2 0 2 3 1 5 6 1 6 2 5 4 7 5 7 6 4 0 3 4 3 7 3 2 6 3 6 7 4 5 1 4 1 0"
-                                                                />
-                                            </GeometryModel3D.Geometry>
-                                            <GeometryModel3D.Material>
-                                                <DiffuseMaterial Brush="{StaticResource TabBlueActiveBrush}"/>
-                                            </GeometryModel3D.Material>
-                                            <GeometryModel3D.Transform>
-                                                <RotateTransform3D>
-                                                    <RotateTransform3D.Rotation>
-                                                        <AxisAngleRotation3D x:Name="logoRotation" Axis="0,1,0" Angle="0"/>
-                                                    </RotateTransform3D.Rotation>
-                                                </RotateTransform3D>
-                                            </GeometryModel3D.Transform>
-                                        </GeometryModel3D>
-                                    </Model3DGroup>
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <Viewport3D.Triggers>
-                                <EventTrigger RoutedEvent="Viewport3D.Loaded">
+                        <!-- animowane logo GP -->
+                        <Border Grid.Column="1"
+                                Width="125"
+                                Height="125"
+                                CornerRadius="20"
+                                Background="Black"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <RotateTransform x:Name="LogoRot" Angle="0"/>
+                            </Border.RenderTransform>
+
+                            <Grid>
+                                <Border CornerRadius="60">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#1133FF" Offset="0"/>
+                                            <GradientStop Color="Black" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+
+                                <TextBlock Text="GP"
+                                           FontFamily="Chiller"
+                                           FontSize="114"
+                                           Foreground="White"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- obroty -->
+                            <Border.Triggers>
+                                <EventTrigger RoutedEvent="Loaded">
                                     <BeginStoryboard>
                                         <Storyboard RepeatBehavior="Forever">
-                                            <DoubleAnimation Storyboard.TargetName="logoRotation" Storyboard.TargetProperty="Angle" From="0" To="360" Duration="0:0:8"/>
+                                            <DoubleAnimation Storyboard.TargetName="LogoRot"
+                                                             Storyboard.TargetProperty="Angle"
+                                                             From="0" To="360"
+                                                             Duration="0:0:6"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
-                            </Viewport3D.Triggers>
-                        </Viewport3D>
+                            </Border.Triggers>
+                        </Border>
                     </Grid>
                 </Border>
 
-                <DockPanel DockPanel.Dock="Top" Margin="0">
-                    <Button DockPanel.Dock="Right" Content="Wyloguj" Style="{StaticResource NavBtn}" Command="{Binding LogoutCommand}"/>
-                    <TabControl SelectionChanged="OnTabChanged" Background="{DynamicResource MaterialDesignPaper}" SelectedIndex="{Binding SelectedTabIndex}">
-                        <TabItem Header="Gry" Tag="Games" Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="Profil" Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="Statystyki" Tag="Stats" Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="Powiadomienia" Tag="Notify" Style="{StaticResource MainTabItemStyle}"/>
-                        <TabItem Header="Do akceptacji" Tag="Pending" Style="{StaticResource AdminTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="Zgłoszenia" Tag="Reports" Style="{StaticResource AdminTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
-                        <TabItem Header="Użytkownicy" Tag="Users" Style="{StaticResource AdminTabItemStyle}" Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                <!-- ░░░  TABs + WYLOGUJ  ░░░ -->
+                <DockPanel DockPanel.Dock="Top">
+                    <Button DockPanel.Dock="Right"
+                            Content="Wyloguj"
+                            Style="{StaticResource NavBtn}"
+                            Command="{Binding LogoutCommand}"/>
+
+                    <TabControl Background="{DynamicResource MaterialDesignPaper}"
+                                SelectedIndex="{Binding SelectedTabIndex}"
+                                SelectionChanged="OnTabChanged">
+
+                        <TabItem Header="Gry"           Tag="Games"   Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="Profil"        Tag="Profile" Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="Statystyki"    Tag="Stats"   Style="{StaticResource MainTabItemStyle}"/>
+                        <TabItem Header="Powiadomienia" Tag="Notify"  Style="{StaticResource MainTabItemStyle}"/>
+
+                        <TabItem Header="Do akceptacji" Tag="Pending"
+                                 Style="{StaticResource AdminTabItemStyle}"
+                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        <TabItem Header="Zgłoszenia"    Tag="Reports"
+                                 Style="{StaticResource AdminTabItemStyle}"
+                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        <TabItem Header="Użytkownicy"   Tag="Users"
+                                 Style="{StaticResource AdminTabItemStyle}"
+                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
                     </TabControl>
                 </DockPanel>
 
-                <!--  zawartość  -->
-                <Frame Content="{Binding CurrentPage}"
-                       NavigationUIVisibility="Hidden"/>
-                <!-- globalny snackbar na komunikaty -->
+                <!-- zawartość -->
+                <Frame Content="{Binding CurrentPage}" NavigationUIVisibility="Hidden"/>
+
+                <!-- snackbar -->
                 <md:Snackbar MessageQueue="{StaticResource GlobalMsgQueue}"
-                             VerticalAlignment="Top"
                              HorizontalAlignment="Center"
-                             Margin="0 50 0 0"
-                             Panel.ZIndex="1"/>
+                             VerticalAlignment="Top"
+                             Margin="0,50,0,0"/>
             </DockPanel>
 
-            <!-- uchwyt wysuwanego panelu znajomych -->
-            <Button Width="40" Height="100"
-                    Command="{Binding ToggleDrawerCommand}"
+            <!-- drawer handle -->
+            <Button Width="40"
+                    Height="100"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Margin="0,0,-16,0"
-                    Background="Black"/>
-
-
+                    Background="Black"
+                    Command="{Binding ToggleDrawerCommand}"/>
         </Grid>
     </md:DrawerHost>
 </Window>
