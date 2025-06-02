@@ -1,4 +1,7 @@
 using System.Windows;
+using System.Windows.Markup;
+
+[assembly: XmlnsDefinition("clr-namespace:GamePlatform.Desktop.Localization", "GamePlatform.Desktop")]
 
 [assembly:ThemeInfo(
     ResourceDictionaryLocation.None,            //where theme specific resource dictionaries are located
