@@ -115,19 +115,7 @@
                                     </UniformGrid.Width>
                                 </UniformGrid>
 
-                                <!-- Flags + Logout (no padding) -->
-                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Background="{StaticResource TabBlueBrush}">
-                                    <Button Style="{StaticResource FlagBtn}"
-                                            Command="{Binding DataContext.SetPolishCommand, RelativeSource={RelativeSource AncestorType=TabControl}}">
-                                        <Image Source="pack://application:,,,/GamePlatform.Desktop;component/Resources/flag_pl.png"/>
-                                    </Button>
-                                    <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0"
-                                            Command="{Binding DataContext.SetEnglishCommand, RelativeSource={RelativeSource AncestorType=TabControl}}">
-                                        <Image Source="pack://application:,,,/GamePlatform.Desktop;component/Resources/flag_gb.png"/>
-                                    </Button>
-                                    <Button Content="{loc:Loc LOGOUT}" Style="{StaticResource NavBtn}"
-                                            Command="{Binding DataContext.LogoutCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"/>
-                                </StackPanel>
+                                
                             </DockPanel>
                         </ScrollViewer>
 
