@@ -10,54 +10,63 @@
         <conv:CoverImageConverter x:Key="CoverConv"/>
     </Page.Resources>
 
-    <StackPanel Margin="24" Width="360"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+    <Grid Margin="24" VerticalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <Border Width="120" Height="120" HorizontalAlignment="Center"
-                 CornerRadius="60" Background="#333" AllowDrop="True" Drop="OnAvatarDrop">
-            <Image Source="{Binding Avatar}" Stretch="UniformToFill" ClipToBounds="True"/>
-        </Border>
+        <StackPanel>
+            <Border Width="100" Height="100" CornerRadius="50" Background="#333" AllowDrop="True" Drop="OnAvatarDrop">
+                <Image Source="{Binding Avatar}" Stretch="UniformToFill" ClipToBounds="True"/>
+            </Border>
+            <Button Content="{loc:Loc CHANGE_PICTURE}" Background="Black" Foreground="White" BorderBrush="Black"
+                    Margin="0 8 0 0"
+                    Command="{Binding PickAvatarCommand}" Width="100"/>
+        </StackPanel>
 
-        <Button Content="{loc:Loc CHANGE_PICTURE}" Background="Black" Foreground="White" BorderBrush="Black"
-                HorizontalAlignment="Center"
-                Margin="0 8 0 12"
-                Command="{Binding PickAvatarCommand}"/>
+        <StackPanel Grid.Column="1" Width="260">
+            <TextBox Text="{Binding NewLogin}"        md:HintAssist.Hint="{loc:Loc LOGIN}"/>
+            <TextBox Text="{Binding NewEmail}"        md:HintAssist.Hint="{loc:Loc EMAIL}"        Margin="0 8 0 0"/>
+            <TextBox Text="{Binding RecoveryMail}"    md:HintAssist.Hint="{loc:Loc RECOVERY_EMAIL}" Margin="0 8 0 0"/>
 
-        <TextBox Text="{Binding NewLogin}"        md:HintAssist.Hint="{loc:Loc LOGIN}"/>
-        <TextBox Text="{Binding NewEmail}"        md:HintAssist.Hint="{loc:Loc EMAIL}"        Margin="0 8 0 0"/>
-        <TextBox Text="{Binding RecoveryMail}"    md:HintAssist.Hint="{loc:Loc RECOVERY_EMAIL}" Margin="0 8 0 0"/>
+            <PasswordBox md:HintAssist.Hint="{loc:Loc NEW_PASSWORD}"
+                         Margin="0 8 0 0"
+                         PasswordChanged="PwdChanged"/>
 
-        <PasswordBox md:HintAssist.Hint="{loc:Loc NEW_PASSWORD}"
-                     Margin="0 8 0 0"
-                     PasswordChanged="PwdChanged"/>
+            <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap"/>
 
-        <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap"/>
+            <Button Content="{loc:Loc SAVE}" Background="Black" Foreground="White" BorderBrush="Black"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}"
+                    Margin="0 12 0 0"
+                    IsDefault="True"/>
 
-        <Button Content="{loc:Loc SAVE}" Background="Black" Foreground="White" BorderBrush="Black"
-                Style="{StaticResource MaterialDesignRaisedButton}"
-                Command="{Binding SaveCommand}"
-                Margin="0 12 0 0"
-                IsDefault="True"/>
+            <ProgressBar Minimum="0" Maximum="{Binding NextXp}" Value="{Binding CurrentXp}" Height="20" Margin="0 12 0 0"/>
+            <TextBlock Text="{Binding Rank}" HorizontalAlignment="Center" Margin="0 4 0 12"/>
 
-        <TextBlock Text="{loc:Loc FAVORITE_GAMES}" FontWeight="Bold" Margin="0 20 0 4"/>
-        <ItemsControl ItemsSource="{Binding Favorites}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:Game}">
-                    <Border Width="200" Height="260" Margin="4" BorderBrush="Gray" BorderThickness="1">
-                        <StackPanel>
-                            <Image Height="220" Width="200" Stretch="UniformToFill"
-                                   Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
-                            <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+            <TextBlock Text="{loc:Loc FAVORITE_GAMES}" FontWeight="Bold" Margin="0 20 0 4"/>
+            <ItemsControl ItemsSource="{Binding Favorites}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:Game}">
+                        <Border Width="200" Height="300" Margin="4" BorderBrush="Gray" BorderThickness="1">
+                            <StackPanel>
+                                <Image Height="220" Width="200" Stretch="UniformToFill"
+                                       Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
+                                <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding LastPlayed}" FontSize="10" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding PlaytimeSeconds}" FontSize="10" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding HighestScore}" FontSize="10" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
 </Page>

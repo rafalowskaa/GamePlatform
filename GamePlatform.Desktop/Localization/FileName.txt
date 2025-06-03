@@ -2,10 +2,22 @@ do poprawy
 1. dodaj opcje drukowania zakladek u admina 	 
  
 
-3. pod flagi w oknie glownym dodaj t³o takie jak w przycisku Wyloguj
-4. Dodaj przycisk "Dodaj do ulubionych" w Gry po kliknieciu na grê
+
 5. Dodaj parametry w ulubionych grach w profilu takich jak:
 tytu³, ostatnio grane (czas), czas grania (tu niech liczy czas jaki uzytkownik poœwiêci³ na grê), najwyzszy wynik
 6. tym samym popraw wyglad profilu: niech avatar bedzie w rogu lewym (zmniejszony) i obok mniejszy przycisk ze zmiana grafiki, niech opcje zmiany hasla, zmiany emaila, zmiana loginu beda w edytowaniu informacji i przycisk do tego - otwiera sie okno gdzie mozna dokonac zmian, na koniec wymagane potwierdzenie haslem, po naniesieniu zmian te zmiany laduja w panelu uzytkownikow u admina, dodaj brakujacy exp w postaci np paska ktory bedzie sie ladowal w miare zdobywania punktow w grach bedzie sie ladowal, dodaj zdjecia pucharow (bez tla) pliki png ktore ogarne zgodnie z poziomem - bedzie puchar na jeden "kolor" drewno braz srebro itd a pod tym bedzie napis DREWNO I DREWNO II itd (przy zdjeciu pucharu drewno), i ma to dzialac w ten sposob ze np na poczatku jest 0 EXP wiec nie ma nic - rozciaga sie pasek (ktory wypelnia sie coraz bardziej z mala czcionka iloscia exp - im wyzej tym wiecej do zdobycia - i na koniec tego paska jest pierwszy puchar, gdy uzytkownik dojdzie do tego pucharu, nastepuje zamiana puchar pierwszy laduje w miejsce puste a na koncu wskakuje widok kolejnego pucharu do zdobycia, zrob ilosc rang jak w league of legends, uwzgledniajac drewno V drewno IV drewno III drewno II drewno I potem  braz V braz IV braz III do I itd do najwyzszej 
-7 popraw kwestie czytania plikow jesli chodzi o dodawane gry, niektore gry oprocz exe musza korzystac z innych pomocniczych plikow np json ktore sa niezbedne do dzialania gry
-napraw wszystko dokladnie
+
+
+- tlumaczenie statusu nie dziala
+- napraw dzialanie ostrzezenia i powiadomien
+
+Poprawiæ powiadomienia
+zakladke znajomi
+- troche cieñsza - o 1/5 + naprawa widocznosci avatarow + zablokowani na sam dó³ + szukaj gracza pomiedzy zak³adk¹ rozmowy a znajomi + usunac szukanie w czacie + napis szukaj gracza wyœrodkuj
+dodawanie do ulubionych
+wygl¹d profilu
+W akceptacji wyœrodkowanie pierwszych kolumn
+DODAWANIE do znajomych
+
+
+w profilu mozliwosc grania w gry ulubione - i usuwanie z ulubionych i inne rzeczy

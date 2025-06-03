@@ -27,4 +27,13 @@ public class Game
 
     [System.ComponentModel.DataAnnotations.Schema.NotMapped]
     public bool IsFavorite { get; set; }
+
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public DateTime? LastPlayed { get; set; }
+
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public int PlaytimeSeconds { get; set; }
+
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public int HighestScore { get; set; }
 }

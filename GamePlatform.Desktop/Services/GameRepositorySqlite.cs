@@ -169,7 +169,19 @@ public sealed class GameRepositorySqlite : IGameRepository
                             .AsNoTracking()
                             .Select(f => f.Game!)
                             .ToListAsync();
-        foreach (var g in list) SetCover(g);
+        foreach (var g in list)
+        {
+            SetCover(g);
+
+            var scores = await _db.Scores
+                                   .Where(s => s.GameId == g.Id && s.UserId == userId)
+                                   .ToListAsync();
+            if (scores.Count > 0)
+            {
+                g.LastPlayed = scores.Max(s => (DateTime?)s.CreatedUtc);
+                g.HighestScore = scores.Max(s => s.Value);
+            }
+        }
         return list;
     }
 }

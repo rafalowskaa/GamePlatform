@@ -14,9 +14,13 @@
         </Style>
     </Page.Resources>
     <DockPanel Margin="12">
-        <Button DockPanel.Dock="Top" Content="{loc:Loc REFRESH}" Command="{Binding RefreshCommand}" Width="100"
-                Background="Black" Foreground="White" BorderBrush="Black"/>
-        <DataGrid ItemsSource="{Binding Games}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0 8 0 0">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Button Content="{loc:Loc REFRESH}" Command="{Binding RefreshCommand}" Width="100"
+                    Background="Black" Foreground="White" BorderBrush="Black"/>
+            <Button Content="{loc:Loc PRINT}" Width="100" Margin="8 0 0 0" Click="OnPrintClick"
+                    Background="Black" Foreground="White" BorderBrush="Black"/>
+        </StackPanel>
+        <DataGrid x:Name="GamesGrid" ItemsSource="{Binding Games}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0 8 0 0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{loc:Loc TITLE}" Binding="{Binding Title}" Width="*"/>
                 <DataGridTextColumn Header="{loc:Loc VERSION}" Binding="{Binding Versions[0].Number}" Width="80"/>

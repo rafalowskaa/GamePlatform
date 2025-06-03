@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using GamePlatform.Shared.Enums;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -30,6 +31,10 @@ public partial class ProfileViewModel : ObservableObject
         AvatarPath = u.AvatarPath;
         if (File.Exists(AvatarPath))
             Avatar = new BitmapImage(new System.Uri(Path.GetFullPath(AvatarPath)));
+
+        CurrentXp = u.Xp;
+        NextXp = RankHelper.GetNextXp(CurrentXp);
+        Rank = u.Rank.ToString();
         _ = LoadFavoritesAsync();
     }
 
@@ -43,6 +48,10 @@ public partial class ProfileViewModel : ObservableObject
     [ObservableProperty] private string? _error;
 
     [ObservableProperty] private ObservableCollection<Game> _favorites = new();
+
+    public int CurrentXp { get; }
+    public int NextXp { get; }
+    public string Rank { get; }
 
     /* -------- Pick avatar ---------- */
     [RelayCommand]
