@@ -3,11 +3,51 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows;
 using System.Windows.Media;
+using System.Collections;
 
 namespace GamePlatform.Desktop.Utils;
 
 public static class PrintHelper
 {
+    private static object? GetValue(object obj, string path)
+    {
+        object? current = obj;
+        foreach (var segment in path.Split('.'))
+        {
+            if (current is null) return null;
+
+            string propertyName = segment;
+            int bracket = segment.IndexOf('[');
+            if (bracket >= 0)
+            {
+                propertyName = segment.Substring(0, bracket);
+            }
+
+            var prop = current.GetType().GetProperty(propertyName);
+            if (prop == null) return null;
+            current = prop.GetValue(current);
+
+            if (bracket >= 0)
+            {
+                int end = segment.IndexOf(']', bracket + 1);
+                if (end > bracket && int.TryParse(segment.Substring(bracket + 1, end - bracket - 1), out int index) && current is System.Collections.IList list && index >= 0 && index < list.Count)
+                {
+                    current = list[index];
+                    if (end < segment.Length - 1)
+                    {
+                        string rest = segment[(end + 1)..];
+                        if (!string.IsNullOrEmpty(rest))
+                        {
+                            prop = current.GetType().GetProperty(rest);
+                            current = prop?.GetValue(current);
+                        }
+                    }
+                }
+            }
+        }
+        return current;
+    }
+
     public static void PrintDataGrid(DataGrid grid, string title)
     {
         var dlg = new PrintDialog();
@@ -42,12 +82,8 @@ public static class PrintHelper
                 string? text = string.Empty;
                 if (col is DataGridBoundColumn bc && bc.Binding is System.Windows.Data.Binding b && b.Path is not null)
                 {
-                    var prop = item.GetType().GetProperty(b.Path.Path!);
-                    if (prop != null)
-                    {
-                        var val = prop.GetValue(item);
-                        text = val?.ToString();
-                    }
+                    var val = GetValue(item, b.Path.Path!);
+                    text = val?.ToString();
                 }
                 row.Cells.Add(new TableCell(new Paragraph(new Run(text ?? string.Empty))) { Padding = new Thickness(4) });
             }

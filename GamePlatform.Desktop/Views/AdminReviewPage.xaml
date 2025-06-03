@@ -12,7 +12,25 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2"/>
         </Style>
-
+        <Style x:Key="GridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground"   Value="White"/>
+            <Setter Property="Background"   Value="#222"/>
+            <Setter Property="BorderBrush"  Value="#444"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#444"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style TargetType="DataGridCell">
             
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -26,12 +44,10 @@
             <Button Content="{loc:Loc PRINT}" Width="100" Margin="8 0 0 0" Click="OnPrintClick"
                     Background="Black" Foreground="White" BorderBrush="Black"/>
         </StackPanel>
-        <DataGrid x:Name="GamesGrid" ItemsSource="{Binding Games}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0 8 0 0">
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="VerticalContentAlignment" Value="Center"/>
-                </Style>
-            </DataGrid.RowStyle>
+        <DataGrid x:Name="GamesGrid" ItemsSource="{Binding Games}" AutoGenerateColumns="False"
+                  IsReadOnly="True" Margin="0 8 0 0" CanUserResizeColumns="False"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ColumnHeaderStyle="{StaticResource GridHeaderStyle}" Loaded="OnGridLoaded">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{loc:Loc TITLE}" Binding="{Binding Title}" Width="*"/>
                 <DataGridTextColumn Header="{loc:Loc VERSION}" Binding="{Binding Versions[0].Number}" Width="80"/>

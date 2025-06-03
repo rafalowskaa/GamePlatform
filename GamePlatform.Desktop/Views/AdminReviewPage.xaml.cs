@@ -8,6 +8,12 @@ public partial class AdminReviewPage : Page
 {
     public AdminReviewPage() => InitializeComponent();
 
+    private void OnGridLoaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is DataGrid dg)
+            dg.SelectedIndex = -1;
+    }
+
     private void OnPrintClick(object sender, RoutedEventArgs e)
     {
         Utils.PrintHelper.PrintDataGrid(GamesGrid, "Games");
