@@ -303,7 +303,7 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
         }
         if (msg.ToId == me.Id)
         {
-            if (!chatUser.HasUnread)
+            if (!ChatWindow.IsOpen(me.Id, mateId) && !chatUser.HasUnread)
             {
                 App.Current.Dispatcher.Invoke(() => chatUser.HasUnread = true);
                 if (_notifiedChats.Add(chatUser.Id))
@@ -324,7 +324,7 @@ public partial class FriendListViewModel : ObservableObject, IDisposable
             chatUser.IsOnline = _chat.IsOnline(chatUser.Id);
             App.Current.Dispatcher.Invoke(() => Chats.Add(chatUser));
         }
-        if (!chatUser.HasUnread)
+        if (!ChatWindow.IsOpen(_auth.CurrentUser!.Id, mateId) && !chatUser.HasUnread)
         {
             App.Current.Dispatcher.Invoke(() => chatUser.HasUnread = true);
             if (_notifiedChats.Add(chatUser.Id))

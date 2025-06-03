@@ -74,7 +74,7 @@
 
                 <!-- Avatar -->
                 <Border Width="40" Height="40" CornerRadius="20" ClipToBounds="True">
-                    <Image Source="{Binding AvatarUri, TargetNullValue={StaticResource EmptyAvatar}}"
+                    <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}, TargetNullValue={StaticResource EmptyAvatar}}"
                            Stretch="UniformToFill"/>
                 </Border>
 
@@ -103,7 +103,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Border Width="40" Height="40" CornerRadius="20" ClipToBounds="True">
-                    <Image Source="{Binding AvatarUri, TargetNullValue={StaticResource EmptyAvatar}}"
+                    <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}, TargetNullValue={StaticResource EmptyAvatar}}"
                            Stretch="UniformToFill"/>
                 </Border>
                 <StackPanel Grid.Column="1" Margin="8 0" VerticalAlignment="Center">
@@ -123,7 +123,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Border Width="40" Height="40" CornerRadius="20" ClipToBounds="True">
-                    <Image Source="{Binding AvatarUri, TargetNullValue={StaticResource EmptyAvatar}}"
+                    <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}, TargetNullValue={StaticResource EmptyAvatar}}"
                            Stretch="UniformToFill" Opacity="0.3"/>
                 </Border>
                 <TextBlock Grid.Column="1" Margin="8 0" VerticalAlignment="Center"
@@ -143,34 +143,18 @@
     <Grid Margin="14">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Szukaj w czacie -->
-            <RowDefinition Height="Auto"/>
-            <!-- Szukaj graczy -->
-            <RowDefinition Height="*"/>
             <!-- Listy -->
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- ===== 1) SZUKAJ W CZACIE (Messenger-like) ===== -->
-        <DockPanel Grid.Row="0" Margin="0 0 0 10">
-            <TextBlock DockPanel.Dock="Left"
-                       FontFamily="Segoe MDL2 Assets"
-                       Text="&#xE721;"
-                       FontSize="20"
-                       Foreground="#999"
-                       Margin="4 0 0 0"/>
-            <TextBox Width="260" Height="30"
-                     Padding="28 0 4 0"
-                     md:HintAssist.Hint="{loc:Loc SEARCH_IN_CHAT}"
-                     Background="#222" Foreground="White" BorderBrush="#444"/>
-        </DockPanel>
-
-        <!-- ===== 2) SZUKAJ GRACZA + SUGESTIE ===== -->
-        <StackPanel Grid.Row="1" Margin="0 0 0 14" HorizontalAlignment="Center">
+        <!-- ===== SZUKAJ GRACZA + SUGESTIE ===== -->
+        <StackPanel Grid.Row="0" Margin="0 0 0 14" HorizontalAlignment="Center">
             <TextBox Width="240"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      KeyDown="OnSearchEnter"
                      md:HintAssist.Hint="{loc:Loc SEARCH_PLAYER}"
-                     Background="#222" Foreground="White" BorderBrush="#444"/>
+                     Background="#222" Foreground="White" BorderBrush="#444"
+                     TextAlignment="Center" HorizontalContentAlignment="Center"/>
 
             <ListBox ItemsSource="{Binding Suggestions}"
                      Visibility="{Binding IsSuggestOpen, Converter={StaticResource BoolToVis}}"
@@ -200,7 +184,7 @@
         </StackPanel>
 
         <!-- ===== 3) LISTY: Rozmowy / Znajomi / Zablokowani ===== -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
 
                 <!-- ROZMOWY -->

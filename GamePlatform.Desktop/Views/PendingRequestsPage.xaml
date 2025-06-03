@@ -4,6 +4,13 @@
       xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
       Title="Oczekujące zaproszenia">
 
+    <Page.Resources>
+        <Style TargetType="DataGridCell">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </Page.Resources>
+    
     <DockPanel Margin="24">
 
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">

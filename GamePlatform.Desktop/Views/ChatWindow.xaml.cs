@@ -67,4 +67,13 @@ public partial class ChatWindow : Window
             Owner = Application.Current.MainWindow
         }.Show();
     }
+
+    public static bool IsOpen(Guid meId, Guid mateId)
+    {
+        foreach (Window w in Application.Current.Windows)
+            if (w is ChatWindow cw && cw.DataContext is ChatWindowViewModel vm &&
+                vm.Me.Id == meId && vm.Mate.Id == mateId)
+                return true;
+        return false;
+    }
 }

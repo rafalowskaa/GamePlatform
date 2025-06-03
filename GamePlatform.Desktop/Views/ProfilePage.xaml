@@ -46,7 +46,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0" Width="32" Height="32" Source="{Binding RankEnum, Converter={StaticResource RankTrophyConv}}"/>
-            <ProgressBar Grid.Column="1" Minimum="0" Maximum="{Binding NextXp}" Value="{Binding CurrentXp, Mode=OneWay}"
+            <ProgressBar Grid.Column="1" Minimum="0" Maximum="{Binding NextXp, Mode=OneWay}" Value="{Binding CurrentXp, Mode=OneWay}"
                          Height="24" Foreground="#7c80ff" Background="#555"/>
             <Image Grid.Column="2" Width="32" Height="32" Source="{Binding NextRankEnum, Converter={StaticResource RankTrophyConv}}"/>
         </Grid>
