@@ -123,7 +123,7 @@
                             <Image Width="30" Height="32" Stretch="Uniform"
                    Source="pack://application:,,,/Resources/flag_pl.png"/>
                         </Button>
-                        <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
+                        <Button Style="{StaticResource FlagBtn}" Margin="4 0 8 0" Command="{Binding SetEnglishCommand}">
                             <Image Width="30" Height="32" Stretch="Uniform"
                    Source="pack://application:,,,/Resources/flag_gb.png"/>
                         </Button>

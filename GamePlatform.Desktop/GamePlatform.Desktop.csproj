@@ -6,6 +6,14 @@
     <None Remove="Resources\flag_pl.png" />
     <None Remove="Resources\login_banner.png" />
 	  <None Remove="Resources\DefaultAvatar.png" />
+	  <None Remove="Resources\Trophies\Bronze.png" />
+	  <None Remove="Resources\Trophies\Diamond.png" />
+	  <None Remove="Resources\Trophies\Emerald.png" />
+	  <None Remove="Resources\Trophies\Gold.png" />
+	  <None Remove="Resources\Trophies\Master.png" />
+	  <None Remove="Resources\Trophies\Platinum.png" />
+	  <None Remove="Resources\Trophies\Silver.png" />
+	  <None Remove="Resources\Trophies\Wood.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +57,30 @@
 	  </Resource>
     <Resource Include="Resources\login_banner.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Trophies\Bronze.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Trophies\Diamond.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Trophies\Emerald.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Trophies\Gold.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Trophies\Master.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Trophies\Platinum.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Trophies\Silver.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Trophies\Wood.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
 	 
   </ItemGroup>

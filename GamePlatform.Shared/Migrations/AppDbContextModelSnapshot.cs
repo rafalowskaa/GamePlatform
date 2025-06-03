@@ -75,6 +75,12 @@ namespace GamePlatform.Shared.Migrations
                     b.Property<Guid?>("GameId1")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("LastPlayedUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PlaytimeSeconds")
+                        .HasColumnType("INTEGER");
+
                     b.Property<Guid?>("UserId1")
                         .HasColumnType("TEXT");
 

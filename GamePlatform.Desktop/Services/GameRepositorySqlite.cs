@@ -184,6 +184,11 @@ public sealed class GameRepositorySqlite : IGameRepository
 
     public async Task<IReadOnlyList<Game>> GetFavoritesAsync(Guid userId)
     {
+        var login = await _db.Users
+                             .Where(u => u.Id == userId)
+                             .Select(u => u.Login)
+                             .FirstAsync();
+
         var list = await _db.FavoriteGames
                             .Where(f => f.UserId == userId)
                             .Include(f => f.Game!)
@@ -199,7 +204,7 @@ public sealed class GameRepositorySqlite : IGameRepository
             g.PlaytimeSeconds = fav.PlaytimeSeconds;
 
             var scores = await _db.Scores
-                                   .Where(s => s.GameId == g.Id && s.UserId == userId)
+                                   .Where(s => s.GameId == g.Id && s.Player == login)
                                    .ToListAsync();
             if (scores.Count > 0)
             {

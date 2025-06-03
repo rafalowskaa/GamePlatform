@@ -65,15 +65,15 @@
                                        Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
                                 <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{loc:Loc LAST_PLAYED}: " FontSize="10"/>
+                                    <TextBlock Text="{loc:Loc LAST_PLAYED}" FontSize="10"/>
                                     <TextBlock Text="{Binding LastPlayed}" FontSize="10"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{loc:Loc PLAY_TIME}: " FontSize="10"/>
+                                    <TextBlock Text="{loc:Loc PLAY_TIME}" FontSize="10"/>
                                     <TextBlock Text="{Binding PlaytimeSeconds}" FontSize="10"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{loc:Loc HIGHEST_SCORE}: " FontSize="10"/>
+                                    <TextBlock Text="{loc:Loc HIGHEST_SCORE}" FontSize="10"/>
                                     <TextBlock Text="{Binding HighestScore}" FontSize="10"/>
                                 </StackPanel>
                                 <Button Content="{loc:Loc PLAY}"
