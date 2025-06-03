@@ -11,10 +11,12 @@ public class TabWidthConverter : IMultiValueConverter
     {
         double viewport = (double)values[0];
         int count = System.Convert.ToInt32(values[1]);
-        double minTab = System.Convert.ToDouble(parameter);   // 120
+        double minTab = System.Convert.ToDouble(parameter);
 
         double desired = count * minTab;
-        return Math.Max(viewport, desired);     // szerokość UniformGrid
+        double available = Math.Max(0, viewport - 170);
+
+        return Math.Max(desired, available);
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes,
