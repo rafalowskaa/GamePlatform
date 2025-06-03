@@ -12,6 +12,12 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2"/>
         </Style>
+
+        <Style TargetType="DataGridCell">
+            
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
     </Page.Resources>
     <DockPanel Margin="12">
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">

@@ -45,6 +45,7 @@
             <Setter Property="Foreground"     Value="White"/>
             <Setter Property="BorderBrush"    Value="#111"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment"   Value="Center"/>
         </Style>
 
@@ -172,14 +173,15 @@
                                     <MultiBinding Converter="{StaticResource ReportStatusTextConv}">
                                         <Binding Path="Status"/>
                                         <Binding Path="StaffNotes"/>
-                                        <Binding Path="(loc:Localization.Current)"/>
+                                        <Binding Path="Current" Source="{x:Static loc:Localization.Proxy}"/>
                                     </MultiBinding>
                                 </TextBlock.Text>
                                 <TextBlock.Foreground>
                                     <MultiBinding Converter="{StaticResource ReportStatusBrushConv}">
                                         <Binding Path="Status"/>
                                         <Binding Path="StaffNotes"/>
-                                        <Binding Path="(loc:Localization.Current)"/>
+                                        <Binding Path="Current" Source="{x:Static loc:Localization.Proxy}"/>
+                                        
                                     </MultiBinding>
                                 </TextBlock.Foreground>
                             </TextBlock>

@@ -14,23 +14,29 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- avatar + edit -->
-        <DockPanel>
-            <StackPanel Orientation="Horizontal">
-                <Border Width="96" Height="96" CornerRadius="48" Background="#333" AllowDrop="True" Drop="OnAvatarDrop">
+        <!-- avatar, name and edit button -->
+        <StackPanel Orientation="Horizontal">
+            <StackPanel>
+                <Border Width="96" Height="96" CornerRadius="48" Background="#333">
                     <Image Source="{Binding Avatar}" Stretch="UniformToFill" ClipToBounds="True"/>
                 </Border>
-                <Button Content="…" Width="24" Height="24" Margin="8 0 0 0"
+                <Button Content="{loc:Loc EDIT_INFO}" Width="96" Margin="0 4 0 0"
                         Background="Black" Foreground="White" BorderBrush="Black"
-                        Command="{Binding PickAvatarCommand}"/>
+                        Command="{Binding EditInfoCommand}"
+                        HorizontalContentAlignment="Center"/>
             </StackPanel>
-            <Button DockPanel.Dock="Right" Content="{loc:Loc EDIT_INFO}" Width="90"
-                    Background="Black" Foreground="White" BorderBrush="Black"
-                    Command="{Binding EditInfoCommand}"/>
-        </DockPanel>
+            <StackPanel Margin="12 0 0 0" VerticalAlignment="Center" Height="96">
+                <TextBlock Text="{Binding NewLogin}" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                <StackPanel Orientation="Horizontal" Margin="0 4 0 0" VerticalAlignment="Center">
+                    <Image Width="20" Height="20" Source="{Binding RankEnum, Converter={StaticResource RankTrophyConv}}"/>
+                    <TextBlock Text="{Binding Rank}" Margin="4 0 0 0" Foreground="White" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
 
         <!-- xp bar -->
         <Grid Grid.Row="1" Margin="0 16 0 0">
@@ -49,8 +55,11 @@
             <Run Text=" "/><Run Text="{loc:Loc TO_NEXT}"/>
         </TextBlock>
 
+        <!-- favorites header -->
+        <TextBlock Grid.Row="2" Text="{loc:Loc FAVORITE_GAMES}" FontSize="16" FontWeight="Bold" Foreground="White" Margin="0 16 0 4"/>
+
         <!-- favorites table -->
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Favorites}" AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Favorites}" AutoGenerateColumns="False" IsReadOnly="True"
                   Margin="0 20 0 0" Background="#303030" Foreground="White" HeadersVisibility="Column">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" Width="50">
@@ -71,11 +80,13 @@
                                 <Button Content="{loc:Loc PLAY}" Width="90" Margin="0 0 8 0"
                                         Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}"/>
+                                        CommandParameter="{Binding}"
+                                        HorizontalContentAlignment="Center"/>
                                 <Button Content="{loc:Loc REMOVE_FROM_FAVORITES}" Width="90"
                                         Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.ToggleFavoriteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}"/>
+                                        CommandParameter="{Binding}"
+                                        HorizontalContentAlignment="Center"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
