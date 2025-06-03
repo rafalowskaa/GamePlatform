@@ -6,15 +6,19 @@
 
     <DockPanel Margin="24">
 
-        <!-- ComboBox wyboru gry -->
-        <ComboBox DockPanel.Dock="Top"
-                  Width="260"
-                  ItemsSource="{Binding Games}"
-                  SelectedItem="{Binding SelectedGame}"
-                  md:HintAssist.Hint="{loc:Loc CHOOSE_GAME}"/>
+        <!-- górny pasek -->
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+            <ComboBox Width="260"
+                      ItemsSource="{Binding Games}"
+                      SelectedItem="{Binding SelectedGame}"
+                      md:HintAssist.Hint="{loc:Loc CHOOSE_GAME}"/>
+            <Button Content="{loc:Loc PRINT}" Width="90" Margin="8 0 0 0" Click="OnPrintClick"
+                    Background="Black" Foreground="White" BorderBrush="Black"/>
+        </StackPanel>
 
         <!-- tabela TOP 50 -->
-        <DataGrid ItemsSource="{Binding Top}"
+        <DataGrid x:Name="ScoresGrid"
+                  ItemsSource="{Binding Top}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>

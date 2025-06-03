@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using GamePlatform.Shared.Enums;
+using System.Linq;
+using GamePlatform.Desktop.Views;
+using System.Diagnostics;
 
 namespace GamePlatform.Desktop.ViewModels;
 
@@ -52,6 +55,68 @@ public partial class ProfileViewModel : ObservableObject
     public int CurrentXp { get; }
     public int NextXp { get; }
     public string Rank { get; }
+
+    /* -------- Commands for favorites -------- */
+    [RelayCommand]
+    private async Task ToggleFavoriteAsync(Game? g)
+    {
+        if (g is null) return;
+        await _games.ToggleFavoriteAsync(_auth.CurrentUser!.Id, g.Id);
+        await LoadFavoritesAsync();
+    }
+
+    [RelayCommand]
+    private void Play(Game? g)
+    {
+        if (g is null) return;
+
+        var latest = g.Versions.OrderByDescending(v => v.Number).FirstOrDefault();
+        if (latest is null) return;
+
+        string? html = Directory.GetFiles(latest.FolderPath, "index.html", SearchOption.AllDirectories).FirstOrDefault();
+        if (html is not null)
+        {
+            var start = DateTime.UtcNow;
+            var win = new PlayWindow
+            {
+                DataContext = new PlayWindowViewModel(g, html),
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+            win.Closed += async (_, __) =>
+            {
+                var seconds = (int)(DateTime.UtcNow - start).TotalSeconds;
+                await _games.AddPlayTimeAsync(_auth.CurrentUser!.Id, g.Id, seconds);
+            };
+            win.Show();
+        }
+        else
+        {
+            string? exe = Directory.GetFiles(latest.FolderPath, "*.exe", SearchOption.AllDirectories).FirstOrDefault();
+            if (exe is not null)
+            {
+                try
+                {
+                    var psi = new System.Diagnostics.ProcessStartInfo(exe)
+                    {
+                        UseShellExecute = true,
+                        WorkingDirectory = Path.GetDirectoryName(exe)
+                    };
+                    var proc = System.Diagnostics.Process.Start(psi);
+                    if (proc != null)
+                    {
+                        var start = DateTime.UtcNow;
+                        proc.EnableRaisingEvents = true;
+                        proc.Exited += async (_, __) =>
+                        {
+                            var seconds = (int)(DateTime.UtcNow - start).TotalSeconds;
+                            await _games.AddPlayTimeAsync(_auth.CurrentUser!.Id, g.Id, seconds);
+                        };
+                    }
+                }
+                catch { }
+            }
+        }
+    }
 
     /* -------- Pick avatar ---------- */
     [RelayCommand]

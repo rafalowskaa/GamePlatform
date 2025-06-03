@@ -64,9 +64,30 @@
                                 <Image Height="220" Width="200" Stretch="UniformToFill"
                                        Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
                                 <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding LastPlayed}" FontSize="10" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding PlaytimeSeconds}" FontSize="10" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding HighestScore}" FontSize="10" HorizontalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="{loc:Loc LAST_PLAYED}: " FontSize="10"/>
+                                    <TextBlock Text="{Binding LastPlayed}" FontSize="10"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="{loc:Loc PLAY_TIME}: " FontSize="10"/>
+                                    <TextBlock Text="{Binding PlaytimeSeconds}" FontSize="10"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="{loc:Loc HIGHEST_SCORE}: " FontSize="10"/>
+                                    <TextBlock Text="{Binding HighestScore}" FontSize="10"/>
+                                </StackPanel>
+                                <Button Content="{loc:Loc PLAY}"
+                                        Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="Black" BorderBrush="Black" Foreground="White"
+                                        Margin="0 4 0 0"/>
+                                <Button Content="{loc:Loc REMOVE_FROM_FAVORITES}"
+                                        Command="{Binding DataContext.ToggleFavoriteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="Black" BorderBrush="Black" Foreground="White"
+                                        Margin="0 4 0 0"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
