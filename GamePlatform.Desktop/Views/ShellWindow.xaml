@@ -88,11 +88,9 @@
 
                 <!-- ░░░  TAB STRIP + FLAGS + LOGOUT ░░░ -->
                 <Grid DockPanel.Dock="Top" Height="48">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TabControl Grid.Column="0"
+                    
+                    
+                    <TabControl 
                                 Style="{StaticResource SingleRowTabControl}"
                                 Background="{DynamicResource MaterialDesignPaper}"
                                 SelectedIndex="{Binding SelectedTabIndex}"
@@ -111,20 +109,7 @@
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
                         
                     </TabControl>
-                    <!-- Flags + Logout (always visible) -->
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Background="{StaticResource TabBlueBrush}">
-                        <Button Style="{StaticResource FlagBtn}" Command="{Binding SetPolishCommand}">
-                            
-                            <Image Width="32" Height="32" Stretch="Uniform"
-                                   Source="pack://application:,,,/GamePlatform.Desktop;component/Resources/flag_pl.png"/>
-                        </Button>
-                        <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
-                            
-                            <Image Width="32" Height="32" Stretch="Uniform"
-                                   Source="pack://application:,,,/GamePlatform.Desktop;component/Resources/flag_gb.png"/>
-                        </Button>
-                        <Button Content="{loc:Loc LOGOUT}" Style="{StaticResource NavBtn}" Command="{Binding LogoutCommand}"/>
-                    </StackPanel>
+                    
                 </Grid>
 
                 <!-- zawartość stron -->
