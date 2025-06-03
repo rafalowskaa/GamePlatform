@@ -90,12 +90,8 @@
                 <Grid DockPanel.Dock="Top" Height="48">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <!-- tabs -->
                         <ColumnDefinition Width="Auto"/>
-                        <!-- flags/logout -->
                     </Grid.ColumnDefinitions>
-
-                    <!-- TabControl: tylko zakładki -->
                     <TabControl Grid.Column="0"
                                 Style="{StaticResource SingleRowTabControl}"
                                 Background="{DynamicResource MaterialDesignPaper}"
@@ -113,15 +109,19 @@
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
                         <TabItem Header="{loc:Loc USERS}"         Tag="Users"   Style="{StaticResource AdminTabItemStyle}"
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+                        
                     </TabControl>
-
-                    <!-- Flags + Logout (zawsze widoczne) -->
+                    <!-- Flags + Logout (always visible) -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Background="{StaticResource TabBlueBrush}">
                         <Button Style="{StaticResource FlagBtn}" Command="{Binding SetPolishCommand}">
-                            <Image Source="pack://application:,,,/Resources/flag_pl.png"/>
+                            
+                            <Image Width="32" Height="32" Stretch="Uniform"
+                                   Source="pack://application:,,,/GamePlatform.Desktop;component/Resources/flag_pl.png"/>
                         </Button>
                         <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
-                            <Image Source="pack://application:,,,/Resources/flag_gb.png"/>
+                            
+                            <Image Width="32" Height="32" Stretch="Uniform"
+                                   Source="pack://application:,,,/GamePlatform.Desktop;component/Resources/flag_gb.png"/>
                         </Button>
                         <Button Content="{loc:Loc LOGOUT}" Style="{StaticResource NavBtn}" Command="{Binding LogoutCommand}"/>
                     </StackPanel>
