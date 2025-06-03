@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using GamePlatform.Shared.Enums;
+using System.Windows.Media.Imaging;
 
 namespace GamePlatform.Desktop.Converters;
 
@@ -12,8 +13,15 @@ public sealed class RankToTrophyConverter : IValueConverter
         if (value is not UserRank rank)
             return null;
         string name = rank.ToString();
-        string path = $"Resources/Trophies/{GetBaseName(name)}.png";
-        return path;
+        string uri = $"pack://application:,,,/Resources/Trophies/{GetBaseName(name)}.png";
+        try
+        {
+            return new BitmapImage(new Uri(uri));
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private static string GetBaseName(string enumName)

@@ -236,6 +236,15 @@ namespace GamePlatform.Shared.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("HasUnread")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsMyFriend")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsOnline")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("LastLoginUtc")
                         .HasColumnType("TEXT");
 

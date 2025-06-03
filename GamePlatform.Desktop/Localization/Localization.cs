@@ -136,7 +136,7 @@ public static class Localization
             ["ADD_FRIEND"] = "DODAJ ZNAJOMEGO",
             ["CONFIRM"] = "POTWIERDŹ",
             ["FAVORITE_GAMES"] = "ULUBIONE GRY",
-            ["ADD_TO_FAVORITES"] = "DODAJ DO ULUBIONYCH",
+            ["ADD_TO_FAVORITES"] = "ULUBIONE",
             ["REMOVE_FROM_FAVORITES"] = "USUŃ Z ULUBIONYCH",
             ["WELCOME_PLAYER"] = "Witaj {0}, w co dziś zagramy?",
 
@@ -257,7 +257,7 @@ public static class Localization
             ["RECOVERY_EMAIL"] = "RECOVERY EMAIL",
             ["NEW_PASSWORD"] = "NEW PASSWORD",
             ["FAVORITE_GAMES"] = "FAVORITE GAMES",
-            ["ADD_TO_FAVORITES"] = "ADD TO FAVORITES",
+            ["ADD_TO_FAVORITES"] = "FAVORITES",
             ["REMOVE_FROM_FAVORITES"] = "REMOVE FROM FAVORITES",
             ["WELCOME_PLAYER"] = "Welcome {0}, what shall we play today?",
 

@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 namespace GamePlatform.Shared.Models;
 
-public class User
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+public class User : INotifyPropertyChanged
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Login { get; set; } = "";
@@ -26,17 +29,53 @@ public class User
     /// the user is currently online. Not mapped to the database.
     /// </summary>
     [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public bool IsOnline { get; set; }
+    private bool _isOnline;
+    public bool IsOnline
+    {
+        get => _isOnline;
+        set
+        {
+            if (_isOnline != value)
+            {
+                _isOnline = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     /// <summary>
     /// Indicates whether the currently logged in user has this
     /// person on their friends list. Runtime only, not stored.
     /// </summary>
     [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public bool IsMyFriend { get; set; }
+    private bool _isMyFriend;
+    public bool IsMyFriend
+    {
+        get => _isMyFriend;
+        set
+        {
+            if (_isMyFriend != value)
+            {
+                _isMyFriend = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    public bool HasUnread { get; set; }
+    private bool _hasUnread;
+    public bool HasUnread
+    {
+        get => _hasUnread;
+        set
+        {
+            if (_hasUnread != value)
+            {
+                _hasUnread = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
 
 
@@ -49,4 +88,8 @@ public class User
     /* —— blokady —— */
     public ICollection<BlockedUser> BlockedUsers { get; set; } = []; // ja blokuję
     public ICollection<BlockedUser> BlockedBy { get; set; } = []; // ktoś blokuje mnie
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private void OnPropertyChanged([CallerMemberName] string? name = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

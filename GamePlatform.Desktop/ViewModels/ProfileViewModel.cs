@@ -58,9 +58,10 @@ public partial class ProfileViewModel : ObservableObject
     [ObservableProperty] private string? _error;
 
     [ObservableProperty] private ObservableCollection<Game> _favorites = new();
+    [ObservableProperty] private int _currentXp;
+    [ObservableProperty] private int _nextXp;
 
-    public int CurrentXp { get; }
-    public int NextXp { get; }
+    
     public string Rank { get; }
     public UserRank RankEnum { get; }
     public UserRank NextRankEnum { get; }
