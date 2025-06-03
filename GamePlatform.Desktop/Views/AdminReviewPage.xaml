@@ -54,5 +54,5 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-    </DockPanel>
+    </DockPanel> 
 </Page>
