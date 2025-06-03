@@ -51,7 +51,7 @@
             <Image Grid.Column="2" Width="32" Height="32" Source="{Binding NextRankEnum, Converter={StaticResource RankTrophyConv}}"/>
         </Grid>
         <TextBlock Grid.Row="1" Margin="0 42 0 0" HorizontalAlignment="Center" Foreground="White">
-            <Run Text="{Binding CurrentXp}"/><Run Text=" / "/><Run Text="{Binding NextXp}"/>
+            <Run Text="{Binding CurrentXp, Mode=OneWay}"/><Run Text=" / "/><Run Text="{Binding NextXp, Mode=OneWay}"/>
             <Run Text=" "/><Run Text="{loc:Loc TO_NEXT}"/>
         </TextBlock>
 
@@ -62,27 +62,27 @@
         <DataGrid Grid.Row="3" ItemsSource="{Binding Favorites}" AutoGenerateColumns="False" IsReadOnly="True"
                   Margin="0 20 0 0" Background="#303030" Foreground="White" HeadersVisibility="Column">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="" Width="50">
+                <DataGridTemplateColumn Header="" Width="70">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Width="40" Height="40" Stretch="UniformToFill" Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="{loc:Loc TITLE}" Binding="{Binding Title}" Width="*"/>
-                <DataGridTextColumn Header="{loc:Loc LAST_PLAYED}" Binding="{Binding LastPlayed}" Width="120"/>
+                <DataGridTextColumn Header="{loc:Loc TITLE}" Binding="{Binding Title}" Width="180"/>
+                <DataGridTextColumn Header="{loc:Loc LAST_PLAYED}" Binding="{Binding LastPlayed}" Width="200"/>
                 <DataGridTextColumn Header="{loc:Loc PLAY_TIME}" Binding="{Binding PlaytimeSeconds}" Width="100"/>
-                <DataGridTextColumn Header="{loc:Loc HIGHEST_SCORE}" Binding="{Binding HighestScore}" Width="120"/>
-                <DataGridTemplateColumn Header="" Width="180">
+                <DataGridTextColumn Header="{loc:Loc HIGHEST_SCORE}" Binding="{Binding HighestScore}" Width="130"/>
+                <DataGridTemplateColumn Header="" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="{loc:Loc PLAY}" Width="90" Margin="0 0 8 0"
+                                <Button Content="{loc:Loc PLAY}" Width="80" Margin="0 0 8 0"
                                         Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"
                                         HorizontalContentAlignment="Center"/>
-                                <Button Content="{loc:Loc REMOVE_FROM_FAVORITES}" Width="90"
+                                <Button Content="{loc:Loc REMOVE_FROM_FAVORITES}" Width="215"
                                         Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.ToggleFavoriteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"

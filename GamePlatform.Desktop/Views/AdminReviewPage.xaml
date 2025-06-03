@@ -27,6 +27,11 @@
                     Background="Black" Foreground="White" BorderBrush="Black"/>
         </StackPanel>
         <DataGrid x:Name="GamesGrid" ItemsSource="{Binding Games}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0 8 0 0">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{loc:Loc TITLE}" Binding="{Binding Title}" Width="*"/>
                 <DataGridTextColumn Header="{loc:Loc VERSION}" Binding="{Binding Versions[0].Number}" Width="80"/>

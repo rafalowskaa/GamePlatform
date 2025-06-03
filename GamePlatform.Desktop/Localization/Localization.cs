@@ -157,7 +157,7 @@ public static class Localization
             /* --- inne --- */
             ["GAME_ROOM"] = "POKÓJ GRY",
             ["CHANGE_PICTURE"] = "ZMIEŃ ZDJĘCIE",
-            ["EDIT_INFO"] = "EDYTUJ DANE",
+            ["EDIT_INFO"] = "EDYTUJ",
             ["PROFILE_UPDATED"] = "Profil zaktualizowany.",
             ["TO_NEXT"] = "Do następnego",
             ["PRINT"] = "DRUKUJ",

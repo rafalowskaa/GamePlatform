@@ -154,7 +154,7 @@
                      KeyDown="OnSearchEnter"
                      md:HintAssist.Hint="{loc:Loc SEARCH_PLAYER}"
                      Background="#222" Foreground="White" BorderBrush="#444"
-                     TextAlignment="Center" HorizontalContentAlignment="Center"/>
+                     TextAlignment="Left" HorizontalContentAlignment="Left"/>
 
             <ListBox ItemsSource="{Binding Suggestions}"
                      Visibility="{Binding IsSuggestOpen, Converter={StaticResource BoolToVis}}"
