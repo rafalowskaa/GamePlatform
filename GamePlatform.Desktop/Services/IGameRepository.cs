@@ -19,6 +19,8 @@ public interface IGameRepository
     Task ToggleFavoriteAsync(Guid userId, Guid gameId);
     Task<IReadOnlyList<Game>> GetFavoritesAsync(Guid userId);
 
+    Task AddPlayTimeAsync(Guid userId, Guid gameId, int seconds);
+
 
     /* ---- wyniki gier ---- */
     Task AddScoreAsync(Guid gameId, Score score);

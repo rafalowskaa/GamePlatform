@@ -103,10 +103,12 @@
             <Button Content="{loc:Loc CLEAR}"
                     Style="{StaticResource BlackBtn}"
                     Command="{Binding ClearFiltersCommand}"/>
+            <Button Content="{loc:Loc PRINT}" Width="100" Margin="8 0 0 0" Click="OnPrintClick" Background="Black" Foreground="White" BorderBrush="Black"/>
         </StackPanel>
 
         <!-- ==========  DATA-GRID  ========== -->
-        <DataGrid ItemsSource="{Binding UsersView}"
+        <DataGrid x:Name="UsersGrid" ItemsSource="{Binding UsersView}"
+                  
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   HeadersVisibility="Column"

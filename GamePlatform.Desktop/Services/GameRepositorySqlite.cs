@@ -160,6 +160,28 @@ public sealed class GameRepositorySqlite : IGameRepository
         await _db.SaveChangesAsync();
     }
 
+    public async Task AddPlayTimeAsync(Guid userId, Guid gameId, int seconds)
+    {
+        var fav = await _db.FavoriteGames.FindAsync(userId, gameId);
+        if (fav is null)
+        {
+            fav = new FavoriteGame
+            {
+                UserId = userId,
+                GameId = gameId,
+                PlaytimeSeconds = seconds,
+                LastPlayedUtc = DateTime.UtcNow
+            };
+            _db.FavoriteGames.Add(fav);
+        }
+        else
+        {
+            fav.PlaytimeSeconds += seconds;
+            fav.LastPlayedUtc = DateTime.UtcNow;
+        }
+        await _db.SaveChangesAsync();
+    }
+
     public async Task<IReadOnlyList<Game>> GetFavoritesAsync(Guid userId)
     {
         var list = await _db.FavoriteGames
@@ -167,11 +189,14 @@ public sealed class GameRepositorySqlite : IGameRepository
                             .Include(f => f.Game!)
                                 .ThenInclude(g => g.Versions)
                             .AsNoTracking()
-                            .Select(f => f.Game!)
                             .ToListAsync();
-        foreach (var g in list)
+        var result = new List<Game>();
+        foreach (var fav in list)
         {
+            var g = fav.Game!;
             SetCover(g);
+            g.LastPlayed = fav.LastPlayedUtc;
+            g.PlaytimeSeconds = fav.PlaytimeSeconds;
 
             var scores = await _db.Scores
                                    .Where(s => s.GameId == g.Id && s.UserId == userId)
@@ -181,7 +206,8 @@ public sealed class GameRepositorySqlite : IGameRepository
                 g.LastPlayed = scores.Max(s => (DateTime?)s.CreatedUtc);
                 g.HighestScore = scores.Max(s => s.Value);
             }
+            result.Add(g);
         }
-        return list;
+        return result;
     }
 }

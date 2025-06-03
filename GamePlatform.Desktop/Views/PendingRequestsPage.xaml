@@ -6,11 +6,14 @@
 
     <DockPanel Margin="24">
 
-        <Button DockPanel.Dock="Top" Content="{loc:Loc REFRESH}"
-                Command="{Binding RefreshCommand}" Width="90"
-                Background="Black" Foreground="White" BorderBrush="Black"/>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Button Content="{loc:Loc REFRESH}" Command="{Binding RefreshCommand}" Width="90"
+                    Background="Black" Foreground="White" BorderBrush="Black"/>
+            <Button Content="{loc:Loc PRINT}" Width="90" Margin="8 0 0 0" Click="OnPrintClick"
+                    Background="Black" Foreground="White" BorderBrush="Black"/>
+        </StackPanel>
 
-        <DataGrid ItemsSource="{Binding Requests}" AutoGenerateColumns="False"
+        <DataGrid x:Name="RequestsGrid" ItemsSource="{Binding Requests}" AutoGenerateColumns="False"
                   IsReadOnly="True" Margin="0 12 0 0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{loc:Loc FROM}"    Binding="{Binding FromUserId}" Width="*"/>

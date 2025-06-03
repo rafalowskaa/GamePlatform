@@ -7,6 +7,10 @@ public class FavoriteGame
     public Guid UserId { get; set; }
     public Guid GameId { get; set; }
 
+    public DateTime? LastPlayedUtc { get; set; }
+
+    public int PlaytimeSeconds { get; set; }
+
     public User? User { get; set; }
     public Game? Game { get; set; }
 }

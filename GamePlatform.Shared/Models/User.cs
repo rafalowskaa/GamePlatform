@@ -15,7 +15,7 @@ public class User
     public UserRole Role { get; set; } = UserRole.User;
 
     public int Xp { get; set; } = 0;
-    public UserRank Rank { get; set; } = UserRank.Bronze;
+    public UserRank Rank { get; set; } = UserRank.WoodV;
 
     public DateTime? BlockedUntilUtc { get; set; }
     public string? BlockReason { get; set; }

@@ -140,21 +140,34 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void Play(Game? g)   // zostawiamy param
+    private void Play(Game? g) 
     {
         g ??= SelectedGame;
         if (g is null) return;
+
         var latest = g.Versions.OrderByDescending(v => v.Number).FirstOrDefault();
         if (latest is null) return;
+
+        var repo = _sp.GetRequiredService<IGameRepository>();
+        var auth = _sp.GetRequiredService<IAuthService>();
+        var rank = _sp.GetRequiredService<IRankService>();
 
         string? html = Directory.GetFiles(latest.FolderPath, "index.html", SearchOption.AllDirectories).FirstOrDefault();
         if (html is not null)
         {
-            new PlayWindow
+            var start = DateTime.UtcNow;
+            var win = new PlayWindow
             {
                 DataContext = new PlayWindowViewModel(g, html),
                 Owner = Application.Current.MainWindow
-            }.Show();
+            };
+            win.Closed += async (_, __) =>
+            {
+                var seconds = (int)(DateTime.UtcNow - start).TotalSeconds;
+                await repo.AddPlayTimeAsync(auth.CurrentUser!.Id, g.Id, seconds);
+                await rank.AddXpAsync(auth.CurrentUser!.Id, seconds);
+            };
+            win.Show();
         }
         else
         {
@@ -168,7 +181,18 @@ public partial class MainViewModel : ObservableObject
                         UseShellExecute = true,
                         WorkingDirectory = Path.GetDirectoryName(exe)
                     };
-                    Process.Start(psi);
+                    var proc = Process.Start(psi);
+                    if (proc != null)
+                    {
+                        var start = DateTime.UtcNow;
+                        proc.EnableRaisingEvents = true;
+                        proc.Exited += async (_, __) =>
+                        {
+                            var seconds = (int)(DateTime.UtcNow - start).TotalSeconds;
+                            await repo.AddPlayTimeAsync(auth.CurrentUser!.Id, g.Id, seconds);
+                            await rank.AddXpAsync(auth.CurrentUser!.Id, seconds);
+                        };
+                    }
                 }
                 catch { }
             }

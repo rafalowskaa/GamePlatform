@@ -24,5 +24,12 @@ namespace GamePlatform.Desktop.Views
         {
             InitializeComponent();
         }
+
+        private void OnPrintClick(object sender, RoutedEventArgs e)
+        {
+            var dlg = new PrintDialog();
+            if (dlg.ShowDialog() == true)
+                dlg.PrintVisual(ReportsGrid, "Reports");
+        }
     }
 }

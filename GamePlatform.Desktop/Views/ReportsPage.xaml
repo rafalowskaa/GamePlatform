@@ -103,15 +103,14 @@
 
     <!-- ==========  UI  ========== -->
     <DockPanel Margin="12">
-        <Button DockPanel.Dock="Top"
-                Content="{loc:Loc REFRESH}"
-                Width="100"
-                Command="{Binding RefreshCommand}"
-                Background="Black"
-                Foreground="White"
-                BorderBrush="Black"/>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Button Content="{loc:Loc REFRESH}" Width="100" Command="{Binding RefreshCommand}"
+                    Background="Black" Foreground="White" BorderBrush="Black"/>
+            <Button Content="{loc:Loc PRINT}" Width="100" Margin="8 0 0 0" Click="OnPrintClick"
+                    Background="Black" Foreground="White" BorderBrush="Black"/>
+        </StackPanel>
 
-        <DataGrid ItemsSource="{Binding Reports}"
+        <DataGrid x:Name="ReportsGrid" ItemsSource="{Binding Reports}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   Margin="0 8 0 0"
