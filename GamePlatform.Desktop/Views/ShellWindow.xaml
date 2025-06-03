@@ -9,7 +9,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Launcher"
-        Width="1100"
+        Width="1140"
         Height="800"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource MaterialDesignWindow}"
@@ -91,8 +91,8 @@
 
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <TabControl Grid.Column="0"
@@ -114,15 +114,22 @@
                                  Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
                         
                     </TabControl>
-                    <!-- Flags + Logout (always visible) -->
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Background="{StaticResource TabBlueBrush}">
-                        <Button Style="{StaticResource FlagBtn}" Command="{Binding SetPolishCommand}">
-                            <Image Width="32" Height="32" Stretch="Uniform" Source="pack://application:,,,/GamePlatform.Desktop;component/Resources/flag_pl.png"/>
+                    <!-- ❷ PANEL FLAG + WYLOGUJ -->
+                    <StackPanel x:Name="NavPanel"                
+                        Grid.Column="1"
+                Orientation="Horizontal"
+                Background="{StaticResource TabBlueBrush}">
+                        <Button Style="{StaticResource FlagBtn}" Margin="8 0 0 0" Command="{Binding SetPolishCommand}">
+                            <Image Width="30" Height="32" Stretch="Uniform"
+                   Source="pack://application:,,,/Resources/flag_pl.png"/>
                         </Button>
                         <Button Style="{StaticResource FlagBtn}" Margin="4 0 0 0" Command="{Binding SetEnglishCommand}">
-                            <Image Width="32" Height="32" Stretch="Uniform" Source="pack://application:,,,/GamePlatform.Desktop;component/Resources/flag_gb.png"/>
+                            <Image Width="30" Height="32" Stretch="Uniform"
+                   Source="pack://application:,,,/Resources/flag_gb.png"/>
                         </Button>
-                        <Button Content="{loc:Loc LOGOUT}" Style="{StaticResource NavBtn}" Command="{Binding LogoutCommand}"/>
+                        <Button Content="{loc:Loc LOGOUT}"
+                Style="{StaticResource NavBtn}"
+                Command="{Binding LogoutCommand}"/>
                     </StackPanel>
                 </Grid>
 
@@ -134,8 +141,8 @@
             </DockPanel>
 
             <!-- uchwyt do wysuwanego panelu znajomych -->
-            <Button Width="40" Height="100" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-16,0"
-                    Background="Black" Command="{Binding ToggleDrawerCommand}"/>
+            <Button Width="30" Height="200" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-16,0"
+                    Background="Black" BorderBrush="Black" Command="{Binding ToggleDrawerCommand}"/>
         </Grid>
     </md:DrawerHost>
 </Window>

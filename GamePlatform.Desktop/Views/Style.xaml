@@ -21,7 +21,7 @@
         <Setter Property="Foreground"  Value="White"/>
         <Setter Property="FontSize"    Value="14"/>
         <Setter Property="FontWeight"  Value="SemiBold"/>
-        <Setter Property="MinWidth"    Value="135"/>
+        <Setter Property="MinWidth"    Value="80"/>
         <Setter Property="Height"      Value="48"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -49,16 +49,32 @@
         <!-- Per‑tab width tweaks -->
         <Style.Triggers>
             <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Games">
-                <Setter Property="MinWidth" Value="110"/>
+                <Setter Property="MinWidth" Value="20"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Profile">
-                <Setter Property="MinWidth" Value="110"/>
+                <Setter Property="MinWidth" Value="50"/>
             </DataTrigger>
+
+ 
             <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Stats">
-                <Setter Property="MinWidth" Value="125"/>
+                <Setter Property="MinWidth" Value="50"/>
             </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Notify">
+                <Setter Property="MinWidth" Value="105"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Pending">
+                <Setter Property="MinWidth" Value="100"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Reports">
+                <Setter Property="MinWidth" Value="100"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Users">
+                <Setter Property="MinWidth" Value="100"/>
+            </DataTrigger>
+
         </Style.Triggers>
     </Style>
+
 
     <!-- ADMIN TAB ITEM -->
     <Style x:Key="AdminTabItemStyle"
@@ -75,18 +91,16 @@
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Height"    Value="48"/>
-        <Setter Property="MinWidth"  Value="100"/>
+        <Setter Property="MinWidth"  Value="70"/>
     </Style>
 
-    <!-- FLAG BUTTON -->
-    <Style x:Key="FlagBtn"
-           TargetType="Button"
-           BasedOn="{StaticResource MaterialDesignFlatButton}">
+    
+    <Style x:Key="FlagBtn" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
         <Setter Property="Background" Value="{StaticResource TabBlueBrush}"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Width" Value="32"/>
-        <Setter Property="Height" Value="32"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Padding"    Value="0"/>
+        <Setter Property="Width"      Value="32"/>
+        <Setter Property="Height"     Value="32"/>
+        <Setter Property="BorderThickness" Value="0"/>
     </Style>
 
     <!-- TABCONTROL  (single row) -->
@@ -102,20 +116,19 @@
 
                         <!-- Header strip -->
                         <ScrollViewer Grid.Row="0"
-                                      HorizontalScrollBarVisibility="Auto"
-                                      VerticalScrollBarVisibility="Disabled">
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Disabled">
                             <DockPanel LastChildFill="False">
-                                <!-- Tabs -->
                                 <UniformGrid Rows="1" DockPanel.Dock="Left" IsItemsHost="True">
                                     <UniformGrid.Width>
+                                        
                                         <MultiBinding Converter="{StaticResource TabWidthConverter}" ConverterParameter="135">
                                             <Binding RelativeSource="{RelativeSource AncestorType=ScrollViewer}" Path="ViewportWidth"/>
-                                            <Binding RelativeSource="{RelativeSource AncestorType=TabControl}" Path="Items.Count"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=TabControl}"   Path="Items.Count"/>
+                                            <Binding ElementName="NavPanel" Path="ActualWidth"/>
                                         </MultiBinding>
                                     </UniformGrid.Width>
                                 </UniformGrid>
-
-                                
                             </DockPanel>
                         </ScrollViewer>
 
