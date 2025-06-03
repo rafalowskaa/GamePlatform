@@ -166,7 +166,37 @@
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <EventSetter Event="PreviewMouseLeftButtonUp" Handler="OnSuggestionItemClick"/>
-                        <EventSetter Event="ContextMenuOpening"      Handler="DisableContextMenu"/>
+                        <EventSetter Event="ContextMenuOpening" Handler="DisableContextMenu"/>
+                        <Setter Property="ContextMenu">
+                            <Setter.Value>
+                                <ContextMenu>
+                                    <MenuItem Header="{Binding PlacementTarget.DataContext.IsMyFriend,
+                                                           Converter={StaticResource FriendAction},
+                                                           RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                              Command="{Binding ToggleForCommand}"
+                                              CommandParameter="{Binding PlacementTarget.DataContext,
+                                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    <Separator/>
+                                    <MenuItem Header="{loc:Loc WRITE_MSG}"
+                                              Command="{Binding StartChatCommand}"
+                                              CommandParameter="{Binding PlacementTarget.DataContext,
+                                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    <MenuItem Header="{loc:Loc SHOW_PROFILE}"
+                                              Command="{Binding ShowProfileCommand}"
+                                              CommandParameter="{Binding PlacementTarget.DataContext,
+                                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    <Separator/>
+                                    <MenuItem Header="{loc:Loc BLOCK}"
+                                              Command="{Binding BlockCommand}"
+                                              CommandParameter="{Binding PlacementTarget.DataContext,
+                                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                    <MenuItem Header="{loc:Loc REPORT}"
+                                              Command="{Binding ReportCommand}"
+                                              CommandParameter="{Binding PlacementTarget.DataContext,
+                                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                </ContextMenu>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
 

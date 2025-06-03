@@ -6,7 +6,7 @@
        Title="{loc:Loc PENDING}">
     <Page.Resources>
         <Style x:Key="ActBtn" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
-            <Setter Property="MinWidth" Value="70"/>
+            <Setter Property="MinWidth" Value="90"/>
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>

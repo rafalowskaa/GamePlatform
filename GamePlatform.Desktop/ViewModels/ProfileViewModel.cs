@@ -45,6 +45,7 @@ public partial class ProfileViewModel : ObservableObject
         RankEnum = RankHelper.GetRank(CurrentXp);
         NextRankEnum = RankHelper.GetNextRank(CurrentXp);
         Rank = RankEnum.ToString();
+        NextRank = NextRankEnum.ToString();
         _ = LoadFavoritesAsync();
     }
 
@@ -65,6 +66,7 @@ public partial class ProfileViewModel : ObservableObject
     public string Rank { get; }
     public UserRank RankEnum { get; }
     public UserRank NextRankEnum { get; }
+    public string NextRank { get; }
 
     /* -------- Commands for favorites -------- */
     [RelayCommand]

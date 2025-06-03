@@ -40,17 +40,23 @@
 
         <!-- xp bar -->
         <Grid Grid.Row="1" Margin="0 16 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" Width="32" Height="32" Source="{Binding RankEnum, Converter={StaticResource RankTrophyConv}}"/>
-            <ProgressBar Grid.Column="1" Minimum="0" Maximum="{Binding NextXp, Mode=OneWay}" Value="{Binding CurrentXp, Mode=OneWay}"
+            <Image Grid.Row="0" Grid.Column="0" Width="32" Height="32" Source="{Binding RankEnum, Converter={StaticResource RankTrophyConv}}"/>
+            <ProgressBar Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="{Binding NextXp, Mode=OneWay}" Value="{Binding CurrentXp, Mode=OneWay}"
                          Height="24" Foreground="#7c80ff" Background="#555"/>
-            <Image Grid.Column="2" Width="32" Height="32" Source="{Binding NextRankEnum, Converter={StaticResource RankTrophyConv}}"/>
+            <Image Grid.Row="0" Grid.Column="2" Width="32" Height="32" Source="{Binding NextRankEnum, Converter={StaticResource RankTrophyConv}}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Rank}" Foreground="White" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding NextRank}" Foreground="White" HorizontalAlignment="Center" Margin="0,2,0,0"/>
         </Grid>
-        <TextBlock Grid.Row="1" Margin="0 42 0 0" HorizontalAlignment="Center" Foreground="White">
+        <TextBlock Grid.Row="1" Margin="0 58 0 0" HorizontalAlignment="Center" Foreground="White">
             <Run Text="{Binding CurrentXp, Mode=OneWay}"/><Run Text=" / "/><Run Text="{Binding NextXp, Mode=OneWay}"/>
             <Run Text=" "/><Run Text="{loc:Loc TO_NEXT}"/>
         </TextBlock>
@@ -77,12 +83,12 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="{loc:Loc PLAY}" Width="80" Margin="0 0 8 0"
+                                <Button Content="{loc:Loc PLAY}" Width="90" Margin="0 0 8 0"
                                         Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"
                                         HorizontalContentAlignment="Center"/>
-                                <Button Content="{loc:Loc REMOVE_FROM_FAVORITES}" Width="215"
+                                <Button Content="{loc:Loc REMOVE_FROM_FAVORITES}" Width="240"
                                         Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.ToggleFavoriteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                         CommandParameter="{Binding}"
