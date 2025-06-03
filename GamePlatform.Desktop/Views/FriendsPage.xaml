@@ -6,7 +6,7 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization"
              Background="Transparent"
-             Width="300">
+             Width="240">
 
     <!-- ═════════════  R E S O U R C E S  ═════════════ -->
     <UserControl.Resources>

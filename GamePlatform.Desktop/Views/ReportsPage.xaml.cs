@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GamePlatform.Desktop.Utils;
 
 namespace GamePlatform.Desktop.Views
 {
@@ -27,9 +28,7 @@ namespace GamePlatform.Desktop.Views
 
         private void OnPrintClick(object sender, RoutedEventArgs e)
         {
-            var dlg = new PrintDialog();
-            if (dlg.ShowDialog() == true)
-                dlg.PrintVisual(ReportsGrid, "Reports");
+            Utils.PrintHelper.PrintDataGrid(ReportsGrid, "Reports");
         }
     }
 }

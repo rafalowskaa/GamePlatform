@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows;
+using GamePlatform.Desktop.Utils;
 
 namespace GamePlatform.Desktop.Views;
 
@@ -9,8 +10,6 @@ public partial class AdminReviewPage : Page
 
     private void OnPrintClick(object sender, RoutedEventArgs e)
     {
-        var dlg = new PrintDialog();
-        if (dlg.ShowDialog() == true)
-            dlg.PrintVisual(GamesGrid, "Games");
+        Utils.PrintHelper.PrintDataGrid(GamesGrid, "Games");
     }
 }

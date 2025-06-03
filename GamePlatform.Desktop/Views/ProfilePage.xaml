@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:conv="clr-namespace:GamePlatform.Desktop.Converters"
-      xmlns:models="clr-namespace:GamePlatform.Shared.Models;assembly=GamePlatform.Shared"
       xmlns:loc="clr-namespace:GamePlatform.Desktop.Localization">
 
     <Page.Resources>
@@ -11,88 +10,77 @@
         <conv:RankToTrophyConverter x:Key="RankTrophyConv"/>
     </Page.Resources>
 
-    <Grid Margin="24" VerticalAlignment="Center">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <Grid Margin="24" Background="#303030">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <StackPanel>
-            <Border Width="100" Height="100" CornerRadius="50" Background="#333" AllowDrop="True" Drop="OnAvatarDrop">
-                <Image Source="{Binding Avatar}" Stretch="UniformToFill" ClipToBounds="True"/>
-            </Border>
-            <Button Content="{loc:Loc CHANGE_PICTURE}" Background="Black" Foreground="White" BorderBrush="Black"
-                    Margin="0 8 0 0"
-                    Command="{Binding PickAvatarCommand}" Width="100"/>
-        </StackPanel>
-
-        <StackPanel Grid.Column="1" Width="260">
-            <TextBox Text="{Binding NewLogin}"        md:HintAssist.Hint="{loc:Loc LOGIN}"/>
-            <TextBox Text="{Binding NewEmail}"        md:HintAssist.Hint="{loc:Loc EMAIL}"        Margin="0 8 0 0"/>
-            <TextBox Text="{Binding RecoveryMail}"    md:HintAssist.Hint="{loc:Loc RECOVERY_EMAIL}" Margin="0 8 0 0"/>
-
-            <PasswordBox md:HintAssist.Hint="{loc:Loc NEW_PASSWORD}"
-                         Margin="0 8 0 0"
-                         PasswordChanged="PwdChanged"/>
-
-            <TextBlock Text="{Binding Error}" Foreground="Red" TextWrapping="Wrap"/>
-
-            <Button Content="{loc:Loc SAVE}" Background="Black" Foreground="White" BorderBrush="Black"
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    Command="{Binding SaveCommand}"
-                    Margin="0 12 0 0"
-                    IsDefault="True"/>
-
-            <StackPanel Orientation="Horizontal" Margin="0 12 0 0" VerticalAlignment="Center">
-                <ProgressBar Minimum="0" Maximum="{Binding NextXp}" Value="{Binding CurrentXp}" Height="20" Width="200"/>
-                <Image Height="20" Width="20" Margin="8 0 0 0"
-                       Source="{Binding Rank, Converter={StaticResource RankTrophyConv}}"/>
+        <!-- avatar + edit -->
+        <DockPanel>
+            <StackPanel Orientation="Horizontal">
+                <Border Width="96" Height="96" CornerRadius="48" Background="#333" AllowDrop="True" Drop="OnAvatarDrop">
+                    <Image Source="{Binding Avatar}" Stretch="UniformToFill" ClipToBounds="True"/>
+                </Border>
+                <Button Content="…" Width="24" Height="24" Margin="8 0 0 0"
+                        Background="Black" Foreground="White" BorderBrush="Black"
+                        Command="{Binding PickAvatarCommand}"/>
             </StackPanel>
-            <TextBlock Text="{Binding Rank}" HorizontalAlignment="Center" Margin="0 4 0 12"/>
+            <Button DockPanel.Dock="Right" Content="{loc:Loc EDIT_INFO}" Width="90"
+                    Background="Black" Foreground="White" BorderBrush="Black"
+                    Command="{Binding EditInfoCommand}"/>
+        </DockPanel>
 
-            <TextBlock Text="{loc:Loc FAVORITE_GAMES}" FontWeight="Bold" Margin="0 20 0 4"/>
-            <ItemsControl ItemsSource="{Binding Favorites}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type models:Game}">
-                        <Border Width="200" Height="300" Margin="4" BorderBrush="Gray" BorderThickness="1">
-                            <StackPanel>
-                                <Image Height="220" Width="200" Stretch="UniformToFill"
-                                       Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
-                                <TextBlock Text="{Binding Title}" HorizontalAlignment="Center"/>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{loc:Loc LAST_PLAYED}" FontSize="10"/>
-                                    <TextBlock Text="{Binding LastPlayed}" FontSize="10"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{loc:Loc PLAY_TIME}" FontSize="10"/>
-                                    <TextBlock Text="{Binding PlaytimeSeconds}" FontSize="10"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{loc:Loc HIGHEST_SCORE}" FontSize="10"/>
-                                    <TextBlock Text="{Binding HighestScore}" FontSize="10"/>
-                                </StackPanel>
-                                <Button Content="{loc:Loc PLAY}"
+        <!-- xp bar -->
+        <Grid Grid.Row="1" Margin="0 16 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Width="32" Height="32" Source="{Binding RankEnum, Converter={StaticResource RankTrophyConv}}"/>
+            <ProgressBar Grid.Column="1" Minimum="0" Maximum="{Binding NextXp}" Value="{Binding CurrentXp, Mode=OneWay}"
+                         Height="24" Foreground="#7c80ff" Background="#555"/>
+            <Image Grid.Column="2" Width="32" Height="32" Source="{Binding NextRankEnum, Converter={StaticResource RankTrophyConv}}"/>
+        </Grid>
+        <TextBlock Grid.Row="1" Margin="0 42 0 0" HorizontalAlignment="Center" Foreground="White">
+            <Run Text="{Binding CurrentXp}"/><Run Text=" / "/><Run Text="{Binding NextXp}"/>
+            <Run Text=" "/><Run Text="{loc:Loc TO_NEXT}"/>
+        </TextBlock>
+
+        <!-- favorites table -->
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Favorites}" AutoGenerateColumns="False" IsReadOnly="True"
+                  Margin="0 20 0 0" Background="#303030" Foreground="White" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Width="40" Height="40" Stretch="UniformToFill" Source="{Binding Versions[0].FolderPath, Converter={StaticResource CoverConv}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="{loc:Loc TITLE}" Binding="{Binding Title}" Width="*"/>
+                <DataGridTextColumn Header="{loc:Loc LAST_PLAYED}" Binding="{Binding LastPlayed}" Width="120"/>
+                <DataGridTextColumn Header="{loc:Loc PLAY_TIME}" Binding="{Binding PlaytimeSeconds}" Width="100"/>
+                <DataGridTextColumn Header="{loc:Loc HIGHEST_SCORE}" Binding="{Binding HighestScore}" Width="120"/>
+                <DataGridTemplateColumn Header="" Width="180">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="{loc:Loc PLAY}" Width="90" Margin="0 0 8 0"
+                                        Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}"
-                                        Style="{StaticResource MaterialDesignRaisedButton}"
-                                        Background="Black" BorderBrush="Black" Foreground="White"
-                                        Margin="0 4 0 0"/>
-                                <Button Content="{loc:Loc REMOVE_FROM_FAVORITES}"
+                                        CommandParameter="{Binding}"/>
+                                <Button Content="{loc:Loc REMOVE_FROM_FAVORITES}" Width="90"
+                                        Background="Black" Foreground="White" BorderBrush="Black"
                                         Command="{Binding DataContext.ToggleFavoriteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}"
-                                        Style="{StaticResource MaterialDesignRaisedButton}"
-                                        Background="Black" BorderBrush="Black" Foreground="White"
-                                        Margin="0 4 0 0"/>
+                                        CommandParameter="{Binding}"/>
                             </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>

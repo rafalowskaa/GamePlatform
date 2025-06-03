@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using GamePlatform.Desktop.Utils;
 
 namespace GamePlatform.Desktop.Views;
 
@@ -8,8 +9,6 @@ public partial class UsersPage : Page
 
     private void OnPrintClick(object sender, System.Windows.RoutedEventArgs e)
     {
-        var dlg = new System.Windows.Controls.PrintDialog();
-        if (dlg.ShowDialog() == true)
-            dlg.PrintVisual(UsersGrid, "Users");
+        Utils.PrintHelper.PrintDataGrid(UsersGrid, "Users");
     }
 }

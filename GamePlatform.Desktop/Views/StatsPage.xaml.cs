@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using GamePlatform.Desktop.Utils;
 
 namespace GamePlatform.Desktop.Views
 {
@@ -12,9 +13,7 @@ namespace GamePlatform.Desktop.Views
 
         private void OnPrintClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            var dlg = new System.Windows.Controls.PrintDialog();
-            if (dlg.ShowDialog() == true)
-                dlg.PrintVisual(ScoresGrid, "Stats");
+            Utils.PrintHelper.PrintDataGrid(ScoresGrid, "Stats");
         }
     }
 }
