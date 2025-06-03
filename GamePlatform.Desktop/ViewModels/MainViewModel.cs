@@ -161,7 +161,15 @@ public partial class MainViewModel : ObservableObject
             string? exe = Directory.GetFiles(latest.FolderPath, "*.exe", SearchOption.AllDirectories).FirstOrDefault();
             if (exe is not null)
             {
-                try { Process.Start(new ProcessStartInfo(exe) { UseShellExecute = true }); }
+                try
+                {
+                    var psi = new ProcessStartInfo(exe)
+                    {
+                        UseShellExecute = true,
+                        WorkingDirectory = Path.GetDirectoryName(exe)
+                    };
+                    Process.Start(psi);
+                }
                 catch { }
             }
         }
