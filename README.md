@@ -45,3 +45,7 @@ This is a portfolio application under development. A local SQLite database is in
 The repository does not contain a dedicated automated test project.
 
 A separate web implementation is available in [BrowserGamesPlatform](https://github.com/rafalowskaa/BrowserGamesPlatform).
+
+## Licence
+
+Original project source code is licensed under [MIT](LICENSE). Third-party libraries and bundled media remain subject to their own rights and licences.
