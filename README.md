@@ -13,6 +13,7 @@ A Windows desktop game platform with a WPF interface, local accounts, game manag
 - Friends, chat, notifications and user reports.
 - Scores, ranks and statistics views.
 - Polish and English localisation.
+- An optional remembered login name; passwords and sessions are not saved.
 - Embedded game presentation using WebView2.
 
 ## Structure

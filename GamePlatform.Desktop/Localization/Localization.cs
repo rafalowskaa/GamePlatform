@@ -111,7 +111,7 @@ public static class Localization
             ["NEW_PASSWORD"] = "NOWE HASŁO",
             ["PASSWORD"] = "HASŁO",
             ["CONFIRM_PASSWORD"] = "POTWÓRZ HASŁO",
-            ["REMEMBER_ME"] = "ZAPAMIĘTAJ MNIE",
+            ["REMEMBER_ME"] = "ZAPAMIĘTAJ LOGIN",
 
             /* --- komunikaty --- */
             ["ERROR"] = "BŁĄD",
@@ -283,7 +283,7 @@ public static class Localization
             ["CONFIRM_PASSWORD"] = "CONFIRM PASSWORD",
             ["ENTER_PASSWORD_PROMPT"] = "TO CONFIRM, ENTER YOUR PASSWORD:",
             ["PASSWORD"] = "PASSWORD",
-            ["REMEMBER_ME"] = "REMEMBER ME",
+            ["REMEMBER_ME"] = "REMEMBER LOGIN",
             ["REGISTER"] = "REGISTER",
             ["NEW_ACCOUNT"] = "NEW ACCOUNT",
             ["BACK_TO_LOGIN"] = "BACK",

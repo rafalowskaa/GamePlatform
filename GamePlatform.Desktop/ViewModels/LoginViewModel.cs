@@ -82,7 +82,7 @@ public partial class LoginViewModel : ObservableObject
 
         if (result.IsSuccess)
         {
-            // TODO: RememberMe -> zapisz token/cookie etc.
+            // Remember the login name only; passwords and sessions are not persisted.
             try
             {
                 if (RememberMe)
