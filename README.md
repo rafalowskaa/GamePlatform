@@ -41,6 +41,6 @@ The app uses `Data Source=games.db`, relative to its working directory. Launchin
 
 This is a portfolio application under development. A local SQLite database is included in the repository; it should be reviewed before redistribution. Startup runs EF migrations and creates a development administrator when no users exist. That behaviour is intended for a local demo and needs review before any wider use.
 
-The shared project references FluentValidation 12 while targeting .NET 8; dependency compatibility needs verification with an actual restore/build. The repository does not contain a dedicated automated test project.
+The repository does not contain a dedicated automated test project.
 
 A separate web implementation is available in [BrowserGamesPlatform](https://github.com/rafalowskaa/BrowserGamesPlatform).
